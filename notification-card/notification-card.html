@@ -1,0 +1,81 @@
+<link rel="import" href="../bower_components/paper-card/paper-card.html">  
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+<!--
+
+<link rel="import" href="./priority-selector.html">
+<link rel="import" href="./notification-times.html">
+-->
+
+<!-- 
+So we'll use words insteed of images
+So active notification will turn the words green if there on and red if there not
+-->
+
+<dom-module id="notification-card">
+  <style is="custom-style">
+  paper-card.disabled{
+    background: rgba(208, 208, 208, 0.79);
+  }
+  </style>
+  <template>
+   
+    <paper-card id="paperCard">
+      <div class="card-content">
+        <div >[[soundInfo.name]]
+            <paper-icon-button  on-tap="launchSoundEdit" icon="create" disabled="{{!soundInfo.disabledNotificaiton}}"></paper-icon-button>
+            <paper-toggle-button on-tap="toggleDisable" checked="{{soundInfo.disabledNotificaiton}}" >disable</paper-toggle-button>
+            <p> active notification</p>
+        </div>
+        <div>
+            <!--<priority-selector certainty="{{soundInfo.sensitivity}}"></priority-selector> -->
+        </div>
+      </div>
+
+      <!--
+      <div class="card-actions">
+          
+          <notification-times notification-dates="[[soundInfo.notificationDates]]"></notification-times>
+          
+      </div>
+      -->
+      
+    </paper-card>
+    
+        
+        
+  </template>
+  <script>
+    Polymer({
+        is: 'notification-card',
+        ready: function(){
+            this.soundInfo = {
+              name: "junk",
+              sensitivity: 80,
+              notificationDates: [],
+              disabledNotificaiton: true
+            } 
+        },
+        properties:{
+            soundInfo:{
+                type: Object,
+                reflectToAttribute: true
+            }
+            
+            
+        },
+        toggleDisable:function(){
+          this.classList.toggle ('disabled');
+          this.$.paperCard.classList.toggle('disabled');
+        },
+        launchSoundEdit:function(){
+            this.fire('soundEdit', {sound: this.soundInfo});
+        }
+        
+        
+    });
+  </script>
+</dom-module>
