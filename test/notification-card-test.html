@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+		<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		<script src="../bower_components/web-component-tester/browser.js"></script>
+
+		<link rel="import" href="../notification-card/notification-card.html">
+	</head>
+	<body>
+		
+		<test-fixture id="notification-card-fixture">
+			<template>
+				<notification-card></notification-card>
+			</template>
+		</test-fixture>
+
+		<script>
+			suite('<notification-card>', function(){
+				var myEl;
+
+				setup(function(){
+					myEl = fixture('notification-card-fixture');
+				});
+				
+				test('test event editNotification get fired', function(done){
+					
+					myEl.addEventListener('editNotification', function(e){
+						done();
+					});
+					
+					Polymer.dom(myEl.root).querySelector('paper-icon-button').click();
+				});
+
+
+			})
+		</script>
+
+	</body>
+</html>
