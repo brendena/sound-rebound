@@ -1,0 +1,51 @@
+<!--
+TODO NEXT
+i have to change how the paper-buttons look after the iron-selector chooses.  Right know it look ugly.
+-->
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+
+<dom-module id="app-settings">
+  <template>
+    <style>
+      paper-button{
+        width:100%;
+        margin:0;
+      }
+      .iron-selected {
+        background-color: orange;
+
+      }
+      a{
+        color: inherit;
+        text-decoration: none;
+      }
+    </style>
+    
+      <firebase-auth
+        id="auth"
+        app-name="sound-rebound"
+        user="{{user}}">
+      </firebase-auth>
+
+      </div>
+        
+        <iron-selector selected="notification" attr-for-selected="data-page">
+          <paper-button data-page="notification"><a  href="#/notification">notification</a></paper-button>
+          <paper-button data-page="about"><a  href="#/about">about page</a></paper-button>
+          <paper-button data-page="accountPage"><a  href="#/accountPage">account page</a></paper-button>
+        </iron-selector>
+  
+
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'app-settings'
+
+    });
+  </script>
+</dom-module>

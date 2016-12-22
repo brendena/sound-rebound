@@ -1,7 +1,6 @@
 /bower_components
 /oldComponents
-/FirebaseAuth.js
-/oldComponents
 /semiNew
 /build
 /node_modules
+/my-firebase-app.html

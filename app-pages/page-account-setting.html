@@ -1,0 +1,50 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="page-account-setting">
+  <template>
+    <style>
+      paper-button{
+        width:100%;
+      }
+    </style>
+    
+      <firebase-auth
+        id="auth"
+        app-name="sound-rebound"
+        user="{{user}}">
+      </firebase-auth>
+
+          <paper-button >delete Account</paper-button>
+          <paper-button >delete Account</paper-button>
+          <paper-button>reset password</paper-button>
+          <paper-button on-tap="signOut">sign out</paper-button>
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'page-account-setting',
+      signOut: function(){
+        this.$.auth.signOut().then(function() {
+            // Sign-out successful.
+              console.log("signed out");
+          }, function(error) {
+              console.log(error);
+              console.log("not signed out");
+            // An error happened.
+        });
+      }
+
+    });
+  </script>
+</dom-module>

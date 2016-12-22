@@ -1,0 +1,135 @@
+<!--
+resources
+firebase documents user managment
+https://firebase.google.com/docs/auth/web/manage-users
+
+-->
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="./app-email-login.html">
+
+<dom-module id="app-login">
+  <template>
+    <style>
+      :host {
+        position: absolute;
+        top: 0px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--paper-red-700);
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1;
+        color: var(--paper-purple-50);
+
+        @apply(--layout);
+        @apply(--layout-center-center);
+      }
+
+      :host([signed-in]) {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      paper-button > * {
+        vertical-align: middle;
+        text-transform: none;
+      }
+    </style>
+
+    <firebase-auth
+      id="auth"
+      app-name="sound-rebound"
+      provider="google"
+      signed-in="{{signedIn}}"
+      user="{{user}}">
+    </firebase-auth>
+
+    <paper-button on-tap="toggleEmailInput" disabled="[[disabled]]">
+      <iron-icon icon="communication:email"></iron-icon>
+      <span>Sign in with email</span>
+    </paper-button>
+    
+    <paper-button on-tap="googleLogIn" disabled="[[disabled]]">
+      <iron-icon icon="account-circle"></iron-icon>
+      <span>Sign in with Google</span>
+    </paper-button>
+
+    <paper-button on-tap="signIn" disabled="[[disabled]]">
+      <iron-icon icon="icons:arrow-forward"></iron-icon>
+      <span>try site without account</span>
+    </paper-button>
+
+    <app-email-login id="emailLoginModule"></app-email-login>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'app-login',
+      properties: {
+        disabled: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
+        },
+
+        signedIn: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
+        }
+      },
+      listeners: {
+          'resetPassword': 'resetEmailPassword',
+          'createAccount': 'createEmailAccount',
+          'logIn': 'emailLogIn',
+      },
+      signIn: function() {
+        this.fire('sign-in', null, { bubbles: false });
+      },
+      toggleEmailInput:function(){
+        this.$.emailLoginModule.open();
+      },
+      createEmailAccount: function(e){
+        var that = this;
+        this.$.auth.createUserWithEmailAndPassword(e.detail.email,e.detail.password).then(function(){
+          that.$.emailLoginModule.nullError();
+        },function(error) {
+          that.firebaseErrorOutput(error);
+        });
+      },
+      emailLogIn: function(e){
+        var that = this;
+        this.$.auth.signInWithEmailAndPassword(e.detail.email,e.detail.password).then(function(){
+          that.$.emailLoginModule.nullError();
+        },function(error) {
+          that.firebaseErrorOutput(error);
+        });
+        
+      },
+      resetEmailPassword: function(e){
+        var that = this;
+        this.$.auth.auth.sendPasswordResetEmail(e.detail.email).then(function(){
+          that.$.emailLoginModule.nullError();
+        },function(error) {
+          that.firebaseErrorOutput(error);
+        });
+        
+      },
+      firebaseErrorOutput(error){
+        this.$.emailLoginModule.userError("jesus");
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log("error 2" + errorCode + errorMessage)
+        emailLoginModule.userError("make sure you inputed the right values");
+      },
+      googleLogIn: function(){
+        this.$.auth.signInWithPopup();
+      },
+    });
+  </script>
+</dom-module>

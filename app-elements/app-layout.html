@@ -1,0 +1,103 @@
+<!--
+resources
+
+app routing
+https://www.polymer-project.org/1.0/blog/routing
+vido on app routing
+https://www.youtube.com/watch?v=xRONodYEF2A
+Example code
+https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
+
+-->
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
+
+<link rel="import" href="../app-pages/page-account-setting.html">
+<link rel="import" href="../app-pages/page-about.html">
+<link rel="import" href="../notification-card/notification-section.html">
+<link rel="import" href="./app-settings.html">
+<link rel="import" href="./app-layout.html">
+<link rel="import" href="./app-login.html">
+
+<dom-module id="app-layout">
+  <template>
+    <style>
+    </style>
+
+    <app-location use-hash-as-path route="{{route}}"></app-location>
+
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{data}}"
+      active="{{pageActive}}"> <!-- the data is going to be the page access it by data.page-->
+    </app-route>
+     
+
+
+    <app-header reveals>
+      <app-toolbar>
+        <paper-icon-button icon="menu" onclick="drawer.toggle()"></paper-icon-button>
+        <div main-title>My app</p></div>
+        <paper-icon-button icon="delete"></paper-icon-button>
+        <paper-icon-button icon="search"></paper-icon-button>
+        <paper-icon-button icon="close"></paper-icon-button>
+        <paper-progress value="10" indeterminate bottom-item></paper-progress>
+      </app-toolbar>
+    </app-header>
+    <div >
+
+      <neon-animated-pages selected='{{data.page}}'
+                           attr-for-selected='key'
+                           entry-animation='slide-from-left-animation'
+                           exit-animation='slide-right-animation'>
+
+        <neon-animatable key='login'>
+          <app-login></app-login>
+        </neon-animatable>
+
+        <neon-animatable key='notification'>
+          <notification-section></notification-section>
+        </neon-animatable>
+
+        <neon-animatable key='about'>
+          <page-about></page-about>
+        </neon-animatable>
+
+        <neon-animatable key='accountPage'>
+          <page-account-setting></page-account-setting>
+        </neon-animatable>
+
+
+      </neon-animated-pages>
+
+    </div>
+    <app-drawer id="drawer" swipe-open>
+      <!-- probably should have a modul to confirm there actions-->
+      <div style="height: 100%; overflow: auto;">
+        <app-settings></app-settings> 
+      </div>
+    </app-drawer>
+    
+  </template>
+  <script>
+    Polymer({
+      is: 'app-layout',
+      attached: function() {
+        /*attached to app-location so it will update when there is no url*/
+        if (!this.route.path) {
+          this.set('route.path', '/login');
+        }
+      }
+    });
+  </script>
+</dom-module>

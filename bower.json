@@ -24,6 +24,7 @@
     "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.1",
     "paper-slider": "PolymerElements/paper-slider#^1.0.12",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.2.1",
-    "polymerfire": "firebase/polymerfire#^0.10.3"
+    "polymerfire": "firebase/polymerfire#^0.10.3",
+    "app-route": "https://github.com/PolymerElements/app-route.git#^0.9.3"
   }
 }
