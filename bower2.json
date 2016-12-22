@@ -1,16 +1,12 @@
 {
-  "name": "sound-rebound",
-  "homepage": "index.html",
+  "name": "public",
   "authors": [
-    "brenden.adamczak@mymail.champlain.edu"
+    "brendena <cerebralasylum1@gmail.com>"
   ],
-  "description": "Its the ui application for my sound detection device",
+  "description": "",
   "main": "",
-  "keywords": [
-    "sound"
-  ],
   "license": "MIT",
-  "private": true,
+  "homepage": "",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -19,15 +15,9 @@
     "tests"
   ],
   "dependencies": {
-    "app-layout": "^0.10.6",
-    "app-route": "https://github.com/PolymerElements/app-route.git#^0.9.3",
-    "firebase": "^3.6.4",
-    "iron-validator-behavior": "^1.0.1",
     "note-app-elements": "polymerlabs/note-app-elements",
-    "page": "visionmedia/page.js",
     "paper-card": "PolymerElements/paper-card#^1.1.4",
     "paper-checkbox": "PolymerElements/paper-checkbox#^1.4.1",
-    "paper-dialog": "^1.1.0",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.4.2",
     "paper-item": "PolymerElements/paper-item#^1.2.1",
     "paper-listbox": "PolymerElements/paper-listbox#^1.1.2",
@@ -35,6 +25,6 @@
     "paper-slider": "PolymerElements/paper-slider#^1.0.12",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.2.1",
     "polymerfire": "firebase/polymerfire#^0.10.3",
-    "web-component-tester": "^5.0.0"
+    "app-route": "https://github.com/PolymerElements/app-route.git#^0.9.3"
   }
 }
