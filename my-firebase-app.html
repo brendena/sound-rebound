@@ -1,0 +1,21 @@
+<link rel="import" href="./bower_components/polymerfire/firebase-app.html">
+<dom-module id="my-firebase-app">
+  <template>
+    <style>
+    </style>
+    <firebase-app 
+        name="sound-rebound"
+        api-key="AIzaSyDrBeDjc8DszVBh9xIR54KhAD8zYh6hCek"
+        auth-domain="sound-rebound.firebaseapp.com"
+        database-url="https://sound-rebound.firebaseio.com"
+        storage-bucket="sound-rebound.appspot.com"
+        messaging-sender-id="52771064904"
+        id="firebase">
+    </firebase-app>
+  </template>
+  <script>
+    Polymer({
+      is: 'my-firebase-app',
+    });
+  </script>
+</dom-module>
