@@ -5,7 +5,7 @@
     "brenden.adamczak@mymail.champlain.edu"
   ],
   "description": "Its the ui application for my sound detection device",
-  "main": "",
+  "main": "index.html",
   "keywords": [
     "sound"
   ],

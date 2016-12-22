@@ -45,8 +45,13 @@ i have to change how the paper-buttons look after the iron-selector chooses.  Ri
   </template>
   <script>
     Polymer({
-      is: 'app-settings'
+      is: 'app-settings',
+      properties:{
+        user:{
+          type:"Object"
+        }
 
+      }
     });
   </script>
 </dom-module>

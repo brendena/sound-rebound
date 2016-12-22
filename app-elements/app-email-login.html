@@ -30,6 +30,15 @@
   <script>
     Polymer({
       is: 'app-email-login',
+      properties:{
+        email:{
+          value: "String",
+        },
+        password:{
+          value: "String"
+        },
+        
+      },
       open: function(){
         this.$.emailLogInModule.open();
       },

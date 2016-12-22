@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <firebase-auth
         id="auth"
         app-name="sound-rebound"
-        user="{{user}}">
+        user="{{user}}"> <!--- i don't know if i need this  -->
       </firebase-auth>
 
           <paper-button >delete Account</paper-button>
@@ -34,6 +34,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'page-account-setting',
+      properties:{
+        user:{
+          type:"Object"
+        }
+
+      },
       signOut: function(){
         this.$.auth.signOut().then(function() {
             // Sign-out successful.
