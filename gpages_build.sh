@@ -67,6 +67,10 @@ str4=$str1$str2$str3
 
 git push --force --quiet -u $str4 gh-pages > /dev/null 2>&1
 
+echo $str4
+
+echo ${GH_REF}
 
 
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!! Done";
 popd >/dev/null
