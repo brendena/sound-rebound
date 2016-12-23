@@ -35,6 +35,7 @@
     "paper-slider": "PolymerElements/paper-slider#^1.0.12",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.2.1",
     "polymerfire": "firebase/polymerfire#^0.10.3",
-    "web-component-tester": "^5.0.0"
+    "web-component-tester": "^5.0.0",
+    "iron-component-page": "^1.1.7"
   }
 }

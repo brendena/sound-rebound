@@ -1,7 +1,7 @@
 console.log("serrrrrrrvice worker");
 
-importScripts('./bower_components/firebase/firebase-app.js');
-importScripts('./bower_components/firebase/firebase-messaging.js');
+importScripts('../firebase/firebase-app.js');
+importScripts('../firebase/firebase-messaging.js');
 
 firebase.initializeApp({
 	'messagingSenderId' : '509920232790'
