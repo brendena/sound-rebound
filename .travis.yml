@@ -2,7 +2,7 @@ language: node_js
 node_js: stable
 dist: trusty
 script:
-  - bash ./gpages_build.sh brendena "sound-rebound" brenden "cerebralasylum1@gmail.com"
+- bash ./gpages_build.sh brendena "sound-rebound" brenden "cerebralasylum1@gmail.com"
 sudo: required
 addons:
   firefox: latest
