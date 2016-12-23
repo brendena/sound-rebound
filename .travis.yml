@@ -1,6 +1,8 @@
 language: node_js
 node_js: stable
 dist: trusty
+script:
+  - bash ./gpages_build.sh brendena "sound-rebound" brenden "cerebralasylum1@gmail.com"
 sudo: required
 addons:
   firefox: latest
@@ -13,6 +15,7 @@ addons:
 before_script:
 - npm install -g bower polylint web-component-tester
 - bower install
+- export PATH=$PWD/node_modules/.bin:$PATH
 
 script:
 - xvfb-run wct --skip-plugin sauce
