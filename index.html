@@ -14,16 +14,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../iron-component-page/iron-component-page.html">
+  
 
 </head>
 <body unresolved>
+	<script>
+		var my_awesome_script = document.createElement('script');
+		var my_awesome_link = document.createElement('link');
+
+		if (location.hostname === "localhost" || location.hostname === "127.0.0.1"){
+			my_awesome_script.setAttribute('src',"./bower_components/webcomponentsjs/webcomponents-lite.js");
+			my_awesome_link.setAttribute('href',"./bower_components/iron-component-page/iron-component-page.html");
+		}
+		else{
+			my_awesome_script.setAttribute('src',"./components/webcomponentsjs/webcomponents-lite.js");
+			my_awesome_link.setAttribute('href',"./components/iron-component-page/iron-component-page.html");
+		}
+		
+
+		my_awesome_link.setAttribute('rel', 'import');
+
+		document.head.appendChild(my_awesome_script);
+		document.head.appendChild(my_awesome_link);
+
+
+	</script>
   <!-- Note: if the main element for this repository doesn't
        match the folder name, add a src="&lt;main-component&gt;.html" attribute,
        where &lt;main-component&gt;.html" is a file that imports all of the
        components you want documented. -->
-  <iron-component-page src="app.html"></iron-component-page>  
+  <iron-component-page src="./app.html"></iron-component-page>  
   
 </body>
 </html>
