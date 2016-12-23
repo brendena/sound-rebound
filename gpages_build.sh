@@ -59,11 +59,14 @@ git config user.email $email
 # send it all to github
 git add -A .
 git commit -am 'Deploy to GitHub Pages'
-git push --force --quiet -u "https://${GH_TOKEN}@:x-oauth-basic@github.com/brendena/sound-rebound.git" gh-pages > /dev/null 2>&1
 
-echo "https://${GH_TOKEN}@:x-oauth-basic@github.com/brendena/sound-rebound.git"; 
-echo ${GH_REF};
-echo ${GH_REF}@;
-echo "!!!!!!!!!!!!!!!!!!!!!!!!!!! done";
+str1="https://"
+str2=${GH_TOKEN}
+str3=":x-oauth-basic@github.com/brendena/sound-rebound.git"
+str4=$str1$str2$str3
+
+git push --force --quiet -u $str4 gh-pages > /dev/null 2>&1
+
+
 
 popd >/dev/null
