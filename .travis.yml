@@ -1,8 +1,6 @@
 language: node_js
 node_js: stable
 dist: trusty
-script:
-- bash ./gpages_build.sh brendena "sound-rebound" brenden "cerebralasylum1@gmail.com"
 sudo: required
 addons:
   firefox: latest
@@ -20,6 +18,7 @@ before_script:
 script:
 - xvfb-run wct --skip-plugin sauce
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct --skip-plugin local; fi
+- bash ./gpages_build.sh brendena "sound-rebound" brenden "cerebralasylum1@gmail.com"
 env:
   global:
   - secure: x9c2ZiFWryN1q5ApWrygUBOQa3QLy2aZBvGEr6JzzCwiJiUqf+1LFO3RP/eYUO8BeOF+OHb7//Lb59UoiTPUr5M/Rp2/hLD22EimGk5CZeajug0NoyETWmaDr/7Tp9KfKgAY7q9w42yTs40jbSTjsSDUfOqe6S8+CZaMszBJWFTgaA4rrlThGlfsagLFriBY0+/J+zoV0Lwx6Vtw+PBaXSV5ZsfoNLJYrUCO065BpLXFqDFJI5eGkeXmEefRO+B+HPrvxotFYI1ng3k905aXPm+G1FsJnFnepde5cShwkirHWvxPlZawcW7wqQ5RdnseS2UrpZimkSrrk/91m8bQ/O6LxDA4zU5G2L9giAvTjh4Sd7D85JGZrtzicKNZx0/YAIjuCgnABESF4OVdhhsprJRha1r2BaJSH8+EUQAgPyg4mVQmWPIbyNuWuDJIeSIfJYkVLXlpxkDKAH1LiFdV4XwmBQoPQYo4ANwlXpsb3YxjHiiL96hmfrgmzefe7VZ2CjkGNt/77rWPDIGjmXpSGMYkxAWkeOUZrhCWg/WS8p0+/ib4GER/I5dXkPC8uZCV5B6MalGcL8VHmQQUUXe0HkxO6J45iXUJHgIfyJqX+ylTX5FPtIMaSodBTua6+yfmDpfYgNrNk6QTMR/CqUJwpNTcdPWohpwNoPqSTDnXVmY=
