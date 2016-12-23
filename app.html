@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <link rel="manifest" href="manifest.json">
+    
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Notes">
+    <!--
+    <link rel="icon"
+          sizes="192x192"
+          href="../note-app/common/images/icon-4x.png">
+    -->
+
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../web-animations-js/web-animations.min.js"></script>
+    <link rel="import" href="../platinum-sw/platinum-sw-elements.html">
+    <link rel="import" href="./app-elements/app-layout.html">
+    <link rel="import" href="./my-firebase-app.html">
+          
+    <title>Notes</title>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+  <!--
+    <platinum-sw-register
+    auto-register
+    skip-waiting
+    clients-claim
+    reload-on-install
+    href="sw-import.js">
+       
+        <platinum-sw-cache
+          default-cache-strategy="networkFirst">
+        </platinum-sw-cache>
+    </platinum-sw-register>
+    -->
+    <my-firebase-app></my-firebase-app>
+    <app-layout></app-layout>
+
+  </body>
+</html>
+
