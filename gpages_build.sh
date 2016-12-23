@@ -16,6 +16,8 @@
 
 # usage gp Polymer core-item [branch]
 # Run in a clean directory passing in a GitHub org and repo name
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!! where going through";
+
 org=$1
 repo=$2
 name=$3
@@ -26,7 +28,7 @@ mkdir temp && cd temp
 
 # make folder (same as input, no checking!)
 mkdir $repo
-git clone "https://${GH_TOKEN}@${GH_REF}" --single-branch
+git clone "https://github.com/brendena/sound-rebound/" --single-branch
 
 # switch to gh-pages branch
 pushd $repo >/dev/null
