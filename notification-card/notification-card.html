@@ -17,9 +17,17 @@ So active notification will turn the words green if there on and red if there no
 
 <dom-module id="notification-card">
   <style is="custom-style">
-  paper-card.disabled{
-    background: rgba(208, 208, 208, 0.79);
-  }
+    paper-card.disabled{
+      background: rgba(208, 208, 208, 0.79);
+    }
+    /*
+    I like the idea of just scalling everthing for desktop
+    but the problem is that the auto div or paper-card doesn't 
+    retain the size
+    paper-card{
+      transform: scale(2,2);
+    }
+    */
   </style>
   <template>
    
@@ -28,6 +36,7 @@ So active notification will turn the words green if there on and red if there no
         <div >[[soundInfo.name]]
             <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="launchNotificationEdit" icon="create" disabled="{{!soundInfo.disabledNotificaiton}}"></paper-icon-button>
             <paper-toggle-button on-tap="toggleDisable" checked="{{soundInfo.disabledNotificaiton}}" >disable</paper-toggle-button>
+            <paper-toggle-button on-tap="toggleActiveNotification" checked="{{soundInfo.repeatingNotification}}" disabled>repeating notification</paper-toggle-button>
             <p> active notification</p>
         </div>
         <div>
@@ -56,6 +65,7 @@ So active notification will turn the words green if there on and red if there no
               name: "junk",
               sensitivity: 80,
               notificationDates: [],
+              repeatingNotification: true,
               disabledNotificaiton: true
             } 
         },
