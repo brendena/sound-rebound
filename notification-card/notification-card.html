@@ -11,8 +11,16 @@
 -->
 
 <!-- 
+To DO
+
+i need to change the way the notification get activated.
+Currently they just toggle everthing, they don't check to see the value
+
 So we'll use words insteed of images
 So active notification will turn the words green if there on and red if there not
+
+
+
 -->
 
 <dom-module id="notification-card">
@@ -34,12 +42,14 @@ So active notification will turn the words green if there on and red if there no
     <paper-card id="paperCard">
       <div class="card-content">
         <div >[[soundInfo.name]]
-            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="launchNotificationEdit" icon="create" disabled="{{!soundInfo.disabledNotificaiton}}"></paper-icon-button>
-            <paper-toggle-button on-tap="toggleDisable" checked="{{soundInfo.disabledNotificaiton}}" >disable</paper-toggle-button>
-            <paper-toggle-button on-tap="toggleActiveNotification" checked="{{soundInfo.repeatingNotification}}" disabled>repeating notification</paper-toggle-button>
+                                                                                                                  <!-- can't edit -->
+            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="launchNotificationEdit" icon="create" disabled="{{soundInfo.disabledNotificaiton}}"></paper-icon-button>
+            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{soundInfo.disabledNotificaiton}}" >disable</paper-toggle-button>
+            <paper-toggle-button on-tap="toggleActiveNotification" checked="[[soundInfo.repeatingNotification]]" disabled>repeating notification</paper-toggle-button>
             <p> active notification</p>
         </div>
         <div>
+          <p>[[soundInfo.sensitivity]]</p>
             <!--<priority-selector certainty="{{soundInfo.sensitivity}}"></priority-selector> -->
         </div>
       </div>
@@ -61,6 +71,8 @@ So active notification will turn the words green if there on and red if there no
     Polymer({
         is: 'notification-card',
         ready: function(){
+            console.log(this.soundInfo);
+            /*
             this.soundInfo = {
               name: "junk",
               sensitivity: 80,
@@ -68,6 +80,10 @@ So active notification will turn the words green if there on and red if there no
               repeatingNotification: true,
               disabledNotificaiton: true
             } 
+            */
+        },
+        attached: function(){
+          this._disabledLogic();
         },
         properties:{
             soundInfo:{
@@ -77,9 +93,31 @@ So active notification will turn the words green if there on and red if there no
             
             
         },
+        /**
+          This get called on #disableToggle and will add the class of disable 
+          and change the property of the soundInfo.disabledNotification by calling a event
+
+          @event toggleDisable
+        */
+
         toggleDisable:function(){
-          this.classList.toggle ('disabled');
-          this.$.paperCard.classList.toggle('disabled');
+            this._disabledLogic();
+            this.soundInfo.disabledNotificaiton = !this.soundInfo.disabledNotificaiton;
+
+            //fire event
+        },
+        /**
+          
+        */
+        _disabledLogic:function(){
+          if(this.soundInfo.disabledNotificaiton){
+            this.classList.add('disabled');
+            this.$.paperCard.classList.add('disabled')
+          } 
+          else{
+            this.classList.remove('disabled');
+            this.$.paperCard.classList.remove('disabled')
+          }
         },
         launchNotificationEdit:function(){
             this.fire('editNotification', {sound: this.soundInfo});

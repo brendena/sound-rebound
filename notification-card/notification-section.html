@@ -1,17 +1,38 @@
+<link rel="import" href="../../polymerfire/firebase-auth.html">
+<link rel="import" href="../../polymerfire/firebase-query.html">
+
 <link rel="import" href="./notification-card.html">
+
 <dom-module id="notification-section">
   <template>
     <style>
     </style>
-    <notification-card></notification-card>
-    <notification-card></notification-card>
-    <notification-card></notification-card>
-    
+    <p>notification page</p>
+    <firebase-auth
+        id="auth"
+        app-name="sound-rebound"
+        user="{{user}}">
+    </firebase-auth>
+
+    <firebase-auth user="{{user}}"></firebase-auth>
+
+    <firebase-query
+      id="query"
+      app-name="sound-rebound"
+      path="/users/[[user.uid]]"
+      data="{{notifications}}">
+    </firebase-query>
+
+    <template is="dom-repeat" items="[[notifications]]" as="notification">
+      <notification-card sound-info="[[notification]]" ></notification-card>
+    </template>
+
   </template>
   <script>
     Polymer({
-      is: 'notification-section'
-
+      is: 'notification-section',
+      ready: function(){
+      }
     });
   </script>
 </dom-module>
