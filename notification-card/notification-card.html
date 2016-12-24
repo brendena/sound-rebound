@@ -72,15 +72,13 @@ So active notification will turn the words green if there on and red if there no
         is: 'notification-card',
         ready: function(){
             console.log(this.soundInfo);
-            /*
             this.soundInfo = {
-              name: "junk",
-              sensitivity: 80,
+              name: "default",
+              sensitivity: 0,
               notificationDates: [],
-              repeatingNotification: true,
-              disabledNotificaiton: true
+              repeatingNotification: false,
+              disabledNotificaiton: false
             } 
-            */
         },
         attached: function(){
           this._disabledLogic();
