@@ -1,5 +1,6 @@
 <link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="../../polymerfire/firebase-query.html">
+<link rel="import" href="./notification-add.html">
 
 <link rel="import" href="./notification-card.html">
 
@@ -7,14 +8,12 @@
   <template>
     <style>
     </style>
-    <p>notification page</p>
     <firebase-auth
         id="auth"
         app-name="sound-rebound"
         user="{{user}}">
     </firebase-auth>
 
-    <firebase-auth user="{{user}}"></firebase-auth>
 
     <firebase-query
       id="query"
@@ -26,13 +25,85 @@
     <template is="dom-repeat" items="[[notifications]]" as="notification">
       <notification-card sound-info="[[notification]]" ></notification-card>
     </template>
-
+    <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
   </template>
   <script>
     Polymer({
       is: 'notification-section',
+      properties:{
+        listNotificationNames:{
+          type: Array,
+          value: function(){
+            return [];
+          }
+        },
+        notifications:{
+          type: Object,
+          observer: 'updateListNotificationNames'
+        }
+
+      },
+      
+      observers: [
+        'updateListNotificationNames(notifications.*)'
+      ],
+      
+      listeners: {
+        'updateDisabledValue': '_updateDisabledValue',
+        'deleteNoticiation' : '_deleteNotification',
+        'addNoticiation' : "_addNotification"
+      },
+
       ready: function(){
+      },
+      _updateDisabledValue(e){
+        console.log(e.detail.disabledNotification);
+        this.$.query.ref.child(e.detail.$key).update({"disabledNotification":e.detail.disabledNotification}); 
+      },
+      _deleteNotification(e){
+        //this.$.query.ref.child(e.detail.$key).update("disabledNotification", e.detail.disabledNotification);
+        this.$.query.ref.child(e.detail.$key).remove();
+      },
+      _addNotification(e){
+        this.$.query.ref.push(e.detail.newNotification);
+      },
+      /*
+      
+
+      basics behind the ovservers
+      http://stackoverflow.com/questions/38264330/firebase-query-data-observer-not-firing
+      */
+      updateListNotificationNames: function(newData){
+        
+        /*if newData is not defined that meens that there 
+          no data to look at so stop. 
+          this is important because the first values is []*/
+        if(typeof newData.base !== "undefined"){
+          /*
+          check to see if we disabled a notification.  We need to do this
+          becuase notifications is going to change forces updateListNotificationNames to fire.
+          This is imortant because listNotificationNames hasen't changed.  Saving some processing cycles.
+          */
+          if(newData.base.length != this.listNotificationNames.length){
+
+
+            var tempNotificationList = [];
+            var data = this.$.query.data;
+            for(var i =0; i < data.length; i++){
+                if(data[i]['name'] != null && data[i]['name'] != undefined){
+                   tempNotificationList.push(data[i]['name']);
+                }
+            }
+            console.log("going through");
+
+            this.listNotificationNames = tempNotificationList;
+          }
+        }
       }
+      /*
+        I could pass a cumputed property down to notification add and i can even pass the value to notificatoin section
+        so i don't have to have another query in my notification add.
+      */
     });
   </script>
 </dom-module>

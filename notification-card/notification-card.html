@@ -41,10 +41,13 @@ So active notification will turn the words green if there on and red if there no
    
     <paper-card id="paperCard">
       <div class="card-content">
-        <div >[[soundInfo.name]]
-                                                                                                                  <!-- can't edit -->
-            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="launchNotificationEdit" icon="create" disabled="{{soundInfo.disabledNotificaiton}}"></paper-icon-button>
-            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{soundInfo.disabledNotificaiton}}" >disable</paper-toggle-button>
+        <div >
+
+            [[soundInfo.name]]                                                                                                      <!-- can't edit -->
+            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="launchNotificationEdit" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
+            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNoticiation" icon="delete"> </paper-icon-button>
+
+            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{soundInfo.disabledNotification}}" >disable</paper-toggle-button>
             <paper-toggle-button on-tap="toggleActiveNotification" checked="[[soundInfo.repeatingNotification]]" disabled>repeating notification</paper-toggle-button>
             <p> active notification</p>
         </div>
@@ -61,7 +64,7 @@ So active notification will turn the words green if there on and red if there no
           
       </div>
       -->
-    
+
     </paper-card>
     
         
@@ -70,6 +73,7 @@ So active notification will turn the words green if there on and red if there no
   <script>
     Polymer({
         is: 'notification-card',
+
         ready: function(){
             console.log(this.soundInfo);
             this.soundInfo = {
@@ -100,15 +104,16 @@ So active notification will turn the words green if there on and red if there no
 
         toggleDisable:function(){
             this._disabledLogic();
-            this.soundInfo.disabledNotificaiton = !this.soundInfo.disabledNotificaiton;
+            this.soundInfo.disabledNotification = !this.soundInfo.disabledNotification;
 
-            //fire event
+            this.fire('updateDisabledValue',{$key: this.soundInfo.$key, disabledNotification : !this.soundInfo.disabledNotification});
         },
         /**
-          
+          This disables all the items attached to the card
+         
         */
         _disabledLogic:function(){
-          if(this.soundInfo.disabledNotificaiton){
+          if(this.soundInfo.disabledNotification){
             this.classList.add('disabled');
             this.$.paperCard.classList.add('disabled')
           } 
@@ -119,8 +124,13 @@ So active notification will turn the words green if there on and red if there no
         },
         launchNotificationEdit:function(){
             this.fire('editNotification', {sound: this.soundInfo});
+        },
+        /**
+          send a event to delete this notfication by its key.
+        */
+        deleteNoticiation: function(){
+          this.fire('deleteNoticiation', {$key: this.soundInfo.$key});
         }
-        
         
     });
   </script>
