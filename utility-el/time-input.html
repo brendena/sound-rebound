@@ -1,11 +1,17 @@
 <link rel="import" href="../../paper-input/paper-input.html">  
 
+<!--
+i can't use paper-input with this validation tactic
+but i might be able to add there styles
 <link rel="import" href="./validatable-input.html">
 <link rel="import" href="./time-validate.html">
-
+-->
 <dom-module id="time-input">
   <style>
-
+    :host{
+      float: left;
+      width:200px;
+    };
   </style>
   <template>
 
@@ -14,19 +20,16 @@
     <section>
 
       <p>
-        only type <code>cats</code>:
-
-        <paper-input is="validatable-input" type="time" invalid="{{invalid}}" validator="cats-only" bind-value="{{time}}"> </paper-input>
-
-        <span class="valid" hidden$="[[invalid]]">valid</span>
-        <span class="invalid" hidden$="[[!invalid]]">invalid</span>
+        
+        <paper-input  id="paperInput" label="this input is manually validated" 
+                      required  type="time"  bind-value="{{time}}" disabled="[[disabled]]" 
+                      error-message="letters only!" invalid="{{invalid}}"> </paper-input>
       </p>
 
-      <p> asdf {{time}}</p>
 
     </section>
 
-            
+
            
   </template>
   <script>
@@ -35,13 +38,26 @@
         properties:{
           disabled:{
             type: Boolean,
-            vale: false
+            value: false,
           },
           time:{
             type: String,
-            value: "1"
+            notify: true,
+            value: "00:00"
+          },
+          invalid:{
+            type: Boolean,
+            notify: true,
+            value: false
           }
+
+        },
+        attached: function(){
+          /*thou we binded the input with bind-value it doesn't set it the first time
+            so you have to bind it when the element is attached to the dom*/
+          this.$.paperInput.value = this.time; 
         }
+
         
         
     });

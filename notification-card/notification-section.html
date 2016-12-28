@@ -1,5 +1,6 @@
 <link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="../../polymerfire/firebase-query.html">
+<link rel="import" href="../../polymerfire/firebase-document.html"
 <link rel="import" href="../../paper-dialog/paper-dialog.html">
 <link rel="import" href="./notification-add.html">
 <link rel="import" href="./notification-card.html">
@@ -17,7 +18,6 @@
         user="{{user}}">
     </firebase-auth>
 
-
     <firebase-query
       id="query"
       app-name="sound-rebound"
@@ -25,15 +25,21 @@
       data="{{notifications}}">
     </firebase-query>
 
+    <firebase-document
+      id="firebaseDoc"
+      app-name="sound-rebound"
+      path="/users/[[user.uid]]/[[specificNotification]]"
+      data="{{editingNotification}}">
+    </firebase-document>
+
     <template is="dom-repeat" items="[[notifications]]" as="notification">
       <notification-card sound-info="[[notification]]" ></notification-card>
     </template>
     <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
 
-    <paper-dialog  id="editNotificationModule"  modal="false">
+    <paper-dialog  id="editNotificationModule"  modal="false" style="width:800px">
       
-      
-      <notification-edit-card id="editingNotificationCard"></notification-edit-card>
+      <notification-edit-card id="editingNotificationCard" sound-Info="[[editingNotification]]"></notification-edit-card>
     </paper-dialog>
 
   </template>
@@ -50,6 +56,10 @@
         notifications:{
           type: Object,
           observer: 'updateListNotificationNames'
+        },
+        specificNotification:{
+          type: String,
+          value: "default"
         }
 
       },
@@ -64,14 +74,16 @@
         'deleteNoticiation' : '_deleteNotification',
         'addNoticiation' : "_addNotification",
 
-        "closeNotificationEdit": "_closeEditingNotificationCard"
+        "closeNotificationEdit": "_closeEditingNotificationCard",
+        "submitNotification": "_submitNotification"
       },
 
       ready: function(){
-        this.$.editNotificationModule.open();
+        console.log("opening");
+        //this.$.editNotificationModule.open();
       },
       editNotification: function(e){
-        this.$.editingNotificationCard.soundInfo = e.detail.soundInfo;
+        this.specificNotification = e.detail.soundInfo.$key;
         this.$.editNotificationModule.open();
       },
       _updateDisabledValue: function(e){
@@ -87,6 +99,33 @@
       },
       _closeEditingNotificationCard: function(){
         this.$.editNotificationModule.close();
+      },
+      _submitNotification: function(e){
+        /*
+        console.log("submited notification");
+        var key = e.detail.soundInfo.$key;
+        console.log(key);
+        console.log(e.detail.soundInfo)
+        delete e.detail.soundInfo.$key;
+        this.$.query.ref.child(key).set({});
+        this.$.query.ref.child(key).set(e.detail.soundInfo);
+        e.detail.soundInfo.$key = key;
+        */
+
+        
+        var firebaseDoc = this.$.firebaseDoc;
+        var key = e.detail.soundInfo.$key;
+        delete e.detail.soundInfo.$key;
+
+        firebaseDoc.data = "";
+        firebaseDoc.data = e.detail.soundInfo;
+
+        console.log("submited notification");
+
+        
+        e.detail.soundInfo.$key = key;
+
+        
       },
       /*
       

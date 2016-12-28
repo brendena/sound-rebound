@@ -27,20 +27,20 @@
           <p>{{soundInfo.name}}</p>   
         </div>
         <div>
-            disable
+            <paper-toggle-button checked="{{soundInfo.repeatingNotification}}"> repeating notification</paper-toggle-button>
         </div>
         <div>
             <!--<priority-selector certainty="{{soundInfo.certainty}}"></priority-selector> -->
         </div>
+        <div>
+            <paper-toggle-button checked="{{soundInfo.timeNotification}}"> enable time specific notes</paper-toggle-button>
+        </div>
       </div>
       <div>
-        <notification-time-edit></notification-time-edit>
-        <!--
+        <!-- have a tag about disabling notification date -->
         <template is="dom-repeat" items="{{notificationDatesArray}}" as="day">
-            <p>[[day.day]] [[day.start]] [[day.end]]</p>
-            <notification-time-selector start="{{day.start}}" end="{{day.end}}"></notification-time-selector>
+            <notification-time-edit start="{{day.start}}" end="{{day.end}}"></notification-time-edit>
         </template>
-        -->
       </div>
       <paper-button on-tap="submit" raised> Submit </paper-button>
       <paper-button on-tap="destroy" raised>delete</paper-button>
@@ -55,8 +55,21 @@
         properties:{
           soundInfo:{
                 type : Object,
-                reflectToAttribute: true
+                reflectToAttribute: true,
+                value: function(){
+                  return {
+                    name: "default",
+                    disabledNotification: false,
+                    repeatingNotification: false,
+                    timeNotification: false,
+                    sensitivity: 0
+                  }
+                }
+                
             },
+        },
+        submit: function(){
+          this.fire('submitNotification', {"soundInfo": this.soundInfo});
         },
         close: function(){
             this.fire('closeNotificationEdit');

@@ -4,6 +4,7 @@
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
 
+<link rel="import" href="../utility-el/display-state-button.html">
 <!--
 
 <link rel="import" href="./priority-selector.html">
@@ -47,9 +48,24 @@ So active notification will turn the words green if there on and red if there no
             <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
             <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNoticiation" icon="delete"> </paper-icon-button>
 
-            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{soundInfo.disabledNotification}}" >disable</paper-toggle-button>
-            <paper-toggle-button on-tap="toggleActiveNotification" checked="[[soundInfo.repeatingNotification]]" disabled>repeating notification</paper-toggle-button>
+            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="[[soundInfo.disabledNotification]]" >disable 
+
+            </paper-toggle-button>
+            <paper-toggle-button checked="[[soundInfo.repeatingNotification]]" disabled>repeating notification
+
+
+            </paper-toggle-button>
+            <paper-toggle-button checked="[[soundInfo.timeNotification]]" disabled>time sensitive notification
+
+              
+            </paper-toggle-button>
+
             <p> active notification</p>
+
+
+        </div>
+        <div>
+          <verbose-toggle-button></verbose-toggle-button>
         </div>
         <div>
           <p>[[soundInfo.sensitivity]]</p>
@@ -75,14 +91,6 @@ So active notification will turn the words green if there on and red if there no
         is: 'notification-card',
 
         ready: function(){
-            console.log(this.soundInfo);
-            this.soundInfo = {
-              name: "default",
-              sensitivity: 0,
-              notificationDates: [],
-              repeatingNotification: false,
-              disabledNotificaiton: false
-            } 
         },
         attached: function(){
           this._disabledLogic();
@@ -90,10 +98,17 @@ So active notification will turn the words green if there on and red if there no
         properties:{
             soundInfo:{
                 type: Object,
-                reflectToAttribute: true
+                reflectToAttribute: true,
+                value: function(){
+                  return {
+                            name: "default",
+                            sensitivity: 0,
+                            notificationDates: [],
+                            repeatingNotification: false,
+                            disabledNotification: false
+                  } 
+              }
             }
-            
-            
         },
         /**
           This get called on #disableToggle and will add the class of disable 

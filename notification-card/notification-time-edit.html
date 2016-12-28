@@ -12,22 +12,19 @@
       p[[hidden]]{
           display: none;
       }  
+      
   </style>
   <template>
     <!-- 
     i want a checkbox
     and two input tags
     -->
-    <p>asdf</p>
-    <paper-checkbox checked='{{enableInput}}' >
-    
+    <paper-checkbox checked='{{enabledInput}}' style="float:left">
+        time notification
     </paper-checkbox>
-    <input id="start" /> <!--  prevent-invalid-input allowed-pattern="[0-9]"-->
-    to
-    <input id="end" />
 
-    <time-input></time-input>
-    
+    <time-input id="start" disabled="{{enabledInput}}" time="{{start}}" invalid="{{startInvalid}}"></time-input>
+    <time-input id="end" disabled="{{enabledInput}}" time="{{end}}" invalid="{{endInvalid}}"></time-input>
 
   </template>
   <script>
@@ -35,29 +32,59 @@
         is: 'notification-time-edit',
         properties:{
             start:{
-                type: String,
-                //computed: "checkInput()", 
-                notify: true
+                type: String, 
+                notify: true,
+                //computed: "checkInput()",
+                value: "00:00"
             },
             end:{
                 type: String,
+                notify: true,
                 //computed: 'checkInput()',
-                
-                notify: true
+                value: "00:00"
+            },
+            startInvalid:{
+                type: Boolean,
+                value: false
+            },
+            endInvalid:{
+                type: Boolean,
+                value: false
             },
             error:{
                 type: Boolean,
                 value: true
             }
         },
-        
+        observers:[
+            'checkInput(start, end)'
+        ],
         validate1: function(){
             console.log("asdf");
         },
 
         ready:function(){
              
+        },
+        checkInput: function(start, end){
+            var regularExpress = /[:]/;
+            start = start.replace(regularExpress, "");
+            end = end.replace(regularExpress, "");
+            console.log(start);
+            console.log(end);
+            if(start > end){
+                console.log("is greater");
+                this.startInvalid =  true;
+                this.endInvalid = true;
+            }
+            else{
+                console.log("is less");
+                this.startInvalid =  false;
+                this.endInvalid = false;
+            }
+            console.log("check");
         }
+
         
         
     });
