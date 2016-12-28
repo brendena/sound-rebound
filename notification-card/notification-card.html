@@ -44,7 +44,7 @@ So active notification will turn the words green if there on and red if there no
         <div >
 
             [[soundInfo.name]]                                                                                                      <!-- can't edit -->
-            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="launchNotificationEdit" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
+            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
             <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNoticiation" icon="delete"> </paper-icon-button>
 
             <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{soundInfo.disabledNotification}}" >disable</paper-toggle-button>
@@ -122,8 +122,8 @@ So active notification will turn the words green if there on and red if there no
             this.$.paperCard.classList.remove('disabled')
           }
         },
-        launchNotificationEdit:function(){
-            this.fire('editNotification', {sound: this.soundInfo});
+        editNotificationLauncher:function(){
+            this.fire('editNotification', {soundInfo: this.soundInfo});
         },
         /**
           send a event to delete this notfication by its key.

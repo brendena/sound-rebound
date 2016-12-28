@@ -1,8 +1,11 @@
 <link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="../../polymerfire/firebase-query.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
 <link rel="import" href="./notification-add.html">
-
 <link rel="import" href="./notification-card.html">
+<link rel="import" href="./notification-edit-card.html">
+
+
 
 <dom-module id="notification-section">
   <template>
@@ -26,6 +29,13 @@
       <notification-card sound-info="[[notification]]" ></notification-card>
     </template>
     <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
+
+    <paper-dialog  id="editNotificationModule"  modal="false">
+      
+      
+      <notification-edit-card id="editingNotificationCard"></notification-edit-card>
+    </paper-dialog>
+
   </template>
   <script>
     Polymer({
@@ -49,23 +59,34 @@
       ],
       
       listeners: {
+        "editNotification": "editNotification",
         'updateDisabledValue': '_updateDisabledValue',
         'deleteNoticiation' : '_deleteNotification',
-        'addNoticiation' : "_addNotification"
+        'addNoticiation' : "_addNotification",
+
+        "closeNotificationEdit": "_closeEditingNotificationCard"
       },
 
       ready: function(){
+        this.$.editNotificationModule.open();
       },
-      _updateDisabledValue(e){
+      editNotification: function(e){
+        this.$.editingNotificationCard.soundInfo = e.detail.soundInfo;
+        this.$.editNotificationModule.open();
+      },
+      _updateDisabledValue: function(e){
         console.log(e.detail.disabledNotification);
         this.$.query.ref.child(e.detail.$key).update({"disabledNotification":e.detail.disabledNotification}); 
       },
-      _deleteNotification(e){
+      _deleteNotification: function(e){
         //this.$.query.ref.child(e.detail.$key).update("disabledNotification", e.detail.disabledNotification);
         this.$.query.ref.child(e.detail.$key).remove();
       },
-      _addNotification(e){
+      _addNotification: function(e){
         this.$.query.ref.push(e.detail.newNotification);
+      },
+      _closeEditingNotificationCard: function(){
+        this.$.editNotificationModule.close();
       },
       /*
       
@@ -100,10 +121,6 @@
           }
         }
       }
-      /*
-        I could pass a cumputed property down to notification add and i can even pass the value to notificatoin section
-        so i don't have to have another query in my notification add.
-      */
     });
   </script>
 </dom-module>

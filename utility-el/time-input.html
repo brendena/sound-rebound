@@ -1,0 +1,49 @@
+<link rel="import" href="../../paper-input/paper-input.html">  
+
+<link rel="import" href="./validatable-input.html">
+<link rel="import" href="./time-validate.html">
+
+<dom-module id="time-input">
+  <style>
+
+  </style>
+  <template>
+
+    <cats-only></cats-only>
+
+    <section>
+
+      <p>
+        only type <code>cats</code>:
+
+        <paper-input is="validatable-input" type="time" invalid="{{invalid}}" validator="cats-only" bind-value="{{time}}"> </paper-input>
+
+        <span class="valid" hidden$="[[invalid]]">valid</span>
+        <span class="invalid" hidden$="[[!invalid]]">invalid</span>
+      </p>
+
+      <p> asdf {{time}}</p>
+
+    </section>
+
+            
+           
+  </template>
+  <script>
+    Polymer({
+        is: 'time-input',
+        properties:{
+          disabled:{
+            type: Boolean,
+            vale: false
+          },
+          time:{
+            type: String,
+            value: "1"
+          }
+        }
+        
+        
+    });
+  </script>
+</dom-module>

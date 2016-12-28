@@ -1,0 +1,72 @@
+<link rel="import" href="../../paper-card/paper-card.html">
+<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">  
+<link rel="import" href="../../paper-input/paper-input.html">  
+<link rel="import" href="../../paper-slider/paper-slider.html">  
+<link rel="import" href="../../iron-validatable-behavior/iron-validatable-behavior.html">
+<link rel="import" href="../../paper-fab/paper-fab.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+
+
+<link rel="import" href="./notification-time-edit.html">
+
+<dom-module id="notification-edit-card">
+  <style>
+      #closeButton{
+        position:absolute;
+        top: -30px;
+        left: -50px;
+      }
+  </style>
+  <template>
+    <paper-card >
+      <paper-fab id="closeButton" icon="close" on-tap="close"></paper-fab>
+      <div class="card-content">
+
+        <div >
+          <p>{{soundInfo.name}}</p>   
+        </div>
+        <div>
+            disable
+        </div>
+        <div>
+            <!--<priority-selector certainty="{{soundInfo.certainty}}"></priority-selector> -->
+        </div>
+      </div>
+      <div>
+        <notification-time-edit></notification-time-edit>
+        <!--
+        <template is="dom-repeat" items="{{notificationDatesArray}}" as="day">
+            <p>[[day.day]] [[day.start]] [[day.end]]</p>
+            <notification-time-selector start="{{day.start}}" end="{{day.end}}"></notification-time-selector>
+        </template>
+        -->
+      </div>
+      <paper-button on-tap="submit" raised> Submit </paper-button>
+      <paper-button on-tap="destroy" raised>delete</paper-button>
+      <paper-button on-tap="test" raised>test</paper-button>
+    </paper-card>
+            
+           
+  </template>
+  <script>
+    Polymer({
+        is: 'notification-edit-card',
+        properties:{
+          soundInfo:{
+                type : Object,
+                reflectToAttribute: true
+            },
+        },
+        close: function(){
+            this.fire('closeNotificationEdit');
+        },
+        test: function(){
+            console.log(this.soundInfo);
+        }
+
+        
+        
+    });
+  </script>
+</dom-module>

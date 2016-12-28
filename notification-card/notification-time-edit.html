@@ -1,0 +1,143 @@
+<link rel="import" href="../../iron-input/iron-input.html">
+<link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+
+<link rel="import" href="../utility-el/time-input.html">
+
+
+<dom-module id="notification-time-edit">
+  <style>
+      /*
+      https://codingwithgerwin.blogspot.com/2016/04/polymer-and-hidden-attribute.html
+      */
+      p[[hidden]]{
+          display: none;
+      }  
+  </style>
+  <template>
+    <!-- 
+    i want a checkbox
+    and two input tags
+    -->
+    <p>asdf</p>
+    <paper-checkbox checked='{{enableInput}}' >
+    
+    </paper-checkbox>
+    <input id="start" /> <!--  prevent-invalid-input allowed-pattern="[0-9]"-->
+    to
+    <input id="end" />
+
+    <time-input></time-input>
+    
+
+  </template>
+  <script>
+    Polymer({
+        is: 'notification-time-edit',
+        properties:{
+            start:{
+                type: String,
+                //computed: "checkInput()", 
+                notify: true
+            },
+            end:{
+                type: String,
+                //computed: 'checkInput()',
+                
+                notify: true
+            },
+            error:{
+                type: Boolean,
+                value: true
+            }
+        },
+        
+        validate1: function(){
+            console.log("asdf");
+        },
+
+        ready:function(){
+             
+        }
+        
+        
+    });
+  </script>
+</dom-module>
+
+
+<!--
+        /
+        properties:{
+            start:{
+                type: String,
+                computed: "checkInput()", 
+                notify: true
+            },
+            end:{
+                type: String,
+                computed: 'checkInput()',
+                
+                notify: true
+            },
+            error:{
+                type: Boolean,
+                value: true
+            }
+        },
+        ready: function(){
+            
+            if(this.end == "0" && this.start == "0"){
+                console.log("got through ready");
+                this.enableInput = false;
+            }
+            else{
+                this.enableInput = true;
+            }
+            this.changed();
+        },
+        changed: function(){
+            //console.log("disabled = " + this.enableInput);
+            if(this.enableInput == false){
+                this.$.start.disabled  = true;
+                this.$.end.disabled  = true;
+            }
+            else{
+                this.$.start.disabled  = false;
+                this.$.end.disabled  = false;
+            }
+            
+        },
+        //this is really bad
+        checkInput: function(newValue, oldValue){
+            //console.log("checkInput!!!!!!!!!!!!!!!!!");
+            /*
+            
+            if(24 < this.start){
+                this.start = 24;
+            }
+            if(24 < this.end){
+                this.end = 24;
+            }
+            //this is for if people delete the input
+            if(this.start == "" || this.end == ""){
+                console.log("dam")
+                this.hideError = true;
+            }
+            else{
+
+                if(this.start <= this.end){
+                    
+                    this.hideError = true;
+                }
+                else{
+                    this.hideError = false;
+                }
+                
+            }
+            */
+        },   
+        validator1: function(){
+          console.log("asdf");  
+        }
+
+-->
