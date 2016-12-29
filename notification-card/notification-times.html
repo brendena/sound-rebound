@@ -2,13 +2,19 @@
 <link rel="import" href="../../paper-slider/paper-slider.html">  
 <link rel="import" href="../../iron-validatable-behavior/iron-validatable-behavior.html">
 
-<dom-module id="notification-times">
+<link rel="import" href="../utility-el/day-array-behavior.html">
 
+<dom-module id="notification-times">
+    <style>
+    span{
+        color: var(--accent-color);
+    }
+    </style>
   <template>
     <div>
         <p>
             <template is="dom-repeat" items="[[notificationDatesArray]]" as="day">
-                 [[day.day]] [[day.start]]-[[day.end]]   
+                 <span>[[day.day]]</span> [[day.start]]-[[day.end]]   
             </template>
         </p>
     </div>
@@ -16,59 +22,35 @@
   <script>
     Polymer({
         is: 'notification-times',
+        behaviors:[MyBehaviors.DayArrayBehavior ],
         properties:{
-            
-          notificationDates:{
+            days:{
                 type : Object,
                 reflectToAttribute: true,
                 observer: '_changedNotificationDates'
             },
             notificationDatesArray:{
-                type: Object
+                type: Object,
+                value: function(){
+                    return [
+                        {
+                            "day": "M",
+                            "start": "01:00",
+                            "end": "01:00"
+                        }
+                    ]
+                }
             }
         },
         ready: function(){
-           
-            this.notificationDatesArray  = [
-                    {
-                        "day": "M",
-                        "start": "1",
-                        "end": "1"
-                    },
-                    {
-                        "day": "T",
-                        "start": "1",
-                        "end": "1"
-                    },
-                    {
-                        "day": "TH",
-                        "start": "1",
-                        "end": "1"
-                    }
-                    
-                ];
-            console.log(this.notificationDatesArray)
-            
             this._changedNotificationDates();
-            
         },
         _changedNotificationDates: function(){
-            
             console.log("changed notification-dates");
+            this.notificationDatesArray = this._sortArray(this.days);
             
-            /*
-            You have to change notificationDatesArray all at once 
-            or else it doesn't update at all.  I'm guessing because
-            it overload the data-binding?
-            */
-            var changedInfo = [];
-            
-            for (var prop in this.notificationDates) {
-                changedInfo.push(this.notificationDates[prop]);
-            }
-            this.notificationDatesArray = changedInfo;
-            
-        }
+        },
+
 
         
         

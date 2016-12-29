@@ -1,0 +1,27 @@
+<link rel="import" href="../../paper-input/paper-input.html">  
+<link rel="import" href="../../paper-slider/paper-slider.html">  
+
+<dom-module id="sensitivity-selector">
+
+  <template>
+    <paper-input label="Priority Level" value="{{sensitivity}}" type="number" min='0' max='100' disabled="[[disabled]]">
+    </paper-input>
+    <paper-slider value="{{sensitivity}}" min='0' max='100' disabled="[[disabled]]" ></paper-slider>
+  </template>
+  <script>
+    Polymer({
+        is: 'sensitivity-selector',
+        properties:{
+          sensitivity:{
+            type : Number,
+            notify: true,
+            value: 0
+          },
+          disabled:{
+            type : Boolean,
+            value: false 
+          }
+        }
+    });
+  </script>
+</dom-module>

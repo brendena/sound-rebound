@@ -4,6 +4,9 @@
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
 
+<link rel="import" href="../utility-el/sensitivity-selector.html">
+<link rel="import" href="./notification-times.html">
+
 
 <!-- 
 To DO
@@ -50,9 +53,13 @@ So active notification will turn the words green if there on and red if there no
       <div class="card-content">
         <div >
 
-            [[soundInfo.name]]                                                                                                      <!-- can't edit -->
-            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
-            <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNoticiation" icon="delete"> </paper-icon-button>
+            <h4>[[soundInfo.name]]                                                                                                  <!-- can't edit -->
+              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
+              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNoticiation" icon="delete"> </paper-icon-button>
+            </h4>   
+       </div>
+       <div>
+
 
             <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{soundInfo.disabledNotification}}" >disable 
 
@@ -66,26 +73,16 @@ So active notification will turn the words green if there on and red if there no
               
             </paper-toggle-button>
 
-            <p> active notification</p>
-
-
         </div>
         <div>
-
-        </div>
-        <div>
-          <p>[[soundInfo.sensitivity]]</p>
-            <!--<priority-selector certainty="{{soundInfo.sensitivity}}"></priority-selector> -->
+            <p>[[soundInfo.sensitivity]]/100 sensitivity levels</p>
         </div>
       </div>
 
-      <!--
-      <div class="card-actions">
-          
-          <notification-times notification-dates="[[soundInfo.notificationDates]]"></notification-times>
-          
+      
+      <div id="timeNotificationDisplay" class="card-actions">
+          <notification-times days="[[soundInfo.notificationDays]]"></notification-times>
       </div>
-      -->
 
     </paper-card>
     
@@ -102,20 +99,24 @@ So active notification will turn the words green if there on and red if there no
           this._disabledLogic();
         },
         properties:{
-            soundInfo:{
-                type: Object,
-                reflectToAttribute: true,
-                value: function(){
-                  return {
-                            name: "default",
-                            sensitivity: 0,
-                            notificationDates: [],
-                            repeatingNotification: false,
-                            disabledNotification: false
-                  } 
-              }
+          soundInfo:{
+            type: Object,
+            reflectToAttribute: true,
+            value: function(){
+              return {
+                        name: "default",
+                        sensitivity: 0,
+                        notificationDates: [],
+                        repeatingNotification: false,
+                        disabledNotification: false,
+                        timeNotification: false
+              } 
             }
+          }
         },
+        observers:[
+          'toggletimeNotificationDisplay(soundInfo.timeNotification)'
+        ],
         /**
           This get called on #disableToggle and will add the class of disable 
           and change the property of the soundInfo.disabledNotification by calling a event
@@ -151,6 +152,16 @@ So active notification will turn the words green if there on and red if there no
         */
         deleteNoticiation: function(){
           this.fire('deleteNotification', {$key: this.soundInfo.$key});
+        },
+        toggletimeNotificationDisplay: function(toggleValue){
+          if(toggleValue){
+            this.$.timeNotificationDisplay.hidden= false;
+          }
+          else{
+            this.$.timeNotificationDisplay.hidden= true;
+          }
+
+          
         }
         
     });

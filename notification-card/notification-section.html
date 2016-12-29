@@ -99,17 +99,6 @@
         this.$.editNotificationModule.close();
       },
       _submitNotification: function(e){
-        /*
-        console.log("submited notification");
-        var key = e.detail.soundInfo.$key;
-        console.log(key);
-        console.log(e.detail.soundInfo)
-        delete e.detail.soundInfo.$key;
-        this.$.query.ref.child(key).set({});
-        this.$.query.ref.child(key).set(e.detail.soundInfo);
-        e.detail.soundInfo.$key = key;
-        */
-
         
         var firebaseDoc = this.$.firebaseDoc;
         var key = e.detail.soundInfo.$key;

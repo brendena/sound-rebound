@@ -35,19 +35,20 @@ but i might be able to add there styles
           time:{
             type: String,
             notify: true,
+            observer: 'check',
             value: "00:00"
           },
           invalid:{
-            type: Boolean,
+            type: Boolean,          
             notify: true,
             value: false
           }
 
         },
-        attached: function(){
-          /*thou we binded the input with bind-value it doesn't set it the first time
+        check: function(){
+            /*thou we binded the input with bind-value it doesn't set it the first time
             so you have to bind it when the element is attached to the dom*/
-          this.$.paperInput.value = this.time; 
+           this.$.paperInput.value = this.time; 
         }
 
         

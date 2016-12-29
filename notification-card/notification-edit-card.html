@@ -6,6 +6,7 @@
 <link rel="import" href="../../paper-fab/paper-fab.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../utility-el/sensitivity-selector.html">
 
 <!--
 just doesn't seem to work
@@ -43,10 +44,14 @@ just doesn't seem to work
         <div>
             <paper-toggle-button checked="{{soundInfo.timeNotification}}"> enable time specific notes</paper-toggle-button>
         </div>
-        
+        <div>
+          
+        </div>
         <div id="notificationTimeEditsContainer">
           <notification-time-edit-prep id="notificationTPrep" days="{{soundInfo.notificationDays}}"></notification-time-edit-prep>
-
+        </div>
+        <div>
+          <sensitivity-selector sensitivity="{{soundInfo.sensitivity}}"></sensitivity-selector>
         </div>
         <paper-button on-tap="submit" raised> Submit </paper-button>
         <paper-button on-tap="delete" raised>delete</paper-button>
