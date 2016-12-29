@@ -1,7 +1,9 @@
+<link rel="import" href="../../app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="../../polymerfire/firebase-query.html">
 <link rel="import" href="../../polymerfire/firebase-document.html">
 <link rel="import" href="../../paper-dialog/paper-dialog.html">
+
 <link rel="import" href="./notification-add.html">
 <link rel="import" href="./notification-card.html">
 <link rel="import" href="./notification-edit-card.html">
@@ -31,6 +33,13 @@
       path="/users/[[user.uid]]/[[specificNotification]]"
       data="{{editingNotification}}">
     </firebase-document>
+
+    <app-indexeddb-mirror
+        session="[[user.uid]]"
+        key="notifications"
+        data="{{notifications}}"
+        persisted-data="{{persistedNotifications}}">
+    </app-indexeddb-mirror>
 
     <template is="dom-repeat" items="[[notifications]]" as="notification">
       <notification-card sound-info="[[notification]]" ></notification-card>
