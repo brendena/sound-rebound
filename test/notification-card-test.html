@@ -32,6 +32,14 @@
 					
 					Polymer.dom(myEl.root).querySelector('paper-icon-button').click();
 				});
+
+				test("test disableToggle is two way binded", function(){
+					//myEl.setAttribute("soundInfo.disabledNotification",true) ;
+
+					Polymer.dom(myEl.root).querySelector('#disableToggle').click();
+
+					assert.equal(Polymer.dom(myEl.root).querySelector('#disableToggle').checked, true) 
+				});
 			})
 		</script>
 

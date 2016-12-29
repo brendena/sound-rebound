@@ -65,18 +65,29 @@
       properties:{
         listOfNotificationNames:{
           type: Array,
-          default: [],
+          value: function(){
+            return [];
+          }
         },
         listSoundsNotificationNamesFiltered: {
           type: Array,
-          default: []
+          value: function(){
+            return [];
+          }
         },
         listSounds: {
-          type: Array
+          type: Array,
+          value: function(){
+            return [];
+          }
         },
         disabledNoMoreNotifications: {
           type: Boolean,
-          default: false
+          value: false
+        },
+        selectedSound: {
+          type: Number,
+          value: -1
         }
       },
       observers: [
@@ -87,13 +98,16 @@
         console.log(this.listOfNotificationNames);
       },
       addNotification: function(){
-        this.fire('addNoticiation', {
+        this.fire('addNotification', {
                   "newNotification": {
                     name: this.listSoundsNotificationNamesFiltered[this.selectedSound].$val,
                     sensitivity: 0,
                     notificationDates: [],
                     repeatingNotification: false,
-                    disabledNotificaiton: false
+                    disabledNotificaiton: false,
+                    notificationDays:[{"day":"T",
+                                       "start":"01:00",
+                                        "end": "02:00"}]
                   }
         });
         this.$.paperList.selected = -1; 

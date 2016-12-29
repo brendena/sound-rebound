@@ -36,7 +36,8 @@
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.2.1",
     "polymerfire": "firebase/polymerfire#^0.10.3",
     "web-component-tester": "^5.0.0",
-    "iron-component-page": "^1.1.7"
+    "iron-component-page": "^1.1.7",
+    "paper-dialog-scrollable": "^1.1.5"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.1.7"

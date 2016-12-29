@@ -7,8 +7,13 @@
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
 
+<!--
+just doesn't seem to work
+<link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
+-->
 
-<link rel="import" href="./notification-time-edit.html">
+
+<link rel="import" href="./notification-time-edit-prep.html">
 
 <dom-module id="notification-edit-card">
   <style>
@@ -17,15 +22,18 @@
         top: -30px;
         left: -50px;
       }
+      paper-card:{
+        overflow: auto;
+      }
   </style>
   <template>
     <paper-card >
       <paper-fab id="closeButton" icon="close" on-tap="close"></paper-fab>
-      <div class="card-content">
 
-        <div >
-          <p>{{soundInfo.name}}</p>   
+        <div class="card-content">
+           <h2>{{soundInfo.name}}</h2>   
         </div>
+
         <div>
             <paper-toggle-button checked="{{soundInfo.repeatingNotification}}"> repeating notification</paper-toggle-button>
         </div>
@@ -35,16 +43,15 @@
         <div>
             <paper-toggle-button checked="{{soundInfo.timeNotification}}"> enable time specific notes</paper-toggle-button>
         </div>
-      </div>
-      <div>
-        <!-- have a tag about disabling notification date -->
-        <template is="dom-repeat" items="{{notificationDatesArray}}" as="day">
-            <notification-time-edit start="{{day.start}}" end="{{day.end}}"></notification-time-edit>
-        </template>
-      </div>
-      <paper-button on-tap="submit" raised> Submit </paper-button>
-      <paper-button on-tap="destroy" raised>delete</paper-button>
-      <paper-button on-tap="test" raised>test</paper-button>
+        
+        <div id="notificationTimeEditsContainer">
+          <notification-time-edit-prep id="notificationTPrep" days="{{soundInfo.notificationDays}}"></notification-time-edit-prep>
+
+        </div>
+        <paper-button on-tap="submit" raised> Submit </paper-button>
+        <paper-button on-tap="delete" raised>delete</paper-button>
+        <paper-button on-tap="test" raised>test</paper-button>
+
     </paper-card>
             
            
@@ -62,20 +69,58 @@
                     disabledNotification: false,
                     repeatingNotification: false,
                     timeNotification: false,
-                    sensitivity: 0
+                    sensitivity: 0,
+                    notificationDays:[{"day":"T",
+                                       "start":"01:00",
+                                        "end": "12:00"}]
                   }
                 }
                 
             },
         },
+        observers:[
+          '_closeOpenSpecificTimeSelector(soundInfo.timeNotification)'
+        ],
         submit: function(){
+          console.log("fired subitNotficationChange");
+          console.log(this.$.notificationTPrep.notificationDaysArray);
+          var nDayArray = this.$.notificationTPrep.notificationDaysArray;
+            
+          var days = ["M","T","W","Th","F","S", "SU"];
+          var returnArray = {};
+          for(var i =0; i < days.length; i++){
+              if(nDayArray[i].start != "00:00" || nDayArray[i].end != "00:00"){
+                  var asdf = days[i];
+                  returnArray[days[i]] = nDayArray[i];
+              }
+          }
+
+          console.log(days);
+          this.soundInfo.notificationDays = returnArray;
+
           this.fire('submitNotification', {"soundInfo": this.soundInfo});
         },
+        delete: function(){
+          this.fire('deleteNotification');
+        },
         close: function(){
-            this.fire('closeNotificationEdit');
+          this.fire('closeNotificationEdit');
         },
         test: function(){
             console.log(this.soundInfo);
+        },
+        _closeOpenSpecificTimeSelector: function(switchValue){
+          if(typeof switchValue != "undefined"){
+            if(switchValue === true){
+              this.$.notificationTimeEditsContainer.hidden = false;
+            }
+            else if(switchValue === false){
+              this.$.notificationTimeEditsContainer.hidden = true;
+            }
+          }        
+        },
+        test: function(){
+          console.log(this.soundInfo);
         }
 
         

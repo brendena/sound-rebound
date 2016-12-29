@@ -1,0 +1,80 @@
+<link rel="import" href="./notification-time-edit.html">
+
+<dom-module id="notification-time-edit-prep">
+  <style>
+
+      
+  </style>
+  <template>
+    
+    <template is="dom-repeat" items="{{notificationDaysArray}}" as="day">
+      <div>
+        <p>{{day.start}} {{day.end}}</p>
+        <notification-time-edit day="[[day.day]]" start="{{day.start}}" end="{{day.end}}"></notification-time-edit>
+      </div>
+    </template>
+    
+    <!-- so i need the leading zero in 03:00 or else it dons't know what to do. -->
+  </template>
+  <script>
+    Polymer({
+        is: 'notification-time-edit-prep',
+        properties:{
+            days: {
+              type: Array,
+              observer: '_changedNotificationDates',
+              value: function(){
+                return [];
+              }
+            },
+            notificationDaysArray:{
+              type: Array,
+              value: function(){
+                return [];
+              }
+            }
+        },
+        _changedNotificationDates:function(newValue){
+
+            if(typeof newValue != "undefined"){
+              console.log("_changedNotificationDates");
+              console.log(this.days);
+              var days = ["M","T","W","Th","F","S", "SU"];
+              var changedInfo = [];
+              var value = {};
+
+              for (i=0; i < days.length; i++) {
+                  
+                  value = this._checkDay(days[i]);
+                  
+                  if(value.day === ""){
+                      value.day = days[i];
+                  }
+                  
+                  changedInfo.push(value);
+              }
+              this.notificationDaysArray = changedInfo;
+              
+              console.log(this.notificationDaysArray);
+            }
+        },
+        _checkDay: function(day){
+          //i had a real hard time doing it any way so 
+          // don't bother changing it
+          for (var prop in this.days) {
+              if(day == this.days[prop].day){
+                  return this.days[prop];
+             }
+          }
+          
+          return {
+            "day": "",
+            "start": "00:00",
+            "end": "00:00"
+          };
+        }
+
+        
+    });
+  </script>
+</dom-module>

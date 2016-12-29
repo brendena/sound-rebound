@@ -20,27 +20,30 @@
     and two input tags
     -->
     <paper-checkbox checked='{{enabledInput}}' style="float:left">
-        time notification
+        [[day]]
     </paper-checkbox>
 
-    <time-input id="start" disabled="{{enabledInput}}" time="{{start}}" invalid="{{startInvalid}}"></time-input>
-    <time-input id="end" disabled="{{enabledInput}}" time="{{end}}" invalid="{{endInvalid}}"></time-input>
+    <time-input id="start" enabled="{{enabledInput}}" time="{{start}}" invalid="{{startInvalid}}"></time-input>
+    <time-input id="end" enabled="{{enabledInput}}" time="{{end}}" invalid="{{endInvalid}}"></time-input>
 
   </template>
   <script>
     Polymer({
         is: 'notification-time-edit',
         properties:{
+            day:{
+                type: String,
+                value: "default"
+            },
             start:{
                 type: String, 
                 notify: true,
-                //computed: "checkInput()",
+                reflectToAttribute: true,
                 value: "00:00"
             },
             end:{
                 type: String,
                 notify: true,
-                //computed: 'checkInput()',
                 value: "00:00"
             },
             startInvalid:{
@@ -59,30 +62,30 @@
         observers:[
             'checkInput(start, end)'
         ],
-        validate1: function(){
-            console.log("asdf");
-        },
-
-        ready:function(){
-             
+        attached: function(){
+            this._disableCheck();
         },
         checkInput: function(start, end){
+            console.log("checkInput got fired");
             var regularExpress = /[:]/;
             start = start.replace(regularExpress, "");
             end = end.replace(regularExpress, "");
-            console.log(start);
-            console.log(end);
             if(start > end){
-                console.log("is greater");
                 this.startInvalid =  true;
                 this.endInvalid = true;
             }
             else{
-                console.log("is less");
                 this.startInvalid =  false;
                 this.endInvalid = false;
             }
-            console.log("check");
+        },
+        _disableCheck: function(){
+            if(this.start == "00:00" && this.end == "00:00"){
+                this.enabledInput = false;
+            }
+            else{
+                this.enabledInput = true;
+            }
         }
 
         
@@ -90,81 +93,3 @@
     });
   </script>
 </dom-module>
-
-
-<!--
-        /
-        properties:{
-            start:{
-                type: String,
-                computed: "checkInput()", 
-                notify: true
-            },
-            end:{
-                type: String,
-                computed: 'checkInput()',
-                
-                notify: true
-            },
-            error:{
-                type: Boolean,
-                value: true
-            }
-        },
-        ready: function(){
-            
-            if(this.end == "0" && this.start == "0"){
-                console.log("got through ready");
-                this.enableInput = false;
-            }
-            else{
-                this.enableInput = true;
-            }
-            this.changed();
-        },
-        changed: function(){
-            //console.log("disabled = " + this.enableInput);
-            if(this.enableInput == false){
-                this.$.start.disabled  = true;
-                this.$.end.disabled  = true;
-            }
-            else{
-                this.$.start.disabled  = false;
-                this.$.end.disabled  = false;
-            }
-            
-        },
-        //this is really bad
-        checkInput: function(newValue, oldValue){
-            //console.log("checkInput!!!!!!!!!!!!!!!!!");
-            /*
-            
-            if(24 < this.start){
-                this.start = 24;
-            }
-            if(24 < this.end){
-                this.end = 24;
-            }
-            //this is for if people delete the input
-            if(this.start == "" || this.end == ""){
-                console.log("dam")
-                this.hideError = true;
-            }
-            else{
-
-                if(this.start <= this.end){
-                    
-                    this.hideError = true;
-                }
-                else{
-                    this.hideError = false;
-                }
-                
-            }
-            */
-        },   
-        validator1: function(){
-          console.log("asdf");  
-        }
-
--->

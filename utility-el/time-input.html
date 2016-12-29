@@ -9,34 +9,26 @@ but i might be able to add there styles
 <dom-module id="time-input">
   <style>
     :host{
-      float: left;
       width:200px;
+      float:left;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 5px;
     };
   </style>
   <template>
 
-    <cats-only></cats-only>
-
-    <section>
-
-      <p>
         
         <paper-input  id="paperInput" label="this input is manually validated" 
-                      required  type="time"  bind-value="{{time}}" disabled="[[disabled]]" 
+                      required  type="time"  disabled="[[!enabled]]" bind-value="{{time}}"
                       error-message="letters only!" invalid="{{invalid}}"> </paper-input>
-      </p>
-
-
-    </section>
-
-
            
   </template>
   <script>
     Polymer({
         is: 'time-input',
         properties:{
-          disabled:{
+          enabled:{
             type: Boolean,
             value: false,
           },

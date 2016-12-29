@@ -4,12 +4,6 @@
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
 
-<link rel="import" href="../utility-el/display-state-button.html">
-<!--
-
-<link rel="import" href="./priority-selector.html">
-<link rel="import" href="./notification-times.html">
--->
 
 <!-- 
 To DO
@@ -29,6 +23,18 @@ So active notification will turn the words green if there on and red if there no
     paper-card.disabled{
       background: rgba(208, 208, 208, 0.79);
     }
+    
+    /*
+    paper-toggle-button{
+      --paper-toggle-button-label-color: blue;
+    }
+    /*
+    maby try and use a mixin to get by the disabled color thing
+
+    you can not style a disabled paper-toggle button
+
+    */
+
     /*
     I like the idea of just scalling everthing for desktop
     but the problem is that the auto div or paper-card doesn't 
@@ -48,7 +54,7 @@ So active notification will turn the words green if there on and red if there no
             <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
             <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNoticiation" icon="delete"> </paper-icon-button>
 
-            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="[[soundInfo.disabledNotification]]" >disable 
+            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{soundInfo.disabledNotification}}" >disable 
 
             </paper-toggle-button>
             <paper-toggle-button checked="[[soundInfo.repeatingNotification]]" disabled>repeating notification
@@ -65,7 +71,7 @@ So active notification will turn the words green if there on and red if there no
 
         </div>
         <div>
-          <verbose-toggle-button></verbose-toggle-button>
+
         </div>
         <div>
           <p>[[soundInfo.sensitivity]]</p>
@@ -144,7 +150,7 @@ So active notification will turn the words green if there on and red if there no
           send a event to delete this notfication by its key.
         */
         deleteNoticiation: function(){
-          this.fire('deleteNoticiation', {$key: this.soundInfo.$key});
+          this.fire('deleteNotification', {$key: this.soundInfo.$key});
         }
         
     });

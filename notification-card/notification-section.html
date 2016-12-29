@@ -1,6 +1,6 @@
 <link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="../../polymerfire/firebase-query.html">
-<link rel="import" href="../../polymerfire/firebase-document.html"
+<link rel="import" href="../../polymerfire/firebase-document.html">
 <link rel="import" href="../../paper-dialog/paper-dialog.html">
 <link rel="import" href="./notification-add.html">
 <link rel="import" href="./notification-card.html">
@@ -37,11 +37,9 @@
     </template>
     <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
 
-    <paper-dialog  id="editNotificationModule"  modal="false" style="width:800px">
-      
+    <paper-dialog id="editNotificationModule" modal="false" style="width:800px">
       <notification-edit-card id="editingNotificationCard" sound-Info="[[editingNotification]]"></notification-edit-card>
     </paper-dialog>
-
   </template>
   <script>
     Polymer({
@@ -71,8 +69,8 @@
       listeners: {
         "editNotification": "editNotification",
         'updateDisabledValue': '_updateDisabledValue',
-        'deleteNoticiation' : '_deleteNotification',
-        'addNoticiation' : "_addNotification",
+        'deleteNotification' : '_deleteNotification',
+        'addNotification' : "_addNotification",
 
         "closeNotificationEdit": "_closeEditingNotificationCard",
         "submitNotification": "_submitNotification"
@@ -125,6 +123,7 @@
         
         e.detail.soundInfo.$key = key;
 
+        this.$.editNotificationModule.close();
         
       },
       /*

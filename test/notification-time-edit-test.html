@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+		<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		<script src="../bower_components/web-component-tester/browser.js"></script>
+
+		<link rel="import" href="../notification-card/notification-time-edit.html">
+	</head>
+	<body>
+		
+		<test-fixture id="notification-time-edit-fixture">
+			<template>
+				<notification-time-edit></notification-time-edit>
+			</template>
+		</test-fixture>
+
+		<script>
+			suite('<notification-card>', function(){
+				var myEl;
+
+				setup(function(){
+					myEl = fixture('notification-time-edit-fixture');
+				});
+
+
+				
+				test('test if valid input 0,0 true', function(){
+					myEl.start = "00:00";
+					myEl.end = "00:00";
+
+
+					assert.equal(myEl.startInvalid, false);
+					assert.equal(myEl.endInvalid, false);
+				});
+
+				test('test if valid input 0,8 true', function(){
+					myEl.start = "00:00";
+					myEl.end = "08:00";
+
+
+					assert.equal(myEl.startInvalid, false);
+					assert.equal(myEl.endInvalid, false);
+				});
+
+				test('test if valid input 8,0 true', function(){
+					myEl.start = "08:00";
+					myEl.end = "00:00";
+
+
+					assert.equal(myEl.startInvalid, true);
+					assert.equal(myEl.endInvalid, true);
+				});
+				
+				/*
+				test('test if disabled, disables time-input ', function(){
+					var startElement = Polymer.dom().getElementById('start');
+					myEl.enabledInput = true;
+					
+
+
+					assert.equal(startElement.disabled, true);
+				});
+				*/
+
+
+			})
+		</script>
+
+	</body>
+</html>
