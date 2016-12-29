@@ -33,14 +33,14 @@
       path="/users/[[user.uid]]/[[specificNotification]]"
       data="{{editingNotification}}">
     </firebase-document>
-
+    <!--
     <app-indexeddb-mirror
         session="[[user.uid]]"
         key="notifications"
         data="{{notifications}}"
         persisted-data="{{persistedNotifications}}">
     </app-indexeddb-mirror>
-
+    -->
     <template is="dom-repeat" items="[[notifications]]" as="notification">
       <notification-card sound-info="[[notification]]" ></notification-card>
     </template>
