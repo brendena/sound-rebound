@@ -23,71 +23,75 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
 <link rel="import" href="../../paper-progress/paper-progress.html">
 
 <link rel="import" href="../app-pages/page-account-setting.html">
+
 <link rel="import" href="../app-pages/page-about.html">
+
 <link rel="import" href="../notification-card/notification-section.html">
+
 <link rel="import" href="./app-settings.html">
-<link rel="import" href="./app-layout.html">
+
 <link rel="import" href="./app-login.html">
+
 
 <dom-module id="app-layout">
   <template>
     <style>
     </style>
-
-    <app-location use-hash-as-path route="{{route}}"></app-location>
-
-    <app-route
-      route="{{route}}"
-      pattern="/:page"
-      data="{{data}}"> 
-      <!-- active="{{pageActive}}" the data is going to be the page access it by data.page-->
-    </app-route>
-     
-
-    <app-login></app-login>
-
-
-    <app-header reveals>
-      <app-toolbar>
-        <paper-icon-button icon="menu" onclick="drawer.toggle()"></paper-icon-button>
-        <div main-title>My app</p></div>
-        <paper-icon-button icon="delete"></paper-icon-button>
-        <paper-icon-button icon="search"></paper-icon-button>
-        <paper-icon-button icon="close"></paper-icon-button>
-        <!--<paper-progress value="10" indeterminate bottom-item></paper-progress> -->
-      </app-toolbar>
-    </app-header>
-    <div class="layout vertical">
-
-      <neon-animated-pages selected='{{data.page}}'
-                           attr-for-selected='key'
-                           entry-animation='slide-from-left-animation'
-                           exit-animation='slide-right-animation'
-                           class="flex">
-
-        <neon-animatable key='notification'>
-          <notification-section></notification-section>
-        </neon-animatable>
-
-        <neon-animatable key='about'>
-          <page-about></page-about>
-        </neon-animatable>
-
-        <neon-animatable key='accountPage'>
-          <page-account-setting></page-account-setting>
-        </neon-animatable>
-
-
-      </neon-animated-pages>
-
-    </div>
-    <app-drawer id="drawer" swipe-open>
-      <!-- probably should have a modul to confirm there actions-->
-      <div style="height: 100%; overflow: auto;">
-        <app-settings></app-settings> 
-      </div>
-    </app-drawer>
     
+     <app-location use-hash-as-path route="{{route}}"></app-location>
+
+<app-route
+  route="{{route}}"
+  pattern="/:page"
+  data="{{data}}"> 
+  <!--active="{{pageActive}}"  the data is going to be the page access it by data.page -->
+</app-route>
+ 
+
+<app-login></app-login>
+
+
+<app-header reveals>
+  <app-toolbar>
+    <paper-icon-button icon="menu" onclick="drawer.toggle()"></paper-icon-button>
+    <div main-title>My app</p></div>
+    <paper-icon-button icon="delete"></paper-icon-button>
+    <paper-icon-button icon="search"></paper-icon-button>
+    <paper-icon-button icon="close"></paper-icon-button>
+    <!--<paper-progress value="10" indeterminate bottom-item></paper-progress>-->
+  </app-toolbar>
+</app-header>
+<div class="layout vertical">
+
+  <neon-animated-pages selected='{{data.page}}'
+                       attr-for-selected='key'
+                       entry-animation='slide-from-left-animation'
+                       exit-animation='slide-right-animation'
+                       class="flex">
+
+    <neon-animatable key='notification'>
+      <notification-section></notification-section>
+    </neon-animatable>
+
+    <neon-animatable key='about'>
+      <page-about></page-about>
+    </neon-animatable>
+
+    <neon-animatable key='accountPage'>
+      <page-account-setting></page-account-setting>
+    </neon-animatable>
+
+
+  </neon-animated-pages>
+
+</div>
+<app-drawer id="drawer" swipe-open>
+  <!-- !!!!!!!!!!!!!! future feature   !!!!!!!!!!!!!!!!!-->
+  <!--probably should have a modul to confirm there actions -->
+  <div style="height: 100%; overflow: auto;">
+    <app-settings></app-settings> 
+  </div>
+</app-drawer>
   </template>
   <script>
     Polymer({
