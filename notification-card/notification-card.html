@@ -54,35 +54,35 @@ So active notification will turn the words green if there on and red if there no
       <div class="card-content">
         <div >
 
-            <h4>[[soundInfo.name]]                                                                                                  <!-- can't edit -->
-              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
+            <h4>[[singleNote.name]]                                                                                                  <!-- can't edit -->
+              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{singleNote.disabledNotification}}"></paper-icon-button>
               <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNotification" icon="delete"> </paper-icon-button>
             </h4>   
        </div>
        <div>
 
 
-            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{soundInfo.disabledNotification}}" >disable 
+            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{singleNote.disabledNotification}}" >disable 
 
             </paper-toggle-button>
-            <paper-toggle-button checked="[[soundInfo.repeatingNotification]]" disabled>repeating notification
+            <paper-toggle-button checked="[[singleNote.repeatingNotification]]" disabled>repeating notification
 
 
             </paper-toggle-button>
-            <paper-toggle-button checked="[[soundInfo.timeNotification]]" disabled>time sensitive notification
+            <paper-toggle-button checked="[[singleNote.timeNotification]]" disabled>time sensitive notification
 
               
             </paper-toggle-button>
 
         </div>
         <div>
-            <p>[[soundInfo.sensitivity]]/100 sensitivity levels</p>
+            <p>[[singleNote.sensitivity]]/100 sensitivity levels</p>
         </div>
       </div>
 
       
       <div id="timeNotificationDisplay" class="card-actions">
-          <notification-times days="[[soundInfo.notificationDays]]"></notification-times>
+          <notification-times days="[[singleNote.notificationDays]]"></notification-times>
       </div>
 
     </paper-card>
@@ -100,7 +100,7 @@ So active notification will turn the words green if there on and red if there no
           this._disabledLogic();
         },
         properties:{
-          soundInfo:{
+          singleNote:{
             type: Object,
             reflectToAttribute: true,
             value: function(){
@@ -116,27 +116,27 @@ So active notification will turn the words green if there on and red if there no
           }
         },
         observers:[
-          'toggletimeNotificationDisplay(soundInfo.timeNotification)'
+          '_toggletimeNotificationDisplay(singleNote.timeNotification)'
         ],
         /**
           This get called on #disableToggle and will add the class of disable 
-          and change the property of the soundInfo.disabledNotification by calling a event
+          and change the property of the singleNote.disabledNotification by calling a event
 
           @event toggleDisable
         */
 
         toggleDisable:function(){
             this._disabledLogic();
-            this.soundInfo.disabledNotification = !this.soundInfo.disabledNotification;
+            this.singleNote.disabledNotification = !this.singleNote.disabledNotification;
 
-            this.fire('updateDisabledValue',{$key: this.soundInfo.$key, disabledNotification : !this.soundInfo.disabledNotification});
+            this.fire('updateDisabledValue',{$key: this.singleNote.$key, disabledNotification : !this.singleNote.disabledNotification});
         },
         /**
           This disables all the items attached to the card
          
         */
         _disabledLogic:function(){
-          if(this.soundInfo.disabledNotification){
+          if(this.singleNote.disabledNotification){
             this.classList.add('disabled');
             this.$.paperCard.classList.add('disabled')
           } 
@@ -146,15 +146,15 @@ So active notification will turn the words green if there on and red if there no
           }
         },
         editNotificationLauncher:function(){
-            this.fire('editNotification', {soundInfo: this.soundInfo});
+            this.fire('editNotification', {singleNote: this.singleNote});
         },
         /**
           send a event to delete this notfication by its key.
         */
         deleteNotification: function(){
-          this.fire('deleteNotification', {$key: this.soundInfo.$key});
+          this.fire('deleteNotification', {$key: this.singleNote.$key});
         },
-        toggletimeNotificationDisplay: function(toggleValue){
+        _toggletimeNotificationDisplay: function(toggleValue){
           if(toggleValue){
             this.$.timeNotificationDisplay.hidden= false;
           }

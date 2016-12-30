@@ -32,30 +32,26 @@ just doesn't seem to work
       <paper-fab id="closeButton" icon="close" on-tap="close"></paper-fab>
 
         <div class="card-content">
-           <h2>{{soundInfo.name}}</h2>   
+           <h2>{{singleNote.name}}</h2>   
         </div>
 
         <div>
-            <paper-toggle-button checked="{{soundInfo.repeatingNotification}}"> repeating notification</paper-toggle-button>
+            <paper-toggle-button checked="{{singleNote.repeatingNotification}}"> repeating notification</paper-toggle-button>
         </div>
         <div>
-            <!--<priority-selector certainty="{{soundInfo.certainty}}"></priority-selector> -->
-        </div>
-        <div>
-            <paper-toggle-button checked="{{soundInfo.timeNotification}}"> enable time specific notes</paper-toggle-button>
+            <paper-toggle-button checked="{{singleNote.timeNotification}}"> enable time specific notes</paper-toggle-button>
         </div>
         <div>
           
         </div>
         <div id="notificationTimeEditsContainer">
-          <notification-time-edit-prep id="notificationTPrep" days="{{soundInfo.notificationDays}}"></notification-time-edit-prep>
+          <notification-time-edit-prep id="notificationTPrep" days="{{singleNote.notificationDays}}"></notification-time-edit-prep>
         </div>
         <div>
-          <sensitivity-selector sensitivity="{{soundInfo.sensitivity}}"></sensitivity-selector>
+          <sensitivity-selector sensitivity="{{singleNote.sensitivity}}"></sensitivity-selector>
         </div>
         <paper-button on-tap="submit" raised> Submit </paper-button>
         <paper-button on-tap="delete" raised>delete</paper-button>
-        <paper-button on-tap="test" raised>test</paper-button>
 
     </paper-card>
             
@@ -65,7 +61,7 @@ just doesn't seem to work
     Polymer({
         is: 'notification-edit-card',
         properties:{
-          soundInfo:{
+          singleNote:{
                 type : Object,
                 reflectToAttribute: true,
                 value: function(){
@@ -75,16 +71,14 @@ just doesn't seem to work
                     repeatingNotification: false,
                     timeNotification: false,
                     sensitivity: 0,
-                    notificationDays:[{"day":"T",
-                                       "start":"01:00",
-                                        "end": "12:00"}]
+                    notificationDays:[]
                   }
                 }
                 
             },
         },
         observers:[
-          '_closeOpenSpecificTimeSelector(soundInfo.timeNotification)'
+          '_closeOpenSpecificTimeSelector(singleNote.timeNotification)'
         ],
         submit: function(){
           console.log("fired subitNotficationChange");
@@ -101,18 +95,15 @@ just doesn't seem to work
           }
 
           console.log(days);
-          this.soundInfo.notificationDays = returnArray;
+          this.singleNote.notificationDays = returnArray;
 
-          this.fire('submitNotification', {"soundInfo": this.soundInfo});
+          this.fire('submitNotification', {"singleNote": this.singleNote});
         },
         delete: function(){
           this.fire('deleteNotification');
         },
         close: function(){
           this.fire('closeNotificationEdit');
-        },
-        test: function(){
-            console.log(this.soundInfo);
         },
         _closeOpenSpecificTimeSelector: function(switchValue){
           if(typeof switchValue != "undefined"){
@@ -123,9 +114,6 @@ just doesn't seem to work
               this.$.notificationTimeEditsContainer.hidden = true;
             }
           }        
-        },
-        test: function(){
-          console.log(this.soundInfo);
         }
 
         

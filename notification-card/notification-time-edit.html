@@ -62,12 +62,12 @@
             }
         },
         observers:[
-            'checkInput(start, end)'
+            '_checkInput(start, end)'
         ],
         attached: function(){
             this._disableCheck();
         },
-        checkInput: function(start, end){
+        _checkInput: function(start, end){
             this._disableCheck();
             console.log("checkInput got fired");
             var regularExpress = /[:]/;

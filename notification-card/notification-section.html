@@ -42,12 +42,12 @@
     </app-indexeddb-mirror>
     -->
     <template is="dom-repeat" items="[[notifications]]" as="notification">
-      <notification-card sound-info="[[notification]]" ></notification-card>
+      <notification-card single-note="[[notification]]" ></notification-card>
     </template>
     <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
 
     <paper-dialog id="editNotificationModule" modal="false" style="width:800px">
-      <notification-edit-card id="editingNotificationCard" sound-Info="[[editingNotification]]"></notification-edit-card>
+      <notification-edit-card id="editingNotificationCard" single-note="[[editingNotification]]"></notification-edit-card>
     </paper-dialog>
   </template>
   <script>
@@ -61,8 +61,10 @@
           }
         },
         notifications:{
-          type: Object,
-          observer: 'updateListNotificationNames'
+          type: Array,
+          value: function(){
+            return [];
+          }
         },
         specificNotification:{
           type: String,
@@ -72,11 +74,11 @@
       },
       
       observers: [
-        'updateListNotificationNames(notifications.*)'
+        '_updateListNotificationNames(notifications.*)'
       ],
       
       listeners: {
-        "editNotification": "editNotification",
+        "editNotification": "_editNotification",
         'updateDisabledValue': '_updateDisabledValue',
         'deleteNotification' : '_deleteNotification',
         'addNotification' : "_addNotification",
@@ -89,8 +91,8 @@
         console.log("opening");
         //this.$.editNotificationModule.open();
       },
-      editNotification: function(e){
-        this.specificNotification = e.detail.soundInfo.$key;
+      _editNotification: function(e){
+        this.specificNotification = e.detail.singleNote.$key;
         this.$.editNotificationModule.open();
       },
       _updateDisabledValue: function(e){
@@ -110,16 +112,16 @@
       _submitNotification: function(e){
         
         var firebaseDoc = this.$.firebaseDoc;
-        var key = e.detail.soundInfo.$key;
-        delete e.detail.soundInfo.$key;
+        var key = e.detail.singleNote.$key;
+        delete e.detail.singleNote.$key;
 
         firebaseDoc.data = "";
-        firebaseDoc.data = e.detail.soundInfo;
+        firebaseDoc.data = e.detail.singleNote;
 
         console.log("submited notification");
 
         
-        e.detail.soundInfo.$key = key;
+        e.detail.singleNote.$key = key;
 
         this.$.editNotificationModule.close();
         
@@ -130,7 +132,7 @@
       basics behind the ovservers
       http://stackoverflow.com/questions/38264330/firebase-query-data-observer-not-firing
       */
-      updateListNotificationNames: function(newData){
+      _updateListNotificationNames: function(newData){
         
         /*if newData is not defined that meens that there 
           no data to look at so stop. 

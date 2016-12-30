@@ -91,8 +91,8 @@
         }
       },
       observers: [
-        'filterListOfNoticationsNames(listSounds.*)',
-        'filterListOfNoticationsNames(listOfNotificationNames.*)'
+        '_filterListOfNoticationsNames(listSounds.*)',
+        '_filterListOfNoticationsNames(listOfNotificationNames.*)'
       ],
       test: function(){
         console.log(this.listOfNotificationNames);
@@ -105,6 +105,7 @@
                     notificationDates: [],
                     repeatingNotification: false,
                     disabledNotification: false,
+                    timeNotification: false,
                     notificationDays:[{"day":"T",
                                        "start":"01:00",
                                         "end": "02:00"}]
@@ -112,7 +113,7 @@
         });
         this.$.paperList.selected = -1; 
       },
-      filterListOfNoticationsNames: function(){
+      _filterListOfNoticationsNames: function(){
         var tempArray = [];
         /*
           need to check for listofNotifation not being set yet and being set to a null array
