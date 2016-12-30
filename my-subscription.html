@@ -1,0 +1,88 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymerfire/firebase-auth.html">
+<link rel="import" href="../polymerfire/firebase-document.html">
+<link rel="import" href="../polymerfire/firebase-messaging.html">
+<link rel="import" href="../paper-toggle-button/paper-toggle-button.html">
+<dom-module id="my-subscription">
+  <template>
+
+  <firebase-auth
+    user="{{user}}">
+
+  </firebase-auth>
+
+
+  <firebase-messaging 
+    id="messaging"
+    name="sound-rebound"
+    token="{{token}}"
+    on-message="handleMessage"
+    ><!--custom-sw-->
+  </firebase-messaging>
+
+  <firebase-document 
+    path="/notification/[[user.uid]]/token" 
+    value="[[token]]">
+    
+  </firebase-document>
+
+  <paper-toggle-button
+    id="subscribe"
+    on-tap="toggleSubscription"
+    checked="[[token]]"
+ >
+    subscribe to notifications
+  </paper-toggle-button>
+
+  <p>Token:</p>
+  <p>[[token]]</p>
+
+
+
+
+  </template>
+  <script>
+    Polymer({
+      is: 'my-subscription',
+      ready: function(){
+        /*
+        console.log("this app");
+        console.log(this.app);
+        app = this.$.messaging;
+
+
+        window.addEventListener('WebComponentsReady', function() {
+            if (navigator.serviceWorker) {
+                navigator.serviceWorker.register('firebase-messaging-sw.js').then(function(sw) {
+                    console.log("got in")
+                    app.activate(sw);
+                });
+            }
+        });
+        */
+      },
+      toggleSubscription: function(){
+
+        this.$.messaging.requestPermission().then(function() {
+          // permission was granted
+          
+        }, function(err) {
+          // permission was denied
+          console.log(err);
+        });
+
+      },
+      handleMessage: function(){
+        console.log('message recived', arguments);
+      }
+    });
+  </script>
+</dom-module>

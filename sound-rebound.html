@@ -1,0 +1,34 @@
+<link rel="import" href="../platinum-sw/platinum-sw-elements.html">
+<link rel="import" href="./app-elements/app-layout.html">
+<link rel="import" href="./my-firebase-app.html">
+
+<link rel="import" href="./my-subscription.html">
+<dom-module id="sound-rebound">
+  <template>
+    <style>
+    </style>
+    <!--
+    <platinum-sw-register
+    auto-register
+    skip-waiting
+    clients-claim
+    reload-on-install
+    href="sw-import.js">
+       
+        <platinum-sw-cache
+          default-cache-strategy="networkFirst">
+        </platinum-sw-cache>
+    </platinum-sw-register>
+    -->
+    
+    <my-subscription></my-subscription>
+    <my-firebase-app></my-firebase-app>
+    <app-layout></app-layout>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'sound-rebound'
+    });
+  </script>
+</dom-module>
