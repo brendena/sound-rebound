@@ -10,11 +10,11 @@
     "sound"
   ],
   "license": "MIT",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
+    "semiNew",
     "test",
     "tests"
   ],
