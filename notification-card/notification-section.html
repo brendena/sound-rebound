@@ -16,20 +16,17 @@
     </style>
     <firebase-auth
         id="auth"
-        app-name="sound-rebound"
         user="{{user}}">
     </firebase-auth>
 
     <firebase-query
       id="query"
-      app-name="sound-rebound"
       path="/users/[[user.uid]]"
       data="{{notifications}}">
     </firebase-query>
 
     <firebase-document
       id="firebaseDoc"
-      app-name="sound-rebound"
       path="/users/[[user.uid]]/[[specificNotification]]"
       data="{{editingNotification}}">
     </firebase-document>

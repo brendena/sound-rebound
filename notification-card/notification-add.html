@@ -24,22 +24,20 @@
 
     <firebase-auth
         id="auth"
-        app-name="sound-rebound"
         user="{{user}}">
     </firebase-auth>
 
     <firebase-query
       id="query"
-      app-name="sound-rebound"
       path="/listSounds"
-      data="{{listSounds}}">
+      data="[[listSounds]]">
     </firebase-query>
 
     <firebase-query
       id="usersAccount"
-      app-name="sound-rebound"
       path="/users/[[user.uid]]">
     </firebase-query>
+
     <paper-card id="paperCard">
       <div class="cafe-header">
         <p id="headerInformation"></p>

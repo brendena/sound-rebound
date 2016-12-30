@@ -22,10 +22,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <firebase-messaging 
     id="messaging"
-    name="sound-rebound"
     token="{{token}}"
-    on-message="handleMessage"
-    ><!--custom-sw-->
+    on-message="handleMessage">
   </firebase-messaging>
 
   <firebase-document 
@@ -53,21 +51,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'my-subscription',
       ready: function(){
-        /*
-        console.log("this app");
-        console.log(this.app);
-        app = this.$.messaging;
-
-
-        window.addEventListener('WebComponentsReady', function() {
-            if (navigator.serviceWorker) {
-                navigator.serviceWorker.register('firebase-messaging-sw.js').then(function(sw) {
-                    console.log("got in")
-                    app.activate(sw);
-                });
-            }
-        });
-        */
       },
       toggleSubscription: function(){
 
