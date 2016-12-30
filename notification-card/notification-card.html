@@ -56,7 +56,7 @@ So active notification will turn the words green if there on and red if there no
 
             <h4>[[soundInfo.name]]                                                                                                  <!-- can't edit -->
               <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{soundInfo.disabledNotification}}"></paper-icon-button>
-              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNoticiation" icon="delete"> </paper-icon-button>
+              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNotification" icon="delete"> </paper-icon-button>
             </h4>   
        </div>
        <div>
@@ -151,7 +151,7 @@ So active notification will turn the words green if there on and red if there no
         /**
           send a event to delete this notfication by its key.
         */
-        deleteNoticiation: function(){
+        deleteNotification: function(){
           this.fire('deleteNotification', {$key: this.soundInfo.$key});
         },
         toggletimeNotificationDisplay: function(toggleValue){
