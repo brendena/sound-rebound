@@ -8,23 +8,51 @@
   <style>
       /*
       https://codingwithgerwin.blogspot.com/2016/04/polymer-and-hidden-attribute.html
+      @apply(--layout-flex);
       */
+      :host{
+        display:block;
+        padding:5px;
+        
+      };
+
       p[[hidden]]{
           display: none;
       }  
+      #div2{
+        display: flex;
+        @apply(--layout-horizontal);
+      }
+    paper-checkbox{
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+
+    @media (max-width: 500px) {
+
       
+      time-input{
+        @apply(--layout-vertical);
+      }
+
+
+    }
+
   </style>
   <template>
     <!-- 
     i want a checkbox
     and two input tags
     -->
-    <paper-checkbox checked='{{enabledInput}}' style="float:left">
-        [[day]]
-    </paper-checkbox>
-
-    <time-input id="start" enabled="{{enabledInput}}" time="{{start}}" invalid="{{startInvalid}}"></time-input>
-    <time-input id="end" enabled="{{enabledInput}}" time="{{end}}" invalid="{{endInvalid}}"></time-input>
+    <div id="div2" >
+        <paper-checkbox checked='{{enabledInput}}' style="float:left">
+            [[day]]
+        </paper-checkbox>
+        <div id="div3">
+            <time-input id="start" enabled="{{enabledInput}}" time="{{start}}" invalid="{{startInvalid}}"></time-input>
+            <time-input id="end" enabled="{{enabledInput}}" time="{{end}}" invalid="{{endInvalid}}"></time-input>
+        <div>
+    </div>
     <!--
     <p>[[start]] NTE</p>
     <p>[[end]] NTE</p>

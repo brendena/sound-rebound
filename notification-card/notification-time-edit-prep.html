@@ -4,14 +4,12 @@
 <dom-module id="notification-time-edit-prep">
   <style>
 
-      
+  
   </style>
   <template>
     
     <template is="dom-repeat" items="{{notificationDaysArray}}" as="day">
-      <div>
         <notification-time-edit id="monkey" day="[[day.day]]" start="{{day.start}}" end="{{day.end}}"></notification-time-edit>
-      </div>
     </template>
     
     <!-- so i need the leading zero in 03:00 or else it dons't know what to do. -->
