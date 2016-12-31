@@ -7,7 +7,9 @@
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
 <link rel="import" href="../utility-el/sensitivity-selector.html">
-
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
 <!--
 just doesn't seem to work
 <link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
@@ -20,47 +22,53 @@ just doesn't seem to work
   <style>
       #closeButton{
         position:absolute;
-        top: -30px;
-        left: -50px;
+        top: -50px;
+        left: -25px;
       }
       paper-card:{
         overflow: auto;
       }
   </style>
   <template>
-    <paper-card >
+  
+  <paper-dialog id="editNotificationModule" modal="false">
+
       <paper-fab id="closeButton" icon="close" on-tap="close"></paper-fab>
 
         <div class="card-content">
            <h2>{{singleNote.name}}</h2>   
         </div>
-
-        <div>
-            <paper-toggle-button checked="{{singleNote.repeatingNotification}}"> repeating notification</paper-toggle-button>
-        </div>
-        <div>
-            <paper-toggle-button checked="{{singleNote.timeNotification}}"> enable time specific notes</paper-toggle-button>
-        </div>
-        <div>
-          
-        </div>
-        <div id="notificationTimeEditsContainer">
-          <notification-time-edit-prep id="notificationTPrep" days="{{singleNote.notificationDays}}"></notification-time-edit-prep>
-        </div>
-        <div>
-          <sensitivity-selector sensitivity="{{singleNote.sensitivity}}"></sensitivity-selector>
-        </div>
+        <paper-dialog-scrollable>
+          <div>
+              <paper-toggle-button checked="{{singleNote.repeatingNotification}}"> repeating notification</paper-toggle-button>
+          </div>
+          <div>
+              <paper-toggle-button checked="{{singleNote.timeNotification}}"> enable time specific notes</paper-toggle-button>
+          </div>
+          <div>
+            
+          </div>
+          <div id="notificationTimeEditsContainer">
+            <notification-time-edit-prep id="notificationTPrep" days="{{singleNote.notificationDays}}"></notification-time-edit-prep>
+          </div>
+        
+          <div>
+            <sensitivity-selector sensitivity="{{singleNote.sensitivity}}"></sensitivity-selector>
+          </div>
+        </paper-dialog-scrollable>
         <paper-button on-tap="submit" raised> Submit </paper-button>
         <paper-button on-tap="delete" raised>delete</paper-button>
 
-    </paper-card>
-            
-           
+              
+
+  </paper-dialog>  
+
   </template>
   <script>
     Polymer({
         is: 'notification-edit-card',
         properties:{
+
           singleNote:{
                 type : Object,
                 reflectToAttribute: true,
@@ -102,8 +110,11 @@ just doesn't seem to work
         delete: function(){
           this.fire('deleteNotification');
         },
+        open: function(){
+          this.$.editNotificationModule.open();
+        },
         close: function(){
-          this.fire('closeNotificationEdit');
+          this.$.editNotificationModule.close();
         },
         _closeOpenSpecificTimeSelector: function(switchValue){
           if(typeof switchValue != "undefined"){
@@ -114,7 +125,7 @@ just doesn't seem to work
               this.$.notificationTimeEditsContainer.hidden = true;
             }
           }
-          this.fire('resizeEditPaperDialog');        
+          this.$.editNotificationModule.notifyResize();        
         }
 
         

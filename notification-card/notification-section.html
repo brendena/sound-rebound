@@ -1,8 +1,9 @@
 <link rel="import" href="../../app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+
 <link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="../../polymerfire/firebase-query.html">
 <link rel="import" href="../../polymerfire/firebase-document.html">
-<link rel="import" href="../../paper-dialog/paper-dialog.html">
+
 
 <link rel="import" href="./notification-add.html">
 <link rel="import" href="./notification-card.html">
@@ -43,9 +44,10 @@
     </template>
     <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
 
-    <paper-dialog id="editNotificationModule" modal="false">
-      <notification-edit-card id="editingNotificationCard" single-note="[[editingNotification]]"></notification-edit-card>
-    </paper-dialog>
+    <notification-edit-card id="editNotificationModule" single-note="[[editingNotification]]"></notification-edit-card>
+
+
+
   </template>
   <script>
     Polymer({
@@ -80,14 +82,12 @@
         'deleteNotification' : '_deleteNotification',
         'addNotification' : "_addNotification",
 
-        "closeNotificationEdit": "_closeEditingNotificationCard",
+
         "submitNotification": "_submitNotification",
-        "resizeEditPaperDialog": "_resizeEditPaperDialog"
       },
 
       ready: function(){
         console.log("opening");
-        //this.$.editNotificationModule.open();
       },
       _editNotification: function(e){
         this.specificNotification = e.detail.singleNote.$key;
@@ -104,12 +104,8 @@
       _addNotification: function(e){
         this.$.query.ref.push(e.detail.newNotification);
       },
-      _closeEditingNotificationCard: function(){
-        this.$.editNotificationModule.close();
-      },
-      _resizeEditPaperDialog: function(){
-        this.$.editNotificationModule.notifyResize();
-      },
+
+
       _submitNotification: function(e){
         
         var firebaseDoc = this.$.firebaseDoc;
