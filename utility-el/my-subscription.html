@@ -1,0 +1,103 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../polymerfire/firebase-auth.html">
+<link rel="import" href="../../polymerfire/firebase-document.html">
+<link rel="import" href="../../polymerfire/firebase-messaging.html">
+<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
+<dom-module id="my-subscription">
+  <template>
+
+  <firebase-auth
+    id="auth"
+    user="{{user}}">
+  </firebase-auth>
+
+
+  <firebase-messaging 
+    id="messaging"
+    token="{{token}}"
+    on-message="handleMessage">
+  </firebase-messaging>
+
+  <firebase-document 
+    id="documentToken"
+    path="/notification_token/[[user.uid]]/token" 
+    data="[[token]]">
+  </firebase-document>
+
+  <firebase-document 
+    id="documentDisabledNotification"
+    path="/notification_token/[[user.uid]]/disabled_global_notifications" 
+    data="{{checked}}">
+  </firebase-document>
+
+  <paper-toggle-button
+    id="subscribe"
+    on-tap="toggleSubscription"
+    checked="{{checked}}">
+    subscribe to notifications
+  </paper-toggle-button>
+  <!--
+  <p on-tap="test">Token:</p>
+  <p>[[token]]</p>
+  <p>user: [[user.ui]]</p>
+  -->
+  </template>
+  <script>
+    Polymer({
+      is: 'my-subscription',
+      properties:{
+        token: {
+          type: String,
+          value: ""
+        },
+        user: {
+          type: Object,
+          value: function(){
+            return {};
+          }
+        },
+        checked: {
+          type: Boolean,
+          value: false
+        }
+      },
+      observers:["_updateToken(user,token)"],
+      /*
+        This update the value of token.
+
+        You need this because token can be fired before user get set.
+        If this happens then nothing happens.  User need to authenticated 
+        by a server so if you have notifications on and load the app it will not
+        fire before token get set.
+      */
+      _updateToken: function(user,token){
+        if(typeof user !== "undefined" && typeof token !== "undefined"){
+          this.$.documentToken.data = this.token;  
+        }
+      },
+      toggleSubscription: function() {
+        var requestPermission = this.$.subscribe.checked;
+        if (requestPermission) {
+          this.$.messaging.requestPermission().then(() => {
+            //console.log('user subscribed successfully!');
+          }, (err) => {
+            console.log('user subscribe failed :(', err);
+          });
+        } else {
+          //console.log('user rejected permission');
+        }
+      },
+      handleMessage: function(){
+        console.log('message recived', arguments);
+      }
+    });
+  </script>
+</dom-module>

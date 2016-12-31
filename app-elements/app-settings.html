@@ -41,7 +41,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
       <firebase-auth
         id="auth"
-        app-name="sound-rebound"
         user="{{user}}">
       </firebase-auth>
 
@@ -61,7 +60,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'app-settings',
       properties:{
         user:{
-          type:"Object"
+          type:"Object",
+          value: function(){
+            return {};
+          }
         }
 
       }
