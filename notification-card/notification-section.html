@@ -43,7 +43,7 @@
     </template>
     <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
 
-    <paper-dialog id="editNotificationModule" modal="false" style="width:800px">
+    <paper-dialog id="editNotificationModule" modal="false">
       <notification-edit-card id="editingNotificationCard" single-note="[[editingNotification]]"></notification-edit-card>
     </paper-dialog>
   </template>
@@ -81,7 +81,8 @@
         'addNotification' : "_addNotification",
 
         "closeNotificationEdit": "_closeEditingNotificationCard",
-        "submitNotification": "_submitNotification"
+        "submitNotification": "_submitNotification",
+        "resizeEditPaperDialog": "_resizeEditPaperDialog"
       },
 
       ready: function(){
@@ -105,6 +106,9 @@
       },
       _closeEditingNotificationCard: function(){
         this.$.editNotificationModule.close();
+      },
+      _resizeEditPaperDialog: function(){
+        this.$.editNotificationModule.notifyResize();
       },
       _submitNotification: function(e){
         

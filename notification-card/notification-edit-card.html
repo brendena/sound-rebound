@@ -113,7 +113,8 @@ just doesn't seem to work
             else if(switchValue === false){
               this.$.notificationTimeEditsContainer.hidden = true;
             }
-          }        
+          }
+          this.fire('resizeEditPaperDialog');        
         }
 
         
