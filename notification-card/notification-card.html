@@ -24,6 +24,10 @@ So active notification will turn the words green if there on and red if there no
 
 <dom-module id="notification-card">
   <style is="custom-style">
+    :host{
+      min-width:250px;
+    };
+
     paper-card.disabled{
       background: rgba(208, 208, 208, 0.79);
     }
@@ -49,7 +53,7 @@ So active notification will turn the words green if there on and red if there no
     */
   </style>
   <template>
-   
+
     <paper-card id="paperCard">
       <div class="card-content">
         <div >
@@ -86,7 +90,7 @@ So active notification will turn the words green if there on and red if there no
       </div>
 
     </paper-card>
-    
+
         
         
   </template>

@@ -33,6 +33,11 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
 <dom-module id="app-layout">
   <template>
     <style>
+    #flexDiv{
+       /*
+       @apply(--layout-horizontal);
+      */
+    }
     </style>
     
      <app-location use-hash-as-path route="{{route}}"></app-location>
@@ -57,7 +62,7 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
     <!--<paper-progress value="10" indeterminate bottom-item></paper-progress>-->
   </app-toolbar>
 </app-header>
-<div class="layout vertical">
+<div id="flexDiv" class="container">
 
   <neon-animated-pages selected='{{data.page}}'
                        attr-for-selected='key'

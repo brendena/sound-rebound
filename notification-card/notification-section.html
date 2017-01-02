@@ -14,6 +14,31 @@
 <dom-module id="notification-section">
   <template>
     <style>
+      /*  
+      notification-card notification-add{
+        display:flex;
+        float: left;
+      }
+      */
+      :host{
+        display:flex;
+        @apply(--layout-wrap);
+        @apply(--layout-horizontal);
+
+      };
+      notification-add, notification-card{
+        flex:1;
+        padding: 20px;
+      }
+
+      @media (max-width: 600px) {
+        notification-add, notification-card {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      
     </style>
     <firebase-auth
         id="auth"
@@ -38,11 +63,13 @@
         data="{{notifications}}"
         persisted-data="{{persistedNotifications}}">
     </app-indexeddb-mirror>
-    -->
+   -->
     <template is="dom-repeat" items="[[notifications]]" as="notification">
       <notification-card single-note="[[notification]]" ></notification-card>
     </template>
+
     <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
+
 
     <notification-edit-card id="editNotificationModule" single-note="[[editingNotification]]"></notification-edit-card>
 
