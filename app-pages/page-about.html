@@ -7,18 +7,106 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
+<link rel="import" href="../../iron-list/iron-list.html">
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+<link rel="import" href="../../iron-selector/iron-selector.html">
 
 
 <dom-module id="page-about">
   <template>
     <style>
+      .item{
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        align-content: center;
+        box-shadow: 1px 1px 1px #888888;
+        margin-bottom: 10px;
+        margi
+        display:block;
+      }
+      @media (max-width: 800px){
+        .item{
+          max-width: 90vw;
+        }
+      }
+      .primary {
+        font-size: 16px;
+        font-weight: bold;
+      }
+      .questionTitle, .longText {
+        font-size: 14px;
+      }
+      .longText {
+        color: gray;
+        display: none;
+      }
+      .item:hover .questionTitle::after {
+        content: ' [+]';
+        color: gray;
+      }
+      .item.expanded:hover .questionTitle::after {
+        content: '';
+      }
+      .item.expanded .longText {
+        display: block;
+      }
+      .item.expanded:hover .longText::after {
+        content: ' [–]';
+      }
+
     </style>
-    <p>about page</p>
-    <p>yaaaaaaa</p>
+    <iron-ajax auto
+          url="./questions.json"
+          handle-as="json"
+          last-response="{{ajaxResponse}}"></iron-ajax>
+
+ 
+        <template is="dom-repeat" items="[[ajaxResponse.questions]]" as="item">
+
+            <div class$="[[getClassForItem(item, item.active)]]"  on-click="switchClass">
+               <paper-item class="questionTitle">[[ item.questionTitle ]]</paper-item>
+               <div class="pad">
+                    <div class="longText">asdfasfd</div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+
   </template>
   <script>
     Polymer({
-      is: 'page-about'
+      is: 'page-about',
+      properties:{
+        ajaxResponse:{
+          type: Object,
+          observer: 'setActiveFalse',
+          value: function(){
+            return {};
+          }
+        }
+      },
+      getClassForItem: function(item, selected) {
+        return selected ? 'item expanded ' : 'item ';
+      },
+      switchClass: function(e){
+        e.model.set('item.active', !e.model.item.active);
+      },
+      /*
+        So my collapsible icon work by having active false attribute and when you click it 
+        it turn the active attribute to possitive, which will toggle the class with the getClassForItem function
+      */
+      setActiveFalse: function(){
+        if(typeof this.ajaxResponse != 'undefined' && this.ajaxResponse != null ){
+          if(typeof this.ajaxResponse['questions'] != 'undefined' ){
+            for(var i = 0; i < this.ajaxResponse['questions'].length; i++){
+              this.ajaxResponse['questions'][i]['active'] = false;
+            }
+          }
+        }
+      }
 
     });
   </script>
