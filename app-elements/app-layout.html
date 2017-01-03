@@ -28,71 +28,100 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
 <link rel="import" href="./app-settings.html">
 <link rel="import" href="./app-login.html">
 <link rel="import" href="../utility-el/my-subscription.html">
-
+<link rel="import" href="../app-theme.html">
 
 <dom-module id="app-layout">
   <template>
     <style>
-    #flexDiv{
-       /*
-       @apply(--layout-horizontal);
-      */
-    }
+    :host {
+        display: block;
+      }
+
+      app-header {
+        color: #fff;
+        background-color: var(--accent-color);
+      }
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+      .drawer-list {
+        margin: 0 20px;
+      }
+
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        text-decoration: none;
+        color: var(--app-secondary-color);
+        line-height: 40px;
+      }
+
+      .drawer-list a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
     </style>
     
-     <app-location use-hash-as-path route="{{route}}"></app-location>
+    <app-location use-hash-as-path route="{{route}}"></app-location>
 
-<app-route
-  route="{{route}}"
-  pattern="/:page"
-  data="{{data}}"> 
-  <!--active="{{pageActive}}"  the data is going to be the page access it by data.page -->
-</app-route>
- 
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{data}}"> 
+      <!--active="{{pageActive}}"  the data is going to be the page access it by data.page -->
+    </app-route>
+     
 
-<app-login></app-login>
+    <app-login></app-login>
+
+    <app-drawer-layout fullbleed>
+      <app-drawer id="drawer" swipe-open>
+        <app-toolbar >Menu</app-toolbar>
+
+        <div style="height: 100%; overflow: auto;">
+          <app-settings></app-settings> 
+        </div>
+      </app-drawer>
+
+      <app-header-layout  has-scrolling-region>
+        <app-header condenses reveals effects="waterfall">
+          <app-toolbar>
+            <!--<paper-icon-button icon="menu" onclick="drawer.toggle()"></paper-icon-button>-->
+            <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
+            <div main-title>sound-rebound</div>
+            <paper-icon-button icon="delete"></paper-icon-button>
+            <my-subscription></my-subscription>
+            <!--<paper-progress value="10" indeterminate bottom-item></paper-progress>-->
+          </app-toolbar>
+        </app-header>
+
+      <neon-animated-pages selected='{{data.page}}'
+                         attr-for-selected='key'
+                         entry-animation='slide-from-left-animation'
+                         exit-animation='slide-right-animation'
+                         >
+
+      <neon-animatable key='notification'>
+        <notification-section></notification-section>
+      </neon-animatable>
+
+      <neon-animatable key='about'>
+        <page-about></page-about>
+      </neon-animatable>
+
+      <neon-animatable key='accountPage'>
+        <page-account-setting></page-account-setting>
+      </neon-animatable>
 
 
-<app-header reveals>
-  <app-toolbar>
-    <paper-icon-button icon="menu" onclick="drawer.toggle()"></paper-icon-button>
-    <div main-title>My app</p></div>
-    <paper-icon-button icon="delete"></paper-icon-button>
-    <my-subscription></my-subscription>
-    <!--<paper-progress value="10" indeterminate bottom-item></paper-progress>-->
-  </app-toolbar>
-</app-header>
-<div id="flexDiv" class="container">
-
-  <neon-animated-pages selected='{{data.page}}'
-                       attr-for-selected='key'
-                       entry-animation='slide-from-left-animation'
-                       exit-animation='slide-right-animation'
-                       class="flex">
-
-    <neon-animatable key='notification'>
-      <notification-section></notification-section>
-    </neon-animatable>
-
-    <neon-animatable key='about'>
-      <page-about></page-about>
-    </neon-animatable>
-
-    <neon-animatable key='accountPage'>
-      <page-account-setting></page-account-setting>
-    </neon-animatable>
+      </neon-animated-pages>
 
 
-  </neon-animated-pages>
-
-</div>
-<app-drawer id="drawer" swipe-open>
-  <!-- !!!!!!!!!!!!!! future feature   !!!!!!!!!!!!!!!!!-->
-  <!--probably should have a modul to confirm there actions -->
-  <div style="height: 100%; overflow: auto;">
-    <app-settings></app-settings> 
-  </div>
-</app-drawer>
+        
+        
+      </app-header-layout>
+    </app-drawer-layout>s
   </template>
   <script>
     Polymer({

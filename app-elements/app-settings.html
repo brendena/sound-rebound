@@ -29,7 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width:100%;
         margin:0;
       }
-      .iron-selected {
+      .iron-selected paper-button {
         background-color: var(--accent-color);
 
       }
@@ -47,9 +47,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
         
         <iron-selector selected="notification" attr-for-selected="data-page">
-          <paper-button data-page="notification"><a  href="#/notification">notification</a></paper-button>
-          <paper-button data-page="about"><a  href="#/about">about page</a></paper-button>
-          <paper-button data-page="accountPage"><a  href="#/accountPage">account page</a></paper-button>
+          <a  href="#/notification" data-page="notification"><paper-button >notification</paper-button></a>
+          <a  href="#/about" data-page="about"><paper-button >about page</paper-button></a>
+          <a  href="#/accountPage" data-page="accountPage"><paper-button >account page</paper-button></a>
         </iron-selector>
   
 
