@@ -1,9 +1,3 @@
-<!--
-resources
-firebase documents user managment
-https://firebase.google.com/docs/auth/web/manage-users
-
--->
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
@@ -12,6 +6,25 @@ https://firebase.google.com/docs/auth/web/manage-users
 <link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="./app-email-login.html">
 
+
+<!--
+
+
+# Purpose `<app-login>`
+This element forces the user to log in.  Its will cover the entire page on any of the pages if you log out.
+This element holds all the information for login in with google auth or email.
+
+## resources
+
+
+firebase documents user managment
+https://firebase.google.com/docs/auth/web/manage-users
+
+
+## haven't finished 
+the anonymous log in currently doens't work
+
+-->
 <dom-module id="app-login">
   <template>
     <style>
@@ -39,13 +52,20 @@ https://firebase.google.com/docs/auth/web/manage-users
         vertical-align: middle;
         text-transform: none;
       }
+      @media (max-width: 600px) {
+        :host{
+           @apply(--layout-vertical);
+        }
+        paper-button{
+          margin-top:30px;
+        }
+      }
     </style>
 
     <firebase-auth
       id="auth"
       provider="google"
-      signed-in="{{signedIn}}"
-      user="{{user}}">
+      signed-in="{{signedIn}}">
     </firebase-auth>
 
     <paper-button on-tap="toggleEmailInput" disabled="[[disabled]]">
@@ -53,15 +73,15 @@ https://firebase.google.com/docs/auth/web/manage-users
       <span>Sign in with email</span>
     </paper-button>
     
-    <paper-button on-tap="googleLogIn" disabled="[[disabled]]">
+    <paper-button on-tap="googleLogIn" disabled="[[disabled]]" id="button">
       <iron-icon icon="account-circle"></iron-icon>
       <span>Sign in with Google</span>
     </paper-button>
 
-    <paper-button on-tap="signIn" disabled="[[disabled]]">
-      <iron-icon icon="icons:arrow-forward"></iron-icon>
-      <span>try site without account</span>
-    </paper-button>
+      <paper-button on-tap="anonymousLogIn" disabled="[[disabled]]">
+        <iron-icon icon="icons:arrow-forward"></iron-icon>
+        <span>try site without account</span>
+      </paper-button>
 
     <app-email-login id="emailLoginModule"></app-email-login>
 
@@ -69,37 +89,47 @@ https://firebase.google.com/docs/auth/web/manage-users
   <script>
     Polymer({
       is: 'app-login',
+      
+      behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+
       properties: {
+        /*if true this disables the paper-buttons*/
         disabled: {
           type: Boolean,
           reflectToAttribute: true,
           value: false
         },
-
+        /*if true this will make the :host opacity: 0*/
         signedIn: {
           type: Boolean,
           reflectToAttribute: true,
           value: false
         },
-        user:{
-          type:"Object",
-          value: function(){
-            return {};
-          }
-
-        }
       },
       listeners: {
           'resetPassword': 'resetEmailPassword',
           'createAccount': 'createEmailAccount',
           'logIn': 'emailLogIn',
       },
-      signIn: function() {
-        this.fire('sign-in', null, { bubbles: false });
+      /*
+      !not functional
+      this will hold the code to log in anonymously
+      */
+      anonymousLogIn: function() {
+        
       },
+      /*
+        toggle the element emailLog 
+        which will open a paper-dialog module
+      */
       toggleEmailInput:function(){
         this.$.emailLoginModule.open();
       },
+      /*
+         This variables takes a email and a
+          password from the event variables
+         and create a email account.
+      */
       createEmailAccount: function(e){
         var that = this;
         this.$.auth.createUserWithEmailAndPassword(e.detail.email,e.detail.password).then(function(){
@@ -108,6 +138,13 @@ https://firebase.google.com/docs/auth/web/manage-users
           that.firebaseErrorOutput(error);
         });
       },
+      /*
+        
+
+        EmailLogIn takes your email and 
+        password and log you into the site.
+      */
+
       emailLogIn: function(e){
         var that = this;
         this.$.auth.signInWithEmailAndPassword(e.detail.email,e.detail.password).then(function(){
@@ -117,6 +154,12 @@ https://firebase.google.com/docs/auth/web/manage-users
         });
         
       },
+
+      /*
+      
+         resetEmailPassword will take your 
+         email and sent you a reset code.
+      */
       resetEmailPassword: function(e){
         var that = this;
         this.$.auth.auth.sendPasswordResetEmail(e.detail.email).then(function(){
@@ -126,6 +169,12 @@ https://firebase.google.com/docs/auth/web/manage-users
         });
         
       },
+      /*
+
+         If there was a error loggin in it will 
+         output to the console and send a message to the
+         user.
+      */
       firebaseErrorOutput(error){
         this.$.emailLoginModule.userError("jesus");
         var errorCode = error.code;
@@ -133,6 +182,9 @@ https://firebase.google.com/docs/auth/web/manage-users
         console.log("error 2" + errorCode + errorMessage)
         emailLoginModule.userError("make sure you inputed the right values");
       },
+      /*
+        this will bring the google auth pop up.
+      */
       googleLogIn: function(){
         this.$.auth.signInWithPopup();
       },
