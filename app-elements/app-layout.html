@@ -8,6 +8,8 @@
 <link rel="import" href="../../neon-animation/neon-animated-pages.html">
 <link rel="import" href="../../neon-animation/neon-animation.html">
 <link rel="import" href="../../paper-progress/paper-progress.html">
+<link rel="import" href="../../app-layout/app-scroll-effects/effects/waterfall.html">
+
 
 
 
@@ -85,7 +87,7 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
     <app-login></app-login>
     
 
-    <app-drawer-layout fullbleed>
+    <app-drawer-layout fullbleed force-narrow="[[forceNarrow]]">
       <app-drawer id="drawer" swipe-open>
         <app-toolbar >Menu</app-toolbar>
 
@@ -97,15 +99,13 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
       <app-header-layout  has-scrolling-region>
         <app-header condenses reveals effects="waterfall" id="header">
           <app-toolbar>
-            <!--<paper-icon-button icon="menu" onclick="drawer.toggle()"></paper-icon-button>-->
-            <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
+            <paper-icon-button icon="menu" on-tap="drawerPanel"></paper-icon-button>
             <div main-title>sound-rebound</div>
             <paper-icon-button icon="delete"></paper-icon-button>
             <my-subscription></my-subscription>
             <!--<paper-progress value="10" indeterminate bottom-item></paper-progress>-->
           </app-toolbar>
         </app-header>
-
       <neon-animated-pages selected='{{data.page}}'
                          attr-for-selected='key'
                          entry-animation='slide-from-left-animation'
@@ -128,41 +128,29 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
 
       </neon-animated-pages>
 
-
         
         
       </app-header-layout>
-    </app-drawer-layout>s
+    </app-drawer-layout>
   </template>
   <script>
     Polymer({
       is: 'app-layout',
       properties: {
-        animationConfig: {
-          value: function() {
-            return {
-              'entry': [{
-                name: 'hero-animation',
-                id: 'hero',
-                toPage: this
-              }, {
-                name: 'fade-in-animation',
-                node: this
-              }],
-              'exit': {
-                name: 'fade-out-animation',
-                node: this
-              }
-            }
-          }
-        },
-        sharedElements: {
-          value: function() {
-            return {
-              'hero': this.$.header
-            }
-          }
+        forceNarrow: {
+          type: Boolean,
+          value: false
         }
+      },
+      /*
+      drawerPanel - display the panel or hides it.
+      It also checks the forceNarrow variable.  Which
+      will allow you to remove the side panel if you don't
+      want it.
+      */
+      drawerPanel: function(){
+        this.forceNarrow =  !this.forceNarrow;
+        this.$.drawer.toggle()
       },
       attached: function() {
         /*attached to app-location so it will update when there is no url*/
