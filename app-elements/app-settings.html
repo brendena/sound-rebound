@@ -16,7 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
-<link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="../../iron-selector/iron-selector.html">
 <link rel="import" href="../app-theme.html">
 
@@ -39,14 +38,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     
-      <firebase-auth
-        id="auth"
-        user="{{user}}">
-      </firebase-auth>
+
 
       </div>
         
-        <iron-selector selected="notification" attr-for-selected="data-page">
+        <iron-selector id="ironSelected" selected="notification" attr-for-selected="data-page">
           <a  href="#/notification" data-page="notification"><paper-button >notification</paper-button></a>
           <a  href="#/about" data-page="about"><paper-button >about page</paper-button></a>
           <a  href="#/accountPage" data-page="accountPage"><paper-button >account page</paper-button></a>
@@ -58,14 +54,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'app-settings',
-      properties:{
-        user:{
-          type:"Object",
-          value: function(){
-            return {};
-          }
-        }
-
+      attached:function(){
+        var location = window.location.href;
+        var rest = location.split("#/");
+        this.$.ironSelected.selected = rest[1];
       }
     });
   </script>

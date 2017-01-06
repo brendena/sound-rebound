@@ -1,0 +1,25 @@
+{
+  "name": "sound-rebound",
+  "version": "1.0.0",
+  "description": "front end website for the sound-rebound device",
+  "dependencies": {
+    "bower": "^1.8.0"
+  },
+  "devDependencies": {
+    "firebase-tools": "^3.2.1",
+    "polymer-cli": "^0.17.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brendena/sound-rebound.git"
+  },
+  "author": "brenden adamczak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brendena/sound-rebound/issues"
+  },
+  "homepage": "https://github.com/brendena/sound-rebound#readme"
+}

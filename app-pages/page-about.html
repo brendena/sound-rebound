@@ -16,21 +16,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="page-about">
   <template>
     <style>
+      #padding{
+        padding-top: 20px;
+      }
       .item{
         max-width: 800px;
+        width:80%;
         margin: 0 auto;
         text-align: center;
         align-content: center;
         box-shadow: 1px 1px 1px #888888;
         margin-bottom: 10px;
-        margi
         display:block;
       }
+      /*
       @media (max-width: 800px){
         .item{
           max-width: 90vw;
         }
       }
+      */
       .primary {
         font-size: 16px;
         font-weight: bold;
@@ -62,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           handle-as="json"
           last-response="{{ajaxResponse}}"></iron-ajax>
 
- 
+      <div id="padding">
         <template is="dom-repeat" items="[[ajaxResponse.questions]]" as="item">
 
             <div class$="[[getClassForItem(item, item.active)]]"  on-click="switchClass">
@@ -74,7 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </template>
 
-
+      </div>
   </template>
   <script>
     Polymer({

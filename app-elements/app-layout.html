@@ -75,7 +75,7 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
       }
     </style>
     
-    <app-location use-hash-as-path route="{{route}}"></app-location>
+    <app-location use-hash-as-path route="{{route}}" id="appLocation"></app-location>
 
     <app-route
       route="{{route}}"
@@ -156,6 +156,7 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
         /*attached to app-location so it will update when there is no url*/
         if (!this.route.path) {
           this.set('route.path', '/notification');
+          window.location.hash = "/notification";
         }
       }
     });
