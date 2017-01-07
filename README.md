@@ -9,7 +9,7 @@
 [demo the site](https://brendena.github.io/sound-rebound/components/sound-rebound/app.html)
 
 
-[gh pages] here(https://github.com/brendena/sound-rebound/tree/gh-pages)
+[gh pages repo here](https://github.com/brendena/sound-rebound/tree/gh-pages)
 
 bower -package
 ```shell
