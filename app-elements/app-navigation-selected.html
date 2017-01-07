@@ -1,27 +1,23 @@
-<!--
-TODO NEXT
-i have to change how the paper-buttons look after the iron-selector chooses.  Right know it look ugly.
--->
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
 <link rel="import" href="../../iron-selector/iron-selector.html">
 <link rel="import" href="../app-theme.html">
 
+<!--
 
 
-<dom-module id="app-settings">
+# Purpose `<app-navigation-selected>`
+This app is the page selected for the slide out navigation bar.  It will change the selected when you 
+press one of the button, on back or foward on the browser or whenever the page url changes. 
+
+## resources
+
+## haven't finished 
+
+-->
+
+<dom-module id="app-navigation-selected">
   <template>
     <style>
       paper-button{
@@ -53,11 +49,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
   <script>
     Polymer({
-      is: 'app-settings',
+      is: 'app-navigation-selected',
+      /*
+        on being attached
+        change selected to proper
+        Url.  If hash URL changes
+        change the URl again.
+      */
       attached:function(){
+        this._changeSelected();
+        window.onhashchange = function() {
+          console.log("!!!!!!!!!! changed");
+          this._changeSelected();
+        }.bind(this);
+      },
+      /*
+        change selected to match
+        the current Url.
+      */
+      _changeSelected(){
         var location = window.location.href;
         var rest = location.split("#/");
-        this.$.ironSelected.selected = rest[1];
+        //don't change selected if you've navigated to app.html
+        if(rest[0] != location){
+          this.$.ironSelected.selected = rest[1];
+        }
       }
     });
   </script>

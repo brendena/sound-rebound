@@ -10,34 +10,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../utility-el/paper-dialog-message.html">
 
+<!--
+
+
+# Purpose `<page-account-setting>`
+This allows the user to basic functions like loging out
+
+
+## resources
+https://firebase.google.com/docs/auth/web/manage-users
+
+## haven't finished 
+
+-->
 <dom-module id="page-account-setting">
   <template>
     <style>
       paper-button{
+
         width:100%;
       }
-
+      #padding{
+        padding-top: 40px;
+      }
+      paper-button{
+        margin-top:10px;
+      }
     </style>
     
       <firebase-auth
         id="auth"
         user="{{user}}"> <!--- i don't know if i need this  -->
       </firebase-auth>
-
-          <paper-button >delete Account</paper-button>
-          <paper-button >delete Account</paper-button>
-          <paper-button>reset password</paper-button>
+      <div id="padding">
+          <paper-button on-tap="deleteAccount">delete Account</paper-button>
+          <paper-button on-tap="resetPassword">reset password</paper-button>
           <paper-button on-tap="signOut">sign out</paper-button>
       </div>
+
+      <paper-dialog-message id="message"></paper-dialog-message>
+
   </template>
   <script>
     Polymer({
       is: 'page-account-setting',
       properties:{
         user:{
-          type:"Object"
+          type:"Object",
+          value: function(){
+            return {};
+          }
         }
+
+      },
+      deleteAccount: function(){
 
       },
       signOut: function(){
@@ -49,6 +77,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               console.log("not signed out");
             // An error happened.
         });
+      },
+      deleteAccount: function(){
+        var auth = this.$.auth.app.auth();
+        var user = auth.currentUser;
+        var error = "";
+        user.delete().then(function() {
+        }, function(ERROR) {
+          console.log(error);
+            error = ERROR;
+        });
+        if(error != ""){
+          this.$.message.open("something wen't wrong",  "account not deleted.  Try loging out and back in again");
+        }
+        
+      },
+      resetPassword: function(){
+        
+        var auth = this.$.auth.app.auth();
+        var user = auth.currentUser;
+        var regularEmailAccount = "";
+        if (user != null) {
+          //user.providerData.forEach(function (profile) 
+          for(var i = 0; i < user.providerData.length; i++)
+          {
+            if(user.providerData[i].providerId == "password"){
+              regularEmailAccount = user.providerData[i].email;
+            }
+          };
+        }
+
+        if(regularEmailAccount != ""){
+          auth.sendPasswordResetEmail(regularEmailAccount).then(function(){
+            console.log("all good");
+          }, function(error){
+            console.log(error);
+          });
+          this.$.message.open("email sent",  "please check your email mail box for instruction on password reset");
+        }
+        else{
+          this.$.message.open("can't reset",  "I can only reset password and email, not google log in");
+        }
+
       }
 
     });

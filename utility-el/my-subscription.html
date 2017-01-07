@@ -11,6 +11,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../polymerfire/firebase-document.html">
 <link rel="import" href="../../polymerfire/firebase-messaging.html">
 <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../utility-el/paper-dialog-message.html">
+
 <dom-module id="my-subscription">
   <template>
   <style>
@@ -48,6 +50,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     checked="{{checked}}">
     subscribe to notifications
   </paper-toggle-button>
+
+
+  <paper-dialog-message id="errorDialog"></paper-dialog-message>
   <!--
   <p on-tap="test">Token:</p>
   <p>[[token]]</p>
@@ -87,6 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.documentToken.data = this.token;  
         }
       },
+      closeDialog: function(){
+        this.$.errorDialog.close();
+      },
       toggleSubscription: function() {
         var requestPermission = this.$.subscribe.checked;
         if (requestPermission) {
@@ -94,9 +102,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             //console.log('user subscribed successfully!');
           }, (err) => {
             console.log('user subscribe failed :(', err);
+            this.$.subscribe.checked = false;
+            this.$.errorDialog.open("error", "Check to make sure you haven't blocked notifications.");
           });
         } else {
-          //console.log('user rejected permission');
+          console.log('user rejected permission');
         }
       },
       handleMessage: function(){

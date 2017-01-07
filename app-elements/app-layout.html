@@ -17,7 +17,7 @@
 <link rel="import" href="../app-pages/page-account-setting.html">
 <link rel="import" href="../app-pages/page-about.html">
 <link rel="import" href="../notification-card/notification-section.html">
-<link rel="import" href="./app-settings.html">
+<link rel="import" href="./app-navigation-selected.html">
 <link rel="import" href="./app-login.html">
 <link rel="import" href="../utility-el/my-subscription.html">
 <link rel="import" href="../app-theme.html">
@@ -92,7 +92,7 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
         <app-toolbar >Menu</app-toolbar>
 
         <div style="height: 100%; overflow: auto;">
-          <app-settings></app-settings> 
+          <app-navigation-selected></app-navigation-selected> 
         </div>
       </app-drawer>
 
@@ -140,6 +140,10 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
         forceNarrow: {
           type: Boolean,
           value: false
+        },
+        location:{
+          type: String,
+          value: '/notification'
         }
       },
       /*
