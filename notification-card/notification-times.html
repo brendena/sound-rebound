@@ -4,6 +4,19 @@
 
 <link rel="import" href="../utility-el/day-array-behavior.html">
 
+
+<!--
+# Purpose `<notification-times>`
+It displays the times when a notification is active under notification-card. 
+
+## resources
+
+
+## haven't finished 
+I want to be able to switch between standard time to military time.
+The logics is in MyBehaviors.DayArrayBehavior.  I just don't yet have a gloval
+setting object.
+-->
 <dom-module id="notification-times">
     <style>
     span{
@@ -22,27 +35,41 @@
   <script>
     Polymer({
         is: 'notification-times',
-        behaviors:[MyBehaviors.DayArrayBehavior ],
+        behaviors:[MyBehaviors.DayArrayBehavior],
         properties:{
+            /*the Day object from my firebase notification object */
             days:{
                 type : Object,
                 reflectToAttribute: true,
-                observer: '_changedNotificationDates'
+                observer: '_changedNotificationDates',
+                value: function(){
+                    return {}
+                }
             },
+            /*this.days turned into a array in sorted order*/
             notificationDatesArray:{
-                type: Object,
+                type: Array,
                 value: function(){
                     return [ ]
                 }
             }
         },
+        /*
+            changedNotifications On creation.  
+            because observers don't work before creation
+        */
         ready: function(){
             this._changedNotificationDates();
         },
+        /*
+            converts the day's Object 
+            into Array that is in order
+        */
         _changedNotificationDates: function(){
             console.log("changed notification-dates");
+            console.log(this.days);
             this.notificationDatesArray = this._sortArray(this.days);
-            
+            console.log(this.notificationDatesArray);
         },
 
 

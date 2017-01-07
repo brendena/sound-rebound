@@ -11,7 +11,32 @@
 
 [gh pages] here(https://github.com/brendena/sound-rebound/tree/gh-pages)
 
-bower
-
+bower -package
+```shell
 bower install --save brendena/sound-rebound
+```
+
+
+### getting started
+
+install dependencies
+
+```shell
+sudo bash required.sh
+``` 
+
+local testing
+
+```shell
+polymer serve
+
+```
+
+local CI testing
+
+```shell
+wct
+
+```
+
 

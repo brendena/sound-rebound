@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+		<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+		<script src="../bower_components/web-component-tester/browser.js"></script>
+
+		<link rel="import" href="../notification-card/notification-times.html">
+	</head>
+	<body>
+		
+		<test-fixture id="notification-times-fixture">
+			<template>
+				<notification-times></notification-times>
+			</template>
+		</test-fixture>
+
+		<script>
+			suite('<notification-card>', function(){
+				var myEl;
+
+				setup(function(){
+					myEl = fixture('notification-times-fixture');
+				});
+
+				test('check Convert days to notificationDatesArray', function(){
+					myEl.days = {
+						"T":{
+							"day": "T",
+							"end": "02:00",
+							"start": "01:00"
+						}
+					}
+
+					var shouldBeResults= [];
+					shouldBeResults[0] = {
+							"day": "T",
+							"end": "2:00",
+							"start": "1:00"
+					};
+					//so if your doing array you need to do deep Equal
+					assert.deepEqual(myEl.notificationDatesArray, shouldBeResults);
+				});
+
+				test('to make sure there in the right order', function(){
+					myEl.days = {
+						"F":{
+							"day": "F",
+							"end": "02:00",
+							"start": "01:00"
+						},
+						"M":{
+							"day": "M",
+							"end": "02:00",
+							"start": "01:00"
+						}
+					}
+					var shouldBeResults= [];
+					shouldBeResults[0] = {
+							"day": "M",
+							"end": "2:00",
+							"start": "1:00"
+					};
+					shouldBeResults[1] = {
+							"day": "F",
+							"end": "2:00",
+							"start": "1:00"
+					};
+					assert.deepEqual(myEl.notificationDatesArray, shouldBeResults);
+				});
+
+				test('test empty days', function(){
+					myEl.days = "undefined";
+					console.log()
+					assert.equal(myEl.notificationDatesArray[0], undefined);
+				});
+
+
+			})
+		</script>
+
+	</body>
+</html>

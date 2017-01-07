@@ -44,21 +44,23 @@
    _sortArray: function(array){
 
     var changedInfo = [];
-    for(i=0; i < this.daysTitle.length; i++){
-      if(typeof array[this.daysTitle[i]] === "object"){
-        //room for inprovement.
-        //I was copping the object by reference to the array where it came from leading to things like 10:00AmAmAm
-        //this was the quickest solution
+    if(typeof array != "undefined"){
+      for(i=0; i < this.daysTitle.length; i++){
+        if(typeof array[this.daysTitle[i]] === "object"){
+          //room for inprovement.
+          //I was copping the object by reference to the array where it came from leading to things like 10:00AmAmAm
+          //this was the quickest solution
 
-        var dayTestValue = {
-          "day":array[this.daysTitle[i]].day,
-          "start": array[this.daysTitle[i]].start,
-          "end": array[this.daysTitle[i]].end
+          var dayTestValue = {
+            "day":array[this.daysTitle[i]].day,
+            "start": array[this.daysTitle[i]].start,
+            "end": array[this.daysTitle[i]].end
+          }
+          
+          dayTestValue.start = this._formateText(dayTestValue.start);
+          dayTestValue.end = this._formateText(dayTestValue.end);
+          changedInfo.push(dayTestValue);
         }
-        
-        dayTestValue.start = this._formateText(dayTestValue.start);
-        dayTestValue.end = this._formateText(dayTestValue.end);
-        changedInfo.push(dayTestValue);
       }
     }
     return changedInfo;
