@@ -42,12 +42,23 @@ https://firebase.google.com/docs/auth/web/manage-users
     
       <firebase-auth
         id="auth"
-        user="{{user}}"> <!--- i don't know if i need this  -->
+        user="{{user}}"> 
       </firebase-auth>
       <div id="padding">
           <paper-button on-tap="deleteAccount">delete Account</paper-button>
           <paper-button on-tap="resetPassword">reset password</paper-button>
           <paper-button on-tap="signOut">sign out</paper-button>
+
+          <paper-button on-tap="toggleEmailInput" disabled="[[disabled]]">
+            <iron-icon icon="communication:email"></iron-icon>
+            <span>Sign in with email</span>
+          </paper-button>
+          
+          <paper-button on-tap="googleLogIn" disabled="[[disabled]]" id="button">
+            <iron-icon icon="account-circle"></iron-icon>
+            <span>Sign in with Google</span>
+          </paper-button>
+
       </div>
 
       <paper-dialog-message id="message"></paper-dialog-message>

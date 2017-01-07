@@ -90,8 +90,6 @@ the anonymous log in currently doens't work
     Polymer({
       is: 'app-login',
       
-      behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
-
       properties: {
         /*if true this disables the paper-buttons*/
         disabled: {
@@ -117,6 +115,12 @@ the anonymous log in currently doens't work
       */
       anonymousLogIn: function() {
         
+        this.$.auth.signInAnonymously().catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+        });
       },
       /*
         toggle the element emailLog 
@@ -139,8 +143,6 @@ the anonymous log in currently doens't work
         });
       },
       /*
-        
-
         EmailLogIn takes your email and 
         password and log you into the site.
       */

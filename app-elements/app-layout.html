@@ -5,22 +5,15 @@
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../app-route/app-route.html">
 <link rel="import" href="../../app-route/app-location.html">
-<link rel="import" href="../../neon-animation/neon-animated-pages.html">
-<link rel="import" href="../../neon-animation/neon-animation.html">
 <link rel="import" href="../../paper-progress/paper-progress.html">
 <link rel="import" href="../../app-layout/app-scroll-effects/effects/waterfall.html">
+<link rel="import" href="../../polymerfire/firebase-auth.html">
 
-
-
-
-
-<link rel="import" href="../app-pages/page-account-setting.html">
-<link rel="import" href="../app-pages/page-about.html">
-<link rel="import" href="../notification-card/notification-section.html">
 <link rel="import" href="./app-navigation-selected.html">
 <link rel="import" href="./app-login.html">
 <link rel="import" href="../utility-el/my-subscription.html">
 <link rel="import" href="../app-theme.html">
+<link rel="import" href="./app-neon-pages.html">
 
 <!--
 
@@ -45,10 +38,17 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
 <dom-module id="app-layout">
   <template>
     <style>
-    :host {
+      :host {
         display: block;
       }
+      .offline {
+        background-color: grey;
 
+      }
+      .anonymous {
+        background-color: yellow;
+        color: #000;
+      }
       app-header {
         color: #fff;
         background-color: var(--accent-color);
@@ -86,50 +86,47 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
       data="{{data}}"> 
       <!--active="{{pageActive}}"  the data is going to be the page access it by data.page -->
     </app-route>
-     
+    <firebase-auth
+      id="auth"
+      online="{{online}}"
+      signed-in="{{signedIn}}"> 
+    </firebase-auth>
+    
+
     <app-login></app-login>
     
 
     <app-drawer-layout fullbleed force-narrow="[[forceNarrow]]">
       <app-drawer id="drawer" swipe-open>
         <app-toolbar >Menu</app-toolbar>
-
         <div style="height: 100%; overflow: auto;">
           <app-navigation-selected></app-navigation-selected> 
         </div>
       </app-drawer>
 
       <app-header-layout  has-scrolling-region>
-        <app-header condenses reveals effects="waterfall" id="header">
+        <app-header condenses reveals effects="waterfall" id="header" disabled="false">
           <app-toolbar>
             <paper-icon-button icon="menu" on-tap="drawerPanel"></paper-icon-button>
-            <div main-title>sound-rebound</div>
-            <paper-icon-button icon="delete"></paper-icon-button>
+            <div main-title >sound-rebound</div>
+
+            <p hidden$="[[online]]">
+              <iron-icon icon="icons:cloud-off" ></iron-icon>
+              offline
+            </p>
+
+            <a href="#/accountPage" style="color: inherit; text-decoration: none;">
+              <paper-button hidden$="[[!anonymous]]" raised>
+                ! Create Perminent Account
+              </paper-button>
+            </a>
             <my-subscription></my-subscription>
             <!--<paper-progress value="10" indeterminate bottom-item></paper-progress>-->
+
           </app-toolbar>
         </app-header>
-      <neon-animated-pages selected='{{data.page}}'
-                         attr-for-selected='key'
-                         entry-animation='slide-from-left-animation'
-                         exit-animation='slide-right-animation'
-                          class="flex">
 
-        <neon-animatable key='notification'>
-          <notification-section></notification-section>
-        </neon-animatable>
-
-        <neon-animatable key='about'>
-          <page-about></page-about>
-        </neon-animatable>
-
-        <neon-animatable key='accountPage'>
-          <page-account-setting></page-account-setting>
-        </neon-animatable>
-
-
-
-      </neon-animated-pages>
+        <app-neon-pages location="[[data.page]]"></app-neon-pages>
 
         
         
@@ -147,8 +144,15 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
         location:{
           type: String,
           value: '/notification'
+        },
+        anonymous:{
+          type: Boolean,
+          value: false
         }
       },
+      observers:[
+        'changeHeadersClasses(online, signedIn)'
+      ],
       /*
       drawerPanel - display the panel or hides it.
       It also checks the forceNarrow variable.  Which
@@ -164,6 +168,35 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
         if (!this.route.path) {
           this.set('route.path', '/notification');
           window.location.hash = "/notification";
+        }
+        this.changeHeadersClasses();
+      },
+      changeHeadersClasses: function(online, signedIn){
+        if(typeof online != "undefined" && signedIn != "undefined"){
+          if(online == false){
+            this.$.header.classList.add('offline');
+            this.$.header.classList.remove('anonymous');
+            this.anonymous = false;
+          }
+          else{
+            if(signedIn == true){
+
+              var user = this.$.auth.app.auth().currentUser;
+              if(user.providerData.length == 0){
+                this.$.header.classList.add('anonymous');
+                this.anonymous= true;
+              }
+              else{
+                this.$.header.classList.remove('anonymous');
+                this.anonymous = false;
+              }
+
+              
+            
+            }
+            this.$.header.classList.remove('offline');
+          }
+          
         }
       }
     });

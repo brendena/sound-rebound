@@ -12,17 +12,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../polymerfire/firebase-messaging.html">
 <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../utility-el/paper-dialog-message.html">
+<link rel="import" href="../../iron-icons/social-icons.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
 
 <dom-module id="my-subscription">
   <template>
   <style>
-    paper-toggle-button{
-      
-    }
+
   </style>
   <firebase-auth
     id="auth"
-    user="{{user}}">
+    user="{{user}}"
+    signed-in="{{signedIn}}">
   </firebase-auth>
 
 
@@ -48,8 +49,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     id="subscribe"
     on-tap="toggleSubscription"
     checked="{{checked}}">
-    subscribe to notifications
+    <iron-icon icon="social:notifications-none" hidden$="[[!checked]]"></iron-icon>
+    <iron-icon icon="social:notifications-off" hidden$="[[checked]]" style="color:inherit;"></iron-icon> 
   </paper-toggle-button>
+   
 
 
   <paper-dialog-message id="errorDialog"></paper-dialog-message>
