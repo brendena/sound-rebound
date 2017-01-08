@@ -14,6 +14,7 @@
 <link rel="import" href="../utility-el/my-subscription.html">
 <link rel="import" href="../app-theme.html">
 <link rel="import" href="./app-neon-pages.html">
+<link rel="import" href="../utility-el/my-svgs-icons.html">
 
 <!--
 
@@ -76,6 +77,33 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
       paper-icon-button{
         min-width:35px;
       }
+      #anonymousButtonATag{
+        width:100%;
+      }
+      #anonymousButton{
+        width:80%;
+        text-align: center;
+        background-color:yellow;
+        margin: auto;
+        margin-top:10px;
+        display:block;
+      }
+
+      @media (max-width: 600px) {
+         .large{
+          display: none;
+        }
+        .small{
+          display:inherit;
+        }
+      }
+      @media (min-width: 600px) {
+        .small{
+          display:none;
+        }
+      }
+
+
     </style>
     
     <app-location use-hash-as-path route="{{route}}" id="appLocation"></app-location>
@@ -108,23 +136,39 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
         <app-header condenses reveals effects="waterfall" id="header" disabled="false">
           <app-toolbar>
             <paper-icon-button icon="menu" on-tap="drawerPanel"></paper-icon-button>
-            <div main-title >sound-rebound</div>
+            <div main-title>
+              <iron-icon icon="my-svgs-icons:soundRebound" ></iron-icon>
+              <span >sound-rebound</span>
+            </div>
 
-            <p hidden$="[[online]]">
-              <iron-icon icon="icons:cloud-off" ></iron-icon>
-              offline
-            </p>
-
-            <a href="#/accountPage" style="color: inherit; text-decoration: none;">
-              <paper-button hidden$="[[!anonymous]]" raised>
-                ! Create Perminent Account
-              </paper-button>
+            <a href="#/accountPage" style="color: inherit; text-decoration: none;" id="anonymousButtonATag" hidden$="[[!anonymous]]">
+              <p class="large">
+                Temporary Account
+              </p>
+              <p class="small">
+                Tmp Account
+              </p>
             </a>
+
+            <div hidden$="[[online]]">
+              <iron-icon icon="icons:cloud-off" ></iron-icon>
+              <p class="large"> offline </p>
+            </div>
+
+            
             <my-subscription></my-subscription>
             <!--<paper-progress value="10" indeterminate bottom-item></paper-progress>-->
 
           </app-toolbar>
         </app-header>
+
+        <!--
+        <a href="#/accountPage" style="color: inherit; text-decoration: none;" id="anonymousButtonATag">
+          <paper-button  raised id="anonymousButton">
+            ! Create Perminent Account
+          </paper-button>
+        </a>
+        -->
 
         <app-neon-pages location="[[data.page]]"></app-neon-pages>
 
