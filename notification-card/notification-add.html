@@ -41,12 +41,12 @@
       path="/users/[[user.uid]]">
     </firebase-query>
 
-    <paper-card id="paperCard">
+    <paper-card id="paperCard" >
       <div class="cafe-header">
         <p id="headerInformation"></p>
       </div>
-      <paper-dropdown-menu label="select sound to add">
-        <paper-listbox id="paperList" class="dropdown-content" selected="{{selectedSound}}">
+      <paper-dropdown-menu label="select sound to add" disabled="[[disabledNoMoreNotifications]]">
+        <paper-listbox id="paperList" class="dropdown-content" selected="{{selectedSound}}" >
           <template is="dom-repeat" items="[[listSoundsNotificationNamesFiltered]]" as="sound"> <!-- filter=""-->
              <paper-item value="[[sound.$val]]">[[sound.$val]]</paper-item>
           </template>
@@ -89,6 +89,12 @@
         selectedSound: {
           type: Number,
           value: -1
+        },
+        disabled: {
+          type:Boolean,
+          reflectToAttribute: true,
+          observer: 'checkNeedsDisabled',
+          value: true
         }
       },
       observers: [
@@ -147,10 +153,16 @@
         this.checkNeedsDisabled()
       },
       checkNeedsDisabled :function(){
-        if(typeof this.listSoundsNotificationNamesFiltered[0] == 'undefined' ){
+        if(typeof this.listSoundsNotificationNamesFiltered[0] == 'undefined' || this.disabled == true){
           this.$.paperCard.classList.add('disabled')
           this.disabledNoMoreNotifications = true;
-          this.$.headerInformation.innerHTML = "there's no more notification options";
+
+          if(this.disabled == true){
+            this.$.headerInformation.innerHTML = "you are currently offline";
+          }
+          else{
+            this.$.headerInformation.innerHTML = "there's no more notification options"; 
+          }
         }
         else
         {

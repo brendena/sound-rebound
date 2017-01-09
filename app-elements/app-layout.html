@@ -42,13 +42,8 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
       :host {
         display: block;
       }
-      .offline {
-        background-color: grey;
-
-      }
-      .anonymous {
-        background-color: yellow;
-        color: #000;
+      .anonymous{
+        color: black;
       }
       app-header {
         color: #fff;
@@ -216,31 +211,37 @@ https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
         this.changeHeadersClasses();
       },
       changeHeadersClasses: function(online, signedIn){
+        console.log("changedHeaderClasses");
         if(typeof online != "undefined" && signedIn != "undefined"){
           if(online == false){
-            this.$.header.classList.add('offline');
-            this.$.header.classList.remove('anonymous');
-            this.anonymous = false;
+            this.customStyle['--accent-color'] = "grey";
+            
           }
           else{
             if(signedIn == true){
 
               var user = this.$.auth.app.auth().currentUser;
+              console.log("user")
+              console.log(user.providerData.length);
               if(user.providerData.length == 0){
+                console.log("anonymous");
                 this.$.header.classList.add('anonymous');
+                this.customStyle['--accent-color'] = "yellow";
                 this.anonymous= true;
               }
               else{
-                this.$.header.classList.remove('anonymous');
                 this.anonymous = false;
+                console.log("not anonymous");
+                this.$.header.classList.remove('anonymous');
+                this.customStyle['--accent-color'] = '#ff4081';
               }
 
               
             
             }
-            this.$.header.classList.remove('offline');
           }
           
+          this.updateStyles();
         }
       }
     });

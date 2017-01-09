@@ -40,8 +40,10 @@
       }
       
     </style>
+
     <firebase-auth
         id="auth"
+        online="{{online}}"
         user="{{user}}">
     </firebase-auth>
 
@@ -65,13 +67,13 @@
     </app-indexeddb-mirror>
    -->
     <template is="dom-repeat" items="[[notifications]]" as="notification">
-      <notification-card single-note="[[notification]]" ></notification-card>
+      <notification-card single-note="[[notification]]" disabled="[[!online]]"></notification-card>
     </template>
 
-    <notification-add list-of-notification-names="[[listNotificationNames]]"></notification-add>
+    <notification-add list-of-notification-names="[[listNotificationNames]]" disabled="[[!online]]"></notification-add>
 
 
-    <notification-edit-card id="editNotificationModule" single-note="[[editingNotification]]"></notification-edit-card>
+    <notification-edit-card id="editNotificationModule" single-note="[[editingNotification]]" ></notification-edit-card>
 
 
 
@@ -95,6 +97,10 @@
         specificNotification:{
           type: String,
           value: "default"
+        },
+        signedIn: {
+          type: Boolean,
+          value: false
         }
 
       },

@@ -59,28 +59,31 @@ So active notification will turn the words green if there on and red if there no
       <div class="card-content">
         <div >
 
-            <h4>[[singleNote.name]]                                                                                                  <!-- can't edit -->
-              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="{{singleNote.disabledNotification}}"></paper-icon-button>
-              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNotification" icon="delete"> </paper-icon-button>
+            <h4>[[singleNote.name]]  
+                                                                                                     <!-- can't edit -->
+              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="editNotificationLauncher" icon="create" disabled="[[disabledNotification]]">
+              </paper-icon-button>
+
+              <paper-icon-button id="buttonLaunchNotificationEdit" on-tap="deleteNotification" icon="delete" disabled="[[disabledNotification]]"> </paper-icon-button>
             </h4>   
-       </div>
-       <div>
+         </div>
+         <div>
 
 
-            <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{singleNote.disabledNotification}}" >disable 
+              <paper-toggle-button id="disableToggle" on-tap="toggleDisable" checked="{{singleNote.disabledNotification}}" disabled="[[disabled]]">disable 
 
-            </paper-toggle-button>
-            <paper-toggle-button checked="[[singleNote.repeatingNotification]]" disabled>repeating notification
+              </paper-toggle-button>
+              <paper-toggle-button checked="[[singleNote.repeatingNotification]]" disabled>repeating notification
 
 
-            </paper-toggle-button>
-            <paper-toggle-button checked="[[singleNote.timeNotification]]" disabled>time sensitive notification
+              </paper-toggle-button>
+              <paper-toggle-button checked="[[singleNote.timeNotification]]" disabled>time sensitive notification
 
-              
-            </paper-toggle-button>
+                
+              </paper-toggle-button>
 
-        </div>
-        <div>
+          </div>
+          <div>
             <p>[[singleNote.sensitivity]]/100 sensitivity levels</p>
         </div>
       </div>
@@ -118,10 +121,20 @@ So active notification will turn the words green if there on and red if there no
                         timeNotification: false
               } 
             }
+          },
+          disabled:{
+            type: Boolean,
+            reflectToAttribute: true,
+            value: true
+          },
+          disabledNotification:{
+            type: Boolean,
+            value: true
           }
         },
         observers:[
-          '_toggletimeNotificationDisplay(singleNote.timeNotification)'
+          '_toggletimeNotificationDisplay(singleNote.timeNotification)',
+          '_checkDisabled(disabled, singleNote.disabledNotification)'
         ],
         /**
           This get called on #disableToggle and will add the class of disable 
@@ -165,9 +178,20 @@ So active notification will turn the words green if there on and red if there no
           }
           else{
             this.$.timeNotificationDisplay.hidden= true;
+          }          
+        },
+
+        _checkDisabled: function(disabled, disabledNotificationObject){
+
+          if(typeof disabled != "undefined" || typeof disabledNotificationObject != "undefined"){
+            if(disabled == true || disabledNotificationObject == true){
+              this.disabledNotification = true;
+            }
+            else{
+              this.disabledNotification = false
+            }
           }
 
-          
         }
         
     });

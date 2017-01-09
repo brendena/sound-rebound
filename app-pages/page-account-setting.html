@@ -42,6 +42,7 @@ https://firebase.google.com/docs/auth/web/manage-users
     
       <firebase-auth
         id="auth"
+        provider="google"
         user="{{user}}"> 
       </firebase-auth>
       <div id="padding">
@@ -130,6 +131,17 @@ https://firebase.google.com/docs/auth/web/manage-users
           this.$.message.open("can't reset",  "I can only reset password and email, not google log in");
         }
 
+      },
+      googleLogIn: function(){
+        var auth = this.$.auth.app.auth();
+        console.log(this.$.auth.app.auth);
+        var credential = auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
+
+        auth.currentUser.link(credential).then(function(user) {
+          console.log("Anonymous account successfully upgraded", user);
+        }, function(error) {
+          console.log("Error upgrading anonymous account", error);
+        });
       }
 
     });
