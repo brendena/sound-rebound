@@ -1,6 +1,24 @@
 <link rel="import" href="./notification-time-edit.html">
 <link rel="import" href="../utility-el/day-array-behavior.html">
 
+
+
+<!--
+# Purpose `<notification-time-edit-prep>`
+hole purpose is to encapsulate some of the logic
+with the notification time edit.
+
+Basically all it is the loop through notificationDaysArray
+and creates notification-time-edit.
+It also set notificationDaysArray which files in
+all the days you've havent set and puts them in proper order.
+
+## resources
+
+
+## haven't finished 
+the paper-drowndown-menu can seem sometimes flaky
+-->
 <dom-module id="notification-time-edit-prep">
   <style>
 
@@ -9,7 +27,7 @@
   <template>
     
     <template is="dom-repeat" items="{{notificationDaysArray}}" as="day">
-        <notification-time-edit id="monkey" day="[[day.day]]" start="{{day.start}}" end="{{day.end}}"></notification-time-edit>
+        <notification-time-edit day="[[day.day]]" start="{{day.start}}" end="{{day.end}}"></notification-time-edit>
     </template>
     
     <!-- so i need the leading zero in 03:00 or else it dons't know what to do. -->
@@ -34,6 +52,14 @@
               }
             }
         },
+        /*
+          this set notificationDaysArray
+          based on the days values in the 
+          proper order.
+
+          Most of the logic is in
+          DayArrayBehavior
+        */
         _changedNotificationDates:function(newValue){
             if(typeof newValue != "undefined"){
               console.log("_changedNotificationDates");

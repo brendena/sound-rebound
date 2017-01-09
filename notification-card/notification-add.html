@@ -8,6 +8,16 @@
 
 <link rel="import" href="./notification-card.html">
 
+<!--
+# Purpose `<notification-add>`
+A element that allows the user to add notification sounds.
+
+## resources
+
+
+## haven't finished 
+the paper-drowndown-menu can seem sometimes flaky
+-->
 <dom-module id="notification-add">
   <template>
     <style>
@@ -64,32 +74,46 @@
         console.log(this.listSoundsNotificationNamesFiltered);
       },
       properties:{
+        /*
+          list of used 
+          notification Names
+        */
         listOfNotificationNames:{
           type: Array,
           value: function(){
             return [];
           }
         },
+        /*list notification names excluding 
+        the ones you have alread used*/
         listSoundsNotificationNamesFiltered: {
           type: Array,
           value: function(){
             return [];
           }
         },
+        /*list of all avaible notification sounds
+        taken from firebase*/
         listSounds: {
           type: Array,
           value: function(){
             return [];
           }
         },
+        /*disables notification add*/
         disabledNoMoreNotifications: {
           type: Boolean,
           value: false
         },
+        /*iron-selector value
+        set to -1 so it's not
+        preselected*/
         selectedSound: {
           type: Number,
           value: -1
         },
+        /*check if needed to disable
+        notification-add externaly*/
         disabled: {
           type:Boolean,
           reflectToAttribute: true,
@@ -101,9 +125,11 @@
         '_filterListOfNoticationsNames(listSounds.*)',
         '_filterListOfNoticationsNames(listOfNotificationNames.*)'
       ],
-      test: function(){
-        console.log(this.listOfNotificationNames);
-      },
+      /*
+        fires a event that sends the object
+        to notification-second to push it to the
+        server
+      */
       addNotification: function(){
         this.fire('addNotification', {
                   "newNotification": {
@@ -118,6 +144,10 @@
         });
         this.$.paperList.selected = -1; 
       },
+      /*
+        filters out all the the used
+        notifications
+      */
       _filterListOfNoticationsNames: function(){
         var tempArray = [];
         /*
@@ -152,6 +182,14 @@
 
         this.checkNeedsDisabled()
       },
+      /*
+        checks to see if you need to 
+        disable the notification-add button
+        it checks to see if you've added all
+        possible notification.  It also check
+        to see if disabled been set to true
+        meening your currently offline.
+      */
       checkNeedsDisabled :function(){
         if(typeof this.listSoundsNotificationNamesFiltered[0] == 'undefined' || this.disabled == true){
           this.$.paperCard.classList.add('disabled')

@@ -1,23 +1,28 @@
-<link rel="import" href="../../paper-card/paper-card.html">
 <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">  
-<link rel="import" href="../../paper-input/paper-input.html">  
 <link rel="import" href="../../paper-slider/paper-slider.html">  
-<link rel="import" href="../../iron-validatable-behavior/iron-validatable-behavior.html">
 <link rel="import" href="../../paper-fab/paper-fab.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../iron-icons/iron-icons.html">
 <link rel="import" href="../utility-el/sensitivity-selector.html">
 <link rel="import" href="../../paper-dialog/paper-dialog.html">
 <link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../../paper-dialog/paper-dialog.html">
-<!--
-just doesn't seem to work
-<link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
--->
 
 
 <link rel="import" href="./notification-time-edit-prep.html">
 
+
+<!--
+# Purpose `<notification-edit-card>`
+This is a pop out menu to allow 
+you to edit a notification
+
+## resources
+
+
+## haven't finished 
+I would love a animation to when 
+you open up the time notification
+-->
 <dom-module id="notification-edit-card">
   <style>
       #closeButton{
@@ -41,7 +46,7 @@ just doesn't seem to work
       <paper-fab id="closeButton" icon="close" on-tap="close"></paper-fab>
 
         <div class="card-content">
-           <h2>{{singleNote.name}}</h2>   
+           <h2>[[singleNote.name]]</h2>   
         </div>
         <paper-dialog-scrollable>
           <div id="paddingDiv">
@@ -94,6 +99,11 @@ just doesn't seem to work
         observers:[
           '_closeOpenSpecificTimeSelector(singleNote.timeNotification)'
         ],
+        /*
+          send a event with the notification
+          data to notification-section
+          where it will get pushed
+        */
         submit: function(){
           console.log("fired subitNotficationChange");
           console.log(this.$.notificationTPrep.notificationDaysArray);
@@ -113,16 +123,31 @@ just doesn't seem to work
 
           this.fire('submitNotification', {"singleNote": this.singleNote});
         },
+        /*
+          send delete notification
+          to notification-section
+        */
         delete: function(){
           this.fire('deleteNotification');
         },
+        /*
+          opens dialog and appends it
+          to the to the body.
+        */
         open: function(){
           this.setDialog(true);
           this.$.editNotificationModule.open();
         },
+        /*
+          close paper-dialog
+        */
         close: function(){
           this.$.editNotificationModule.close();
         },
+        /*
+          opens notification time selector 
+          and then notifys a resize event.
+        */
         _closeOpenSpecificTimeSelector: function(switchValue){
           if(typeof switchValue != "undefined"){
             if(switchValue === true){
