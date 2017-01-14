@@ -149,6 +149,7 @@ you open up the time notification
       */
       _editNotification: function(e){
         this.specificNotification = e.detail.singleNote.$key;
+        
         this.$.editNotificationModule.open();
       },
       /*
@@ -168,7 +169,14 @@ you open up the time notification
       */
       _deleteNotification: function(e){
         //this.$.query.ref.child(e.detail.$key).update("disabledNotification", e.detail.disabledNotification);
-        this.$.query.ref.child(e.detail.$key).remove();
+        if(typeof e.detail.$key == "undefined"){
+          this.$.firebaseDoc.destroy();
+          this.$.editNotificationModule.close();
+        }
+        else {
+          this.$.query.ref.child(e.detail.$key).remove();
+        }
+
       },
       /*
         pushes a notification.
@@ -195,16 +203,13 @@ you open up the time notification
       _submitNotification: function(e){
         
         var firebaseDoc = this.$.firebaseDoc;
-        var key = e.detail.singleNote.$key;
-        delete e.detail.singleNote.$key;
+
 
         firebaseDoc.data = "";
         firebaseDoc.data = e.detail.singleNote;
 
         console.log("submited notification");
 
-        
-        e.detail.singleNote.$key = key;
 
         this.$.editNotificationModule.close();
         

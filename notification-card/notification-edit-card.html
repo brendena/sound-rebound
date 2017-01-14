@@ -39,6 +39,9 @@ you open up the time notification
       paper-dialog{
         /*transition: 1s;*/
       }
+      paper-button{
+        min-width:50%;
+      }
   </style>
   <template>
   <paper-dialog id="editNotificationModule" modal="false">
@@ -68,15 +71,19 @@ you open up the time notification
             </div>
           </div>
         </paper-dialog-scrollable>
-        <paper-button on-tap="submit" raised> Submit </paper-button>
-        <paper-button on-tap="delete" raised>delete</paper-button>
-
+        <div style="display:flex; justify-content:space-around">
+          <paper-button on-tap="submit" raised> Submit </paper-button>
+          <paper-button on-tap="delete" raised>delete</paper-button>
+        </div>
          
     
   </paper-dialog>  
   </template>
   <script>
     Polymer({
+        test: function(){
+        console.log(this.singleNote);
+        },
         is: 'notification-edit-card',
         properties:{
 
@@ -90,7 +97,8 @@ you open up the time notification
                     repeatingNotification: false,
                     timeNotification: false,
                     sensitivity: 0,
-                    notificationDays:[]
+                    notificationDays:[],
+                    $key: "0"
                   }
                 }
                 
@@ -120,7 +128,7 @@ you open up the time notification
 
           console.log(days);
           this.singleNote.notificationDays = returnArray;
-
+          console.log(this.singleNote)
           this.fire('submitNotification', {"singleNote": this.singleNote});
         },
         /*
