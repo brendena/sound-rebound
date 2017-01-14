@@ -34,7 +34,9 @@ press one of the button, on back or foward on the browser or whenever the page u
       }
     </style>
     
-
+      <firebase-auth
+        id="auth"> 
+      </firebase-auth>
 
       </div>
         
@@ -43,7 +45,8 @@ press one of the button, on back or foward on the browser or whenever the page u
           <a  href="#/about" data-page="about"><paper-button >about page</paper-button></a>
           <a  href="#/accountPage" data-page="accountPage"><paper-button >account page</paper-button></a>
         </iron-selector>
-  
+
+        <paper-button on-tap="signOut">sign out<iron-icon icon="icons:lock" ></iron-icon></paper-button>
 
       </div>
   </template>
@@ -74,6 +77,16 @@ press one of the button, on back or foward on the browser or whenever the page u
         if(rest[0] != location){
           this.$.ironSelected.selected = rest[1];
         }
+      },
+      signOut(){
+        this.$.auth.signOut().then(function() {
+            // Sign-out successful.
+              console.log("signed out");
+          }, function(error) {
+              console.log(error);
+              console.log("not signed out");
+            // An error happened.
+        });
       }
     });
   </script>
