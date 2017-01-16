@@ -5,6 +5,7 @@
 <link rel="import" href="../../paper-dialog/paper-dialog.html">
 <link rel="import" href="../../neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="../../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../iron-list/iron-list.html">
 <!--
 `<awesome-sauce>` injects a healthy dose of awesome into your page.
 
@@ -24,15 +25,25 @@ Wham! It's all awesome now!
       p{
         text-align: center;
       }
+      button.no-style{
+        -webkit-appearance: none;
+        border: 0;
+        padding: 0;
+        background: transparent;
+      }
     </style>
 
     <paper-dialog id="emailLogInModule" entry-animation="scale-up-animation" exit-animation="fade-out-animation" > <!--with-backdrop caused problem -->
-        <paper-input label="email" bind-value="{{email}}" type="email">Email</paper-input>
+      <form is="iron-form" id="form"d>
+        <paper-input label="email" bind-value="{{email}}" type="email" required>Email</paper-input>
         <paper-input label="emailPassword" bind-value="{{password}}" type="password">password</paper-input>
-        <paper-button on-tap="_logIn"> submit</paper-button>
+        <paper-button on-tap="_logIn" type="submit"> submit</paper-button>
         <paper-button on-tap="_createAccount">Create Account</paper-button>
         <paper-button on-tap="_resetPassword">password reset</paper-button>
+
         <p id="errorText"></p>
+        
+      </form>
     </paper-dialog>
 
   </template>
@@ -48,7 +59,9 @@ Wham! It's all awesome now!
           type: String,
           value: "String"
         },
-        
+      },
+      listeners: {
+        'iron-form-submit': '_test'
       },
       open: function(){
         this.$.emailLogInModule.open();
@@ -73,7 +86,7 @@ Wham! It's all awesome now!
         this.fire('logIn', {email: this.email, password: this.password});
       }
 
-
     });
+
   </script>
 </dom-module>
