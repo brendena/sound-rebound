@@ -4,7 +4,11 @@
 <link rel="import" href="../../iron-icons/communication-icons.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../polymerfire/firebase-auth.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+
+<link rel="import" href="../utility-el/my-svgs-icons.html">
 <link rel="import" href="./app-email-login.html">
+
 
 
 <!--
@@ -39,8 +43,13 @@ the anonymous log in currently doens't work
         z-index: 1;
         color: var(--paper-purple-50);
 
-        @apply(--layout);
+        /*@apply(--layout);
         @apply(--layout-center-center);
+        */
+        display:flex;
+        align-content:center;
+        justify-content: center;
+        flex-wrap: wrap;
       }
 
       :host([signed-in]) {
@@ -60,6 +69,19 @@ the anonymous log in currently doens't work
           margin-top:30px;
         }
       }
+
+      #fontDiv{
+        width:100%; 
+        text-align: center;
+        font-size: calc(20px + 2vw);
+        padding-bottom: 2vh;
+
+      }
+
+      #soundReboundIcon{
+        width: calc(20px + 2vw);
+        height: calc(20px + 2vw);
+      }
     </style>
 
     <firebase-auth
@@ -67,6 +89,13 @@ the anonymous log in currently doens't work
       provider="google"
       signed-in="{{signedIn}}">
     </firebase-auth>
+
+    <div id="fontDiv">
+      <iron-icon icon="my-svgs-icons:soundRebound" id="soundReboundIcon"></iron-icon>
+      <span>
+        Sound-Rebound
+      </span>
+    </div>
 
     <paper-button on-tap="toggleEmailInput" disabled="[[disabled]]">
       <iron-icon icon="communication:email"></iron-icon>
@@ -84,7 +113,7 @@ the anonymous log in currently doens't work
       </paper-button>
 
     <app-email-login id="emailLoginModule"></app-email-login>
-    
+
 
   </template>
   <script>
