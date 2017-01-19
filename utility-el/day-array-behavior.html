@@ -6,7 +6,20 @@
 
   	daysTitle: ["M","T","W","Th","F","S", "SU"],
   	defaultNullTime: "00:00",
-
+    defaultValue:{
+      "start": this.defaultNullTime,
+      "end" : this.defaultNullTime,
+      "enabled" : false
+    },
+    defaultedArray:[
+      {"day": "M", "start": this.defaultNullTime, "end" : this.defaultNullTime, "enabled" : false},
+      {"day": "T", "start": this.defaultNullTime, "end" : this.defaultNullTime, "enabled" : false},
+      {"day": "W", "start": this.defaultNullTime, "end" : this.defaultNullTime, "enabled" : false},
+      {"day": "Th", "start": this.defaultNullTime, "end" : this.defaultNullTime, "enabled" : false},
+      {"day": "F", "start": this.defaultNullTime, "end" : this.defaultNullTime, "enabled" : false},
+      {"day": "S", "start": this.defaultNullTime, "end" : this.defaultNullTime, "enabled" : false},
+      {"day": "SU", "start": this.defaultNullTime, "end" : this.defaultNullTime, "enabled" : false}
+    ],
   	_changedNDates:function(){
   		console.log("dick");
   		

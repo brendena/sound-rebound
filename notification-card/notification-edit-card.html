@@ -81,9 +81,6 @@ you open up the time notification
   </template>
   <script>
     Polymer({
-        test: function(){
-        console.log(this.singleNote);
-        },
         is: 'notification-edit-card',
         properties:{
 
@@ -119,16 +116,18 @@ you open up the time notification
           console.log(nDayArray); 
           var days = ["M","T","W","Th","F","S", "SU"];
           var returnArray = {};
+          var addedStuff = false;
           for(var i =0; i < days.length; i++){
               if(nDayArray[i].start != "00:00" || nDayArray[i].end != "00:00"){
                   var asdf = days[i];
                   returnArray[days[i]] = nDayArray[i];
+                  addedStuff = true;
               }
-              //else{
-              //  this.$.notificationTPrep.notificationDaysArray[i].enabled = false;
-              //}
           }
-
+          console.log("length  " +  returnArray == {});
+          if(addedStuff === false){
+            this.singleNote.timeNotification = false;
+          }         
           console.log(days);
           this.singleNote.notificationDays = returnArray;
           console.log(this.singleNote)

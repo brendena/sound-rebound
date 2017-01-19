@@ -148,8 +148,10 @@ you open up the time notification
         Then opens the dialog pop up both.
       */
       _editNotification: function(e){
-        this.specificNotification = e.detail.singleNote.$key;
         
+        this.specificNotification = e.detail.singleNote.$key;
+        this.editingNotification.notificationDays = [];
+        console.log(this.editingNotification)
         this.$.editNotificationModule.open();
       },
       /*
@@ -239,9 +241,11 @@ you open up the time notification
             var data = this.$.query.data;
             for(var i =0; i < data.length; i++){
                 if(data[i]['name'] != null && data[i]['name'] != undefined){
+                  console.log("jessussus");
                    tempNotificationList.push(data[i]['name']);
                 }
             }
+
             console.log("going through");
 
             this.listNotificationNames = tempNotificationList;
