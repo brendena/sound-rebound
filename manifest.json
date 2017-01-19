@@ -1,5 +1,5 @@
 {
-    "name": "Notes",
+    "name": "sound-rebound",
     "gcm_sender_id" : "103953800507",
     "scope": "./",
     "start_url": "index.html",
