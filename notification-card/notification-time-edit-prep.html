@@ -27,7 +27,7 @@ the paper-drowndown-menu can seem sometimes flaky
   <template>
     
     <template is="dom-repeat" items="{{notificationDaysArray}}" as="day">
-        <notification-time-edit day="[[day.day]]" start="{{day.start}}" end="{{day.end}}"></notification-time-edit>
+        <notification-time-edit day="[[day.day]]" start="{{day.start}}" end="{{day.end}}" enabled="{{day.enabled}}"></notification-time-edit>
     </template>
     
     <!-- so i need the leading zero in 03:00 or else it dons't know what to do. -->
@@ -39,6 +39,7 @@ the paper-drowndown-menu can seem sometimes flaky
         properties:{
             days: {
               type: Array,
+              notify: true,
               observer: '_changedNotificationDates',
               value: function(){
                 return [];

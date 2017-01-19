@@ -1,46 +1,48 @@
 
 <script>
   // Implement the extended behavior
-   var MyBehaviors = MyBehaviors || {};
+  var MyBehaviors = MyBehaviors || {};
   var DayArrayBehaviorImpl = {
+
   	daysTitle: ["M","T","W","Th","F","S", "SU"],
   	defaultNullTime: "00:00",
+
   	_changedNDates:function(){
   		console.log("dick");
   		
-		var changedInfo = [];
-		var value = {};
-		
-		for (i=0; i < this.daysTitle.length; i++) {
-		  
-		  value = this._checkDay(this.daysTitle[i]);
-		  
-		  if(value.day === ""){
-		      value.day = this.daysTitle[i];
-		  }
-		  
-		  changedInfo.push(value);
-		}
+  		var changedInfo = [];
+  		var value = {};
+  		
+  		for (i=0; i < this.daysTitle.length; i++) {
+  		  
+  		  value = this._checkDay(this.daysTitle[i]);
+  		  
+  		  if(value.day === ""){
+  		      value.day = this.daysTitle[i];
+  		  }
+  		  
+  		  changedInfo.push(value);
+  		}
 
-		return changedInfo;
-	    
-	 },
-  	_checkDay: function(day){
-        //i had a real hard time doing it any way so 
-        // don't bother changing it
+  		return changedInfo;
+  	    
+  	},
+	  _checkDay: function(day){
+      //i had a real hard time doing it any way so 
+      // don't bother changing it
 
-        for (var prop in this.days) {
-            if(day == this.days[prop].day){
-                return this.days[prop]; 
-           }
-        }
-        
-        return {
-          "day": "",
-          "start": this.defaultNullTime,
-          "end": this.defaultNullTime
-        };
-   },
+      for (var prop in this.days) {
+          if(day == this.days[prop].day){
+              return this.days[prop]; 
+         }
+      }
+      
+      return {
+        "day": "",
+        "start": this.defaultNullTime,
+        "end": this.defaultNullTime
+      };
+    },
    _sortArray: function(array){
 
     var changedInfo = [];
@@ -50,16 +52,18 @@
           //room for inprovement.
           //I was copping the object by reference to the array where it came from leading to things like 10:00AmAmAm
           //this was the quickest solution
-
-          var dayTestValue = {
-            "day":array[this.daysTitle[i]].day,
-            "start": array[this.daysTitle[i]].start,
-            "end": array[this.daysTitle[i]].end
+          if(typeof array[this.daysTitle[i]].enabled != undefined &&
+                    array[this.daysTitle[i]].enabled == true){
+            var dayTestValue = {
+              "day":array[this.daysTitle[i]].day,
+              "start": array[this.daysTitle[i]].start,
+              "end": array[this.daysTitle[i]].end
+            }
+            
+            dayTestValue.start = this._formateText(dayTestValue.start);
+            dayTestValue.end = this._formateText(dayTestValue.end);
+            changedInfo.push(dayTestValue);
           }
-          
-          dayTestValue.start = this._formateText(dayTestValue.start);
-          dayTestValue.end = this._formateText(dayTestValue.end);
-          changedInfo.push(dayTestValue);
         }
       }
     }
@@ -82,7 +86,7 @@
      */
 
      return timeString;
-   }
+    }
   }
 
   // Define the behavior

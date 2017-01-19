@@ -116,7 +116,7 @@ you open up the time notification
           console.log("fired subitNotficationChange");
           console.log(this.$.notificationTPrep.notificationDaysArray);
           var nDayArray = this.$.notificationTPrep.notificationDaysArray;
-            
+          console.log(nDayArray); 
           var days = ["M","T","W","Th","F","S", "SU"];
           var returnArray = {};
           for(var i =0; i < days.length; i++){
@@ -124,6 +124,9 @@ you open up the time notification
                   var asdf = days[i];
                   returnArray[days[i]] = nDayArray[i];
               }
+              //else{
+              //  this.$.notificationTPrep.notificationDaysArray[i].enabled = false;
+              //}
           }
 
           console.log(days);
