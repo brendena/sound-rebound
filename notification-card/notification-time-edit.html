@@ -37,6 +37,9 @@
 
 
     }
+    time-input{
+        flex-grow:1;
+    }
 
   </style>
   <template>
@@ -48,9 +51,17 @@
         <paper-checkbox checked='{{enabledInput}}' style="float:left">
             [[day]]
         </paper-checkbox>
-        <div id="div3">
-            <time-input id="start" enabled="{{enabledInput}}" time="{{start}}" invalid="{{startInvalid}}"></time-input>
-            <time-input id="end" enabled="{{enabledInput}}" time="{{end}}" invalid="{{endInvalid}}"></time-input>
+        <div id="div3" style="display:flex; flex-wrap: wrap; justify-content: center">
+            <time-input id="start" enabled="{{enabledInput}}" time="{{start}}" invalid="{{startInvalid}}" label="Start time"></time-input>
+
+<!--
+            <div  style="float: left; display:flex; align-items:center; height:100%">
+                <span>To</span>
+            </div>
+            
+
+            -->
+            <time-input id="end" enabled="{{enabledInput}}" time="{{end}}" invalid="{{endInvalid}}" label="End time"></time-input>
         <div>
     </div>
     <!--
