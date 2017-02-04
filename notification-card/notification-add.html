@@ -23,9 +23,13 @@ the paper-drowndown-menu can seem sometimes flaky
     <style>
       :host{
         min-width:200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       };
       paper-card{
         background: var(--light-primary-color);
+        padding:20px;
       }
       paper-card.disabled{
         background: rgba(208, 208, 208, 0.79);
@@ -51,7 +55,7 @@ the paper-drowndown-menu can seem sometimes flaky
       path="/users/[[user.uid]]">
     </firebase-query>
 
-    <paper-card id="paperCard" >
+    <paper-card id="paperCard"  >
       <div class="cafe-header">
         <p id="headerInformation"></p>
       </div>

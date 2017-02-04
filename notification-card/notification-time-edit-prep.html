@@ -25,7 +25,6 @@ the paper-drowndown-menu can seem sometimes flaky
   
   </style>
   <template>
-    <button on-tap="test">test</button>
     <template is="dom-repeat" items="{{notificationDaysArray}}" as="day">
         <notification-time-edit day="[[day.day]]" start="{{day.start}}" end="{{day.end}}" enabled="{{day.enabled}}"></notification-time-edit>
     </template>
