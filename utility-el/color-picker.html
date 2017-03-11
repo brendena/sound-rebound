@@ -1,0 +1,99 @@
+<link rel="import" href="../../neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../polymerfire/firebase-auth.html">
+<link rel="import" href="../../polymerfire/firebase-query.html">
+<link rel="import" href="../../polymerfire/firebase-document.html">
+
+
+<dom-module id="color-picker">
+  <template>
+    <style>
+
+    </style>
+
+    <firebase-auth
+        id="auth"
+        online="{{online}}"
+        user="{{user}}">
+    </firebase-auth>
+
+    <firebase-query
+      id="firebaseQuery"
+      path="/account_info/[[user.uid]]/colors"
+      data="{{myColors}}">
+    </firebase-query>
+
+
+
+    <paper-button on-tap="addNewColorMenu" raised>change color</paper-button>
+    <p>{{color}}</p>
+    
+    <paper-dropdown-menu label="notification color">
+      <paper-listbox class="dropdown-content">
+        <template is="dom-repeat" items="[[myColors]]" as="color">
+          <paper-item>"{{color.title}}"</paper-item>
+        </template>
+        <paper-item on-tap="addNewColorMenu">add card</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu>
+    
+    <div id="colorMenu" style="display:none">
+      <paper-input  id="colorTitleInput" label="input title color"
+                      required   bind-value="{{colorTitle}}"> </paper-input>
+
+
+      <input id="colorInput" type="color" name="favcolor" 
+            value="{{color::input}}" style="display:none">
+
+      <paper-button on-tap="changeColor" raised 
+                    style$="background:[[color]]; width: 100%"></paper-button>
+
+
+      <paper-button id="addColorButton" raised on-tap="addColor">add</paper-button>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'color-picker',
+      properties:{
+        'color': {
+          type: String,
+          reflectToAttribute: true,
+          notify: true,
+          value:"#1CF5FE"
+        },
+        'colorTitle':{
+          type: String,
+          reflectToAttribute: true,
+          notify: true,
+          value: "blank"
+        },
+        'myColors':{
+          type: Array,
+          reflectToAttribute: true
+        }
+      },
+
+      changeColor:function(){
+        this.$.colorInput.click();
+      },
+      addNewColorMenu(){
+        this.$.colorMenu.style.display = "inherit";
+      },
+      addColor(){
+        this.$.colorMenu.style.display = "none";
+
+        this.$.firebaseQuery.ref.push({
+                                  "title": this.colorTitle,
+                                  "color": this.color});
+
+      }
+    });
+  </script>
+</dom-module>
