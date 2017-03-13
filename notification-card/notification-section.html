@@ -69,6 +69,12 @@ you open up the time notification
       data="{{notifications}}">
     </firebase-query>
 
+    <firebase-query
+      id="firebaseColorQuery"
+      path="/account_info/[[user.uid]]/colors"
+      data="{{myColors}}">
+    </firebase-query>
+
     <firebase-document
       id="firebaseDoc"
       path="/users/[[user.uid]]/[[specificNotification]]"
@@ -83,7 +89,8 @@ you open up the time notification
     </app-indexeddb-mirror>
    -->
     <template is="dom-repeat" items="[[notifications]]" as="notification">
-      <notification-card single-note="[[notification]]" disabled="[[!online]]"></notification-card>
+      <notification-card single-note="[[notification]]" disabled="[[!online]]"
+                         colors="[[myColors]]"></notification-card>
     </template>
 
     <notification-add list-of-notification-names="[[listNotificationNames]]" disabled="[[!online]]"></notification-add>

@@ -78,9 +78,16 @@ So active notification will turn the words green if there on and red if there no
 
               </paper-toggle-button>
               <paper-toggle-button checked="[[singleNote.timeNotification]]" disabled>time sensitive notification
-
-                
               </paper-toggle-button>
+
+              <div >
+                <iron-icon icon="icons:opacity"   style$="color:[[_notificationColor.$val]]">
+                </iron-icon>
+                [[_notificationColor.$key]]
+
+                notification color
+                
+              </div>
 
           </div>
           <div>
@@ -96,12 +103,13 @@ So active notification will turn the words green if there on and red if there no
     </paper-card>
 
         
-        
   </template>
   <script>
     Polymer({
         is: 'notification-card',
-
+        check: function(){
+          console.log(this.colors)
+        },
         ready: function(){
         },
         attached: function(){
@@ -113,13 +121,21 @@ So active notification will turn the words green if there on and red if there no
             reflectToAttribute: true,
             value: function(){
               return {
-                        name: "default",
-                        sensitivity: 0,
-                        notificationDates: [],
-                        repeatingNotification: false,
-                        disabledNotification: false,
-                        timeNotification: false
+                      name: "default",
+                      sensitivity: 0,
+                      notificationDates: [],
+                      colorTitle: "blank",
+                      repeatingNotification: false,
+                      disabledNotification: false,
+                      timeNotification: false
               } 
+            }
+          },
+          colors:{
+            type:Array,
+            reflectToAttribute: true,
+            value: function(){
+              return [];
             }
           },
           disabled:{
@@ -130,12 +146,36 @@ So active notification will turn the words green if there on and red if there no
           disabledNotification:{
             type: Boolean,
             value: true
+          },
+          _notificationColor:{
+            type: Object,
+            value: function(){
+              return {};
+            }
           }
         },
         observers:[
           '_toggletimeNotificationDisplay(singleNote.timeNotification)',
-          '_checkDisabled(disabled, singleNote.disabledNotification)'
+          '_checkDisabled(disabled, singleNote.disabledNotification)',
+          '_getNotificationCardsColor(colors.*,singleNote.colorTitle)'
         ],
+        _getNotificationCardsColor:function(colors,noteColorTitle){
+          if(typeof(this._notificationColor) == "undefined" ){
+            this._notificationColor = {
+              '$key': ""
+            };
+          }
+          if(this._notificationColor.$key != this.singleNote.colorTitle){
+
+            for(var i =0; i < this.colors.length; i++){
+
+              if(this.singleNote.colorTitle == this.colors[i].$key){
+                this._notificationColor = this.colors[i];
+
+              }
+            }
+          }
+        },
         /**
           This get called on #disableToggle and will add the class of disable 
           and change the property of the singleNote.disabledNotification by calling a event

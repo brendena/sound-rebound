@@ -29,20 +29,20 @@
       data="{{myColors}}">
     </firebase-query>
 
-
-
-    <paper-button on-tap="addNewColorMenu" raised>change color</paper-button>
-    <p>{{color}}</p>
+    <firebase-document
+      id="firebaseDoc"
+      path="/account_info/[[user.uid]]/colors"
+      data="{{myColorsDoc}}">
+    </firebase-document>
     
     <paper-dropdown-menu label="notification color">
-      <paper-listbox class="dropdown-content">
+      <paper-listbox class="dropdown-content" selected="{{selectedIndex}}" >
         <template is="dom-repeat" items="[[myColors]]" as="color">
-          <paper-item>"{{color.title}}"</paper-item>
+          <paper-item>{{color.$key}}</paper-item>
         </template>
-        <paper-item on-tap="addNewColorMenu">add card</paper-item>
+        <paper-item >add card</paper-item>
       </paper-listbox>
     </paper-dropdown-menu>
-    
     <div id="colorMenu" style="display:none">
       <paper-input  id="colorTitleInput" label="input title color"
                       required   bind-value="{{colorTitle}}"> </paper-input>
@@ -52,10 +52,11 @@
             value="{{color::input}}" style="display:none">
 
       <paper-button on-tap="changeColor" raised 
-                    style$="background:[[color]]; width: 100%"></paper-button>
+                    style$="background:[[color]]"; width: 100%"></paper-button>
 
 
       <paper-button id="addColorButton" raised on-tap="addColor">add</paper-button>
+      <p>{{colorTitle}}</p>
     </div>
   </template>
   <script>
@@ -76,23 +77,40 @@
         },
         'myColors':{
           type: Array,
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          value: function(){
+            return [];
+          }
+        },
+        'selectedIndex':{
+          type: Number,
+          reflectToAttribute: true,
+          notify: true,
+          value: 0
+
         }
       },
-
+      observers:[
+        '_changedSelected(selectedIndex, myColors.*)'
+      ],
       changeColor:function(){
         this.$.colorInput.click();
       },
-      addNewColorMenu(){
-        this.$.colorMenu.style.display = "inherit";
+      _changedSelected(selected,myColors){
+        if(myColors.base.length <= selected){
+          this.$.colorMenu.style.display = "inherit";
+        }
+        else{
+          this.$.colorMenu.style.display = "none";
+          this.colorTitle = myColors.base[selected].$key;
+        }
+        
       },
       addColor(){
         this.$.colorMenu.style.display = "none";
 
-        this.$.firebaseQuery.ref.push({
-                                  "title": this.colorTitle,
-                                  "color": this.color});
-
+        this.$.firebaseDoc.path = "/account_info/" + this.user.uid +"/colors/" + this.colorTitle;
+        this.$.firebaseDoc.data = this.color; 
       }
     });
   </script>

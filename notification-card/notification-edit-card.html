@@ -60,7 +60,8 @@ you open up the time notification
                 <paper-toggle-button checked="{{singleNote.timeNotification}}"> enable time specific notes</paper-toggle-button>
             </div>
             <div>
-              <color-picker></color-picker>
+              <color-picker color-title="{{singleNote.colorTitle}}"></color-picker>
+              <p>{{singleNote.colorTitle}}</p>
             </div>
             <div>
               
@@ -97,6 +98,7 @@ you open up the time notification
                     repeatingNotification: false,
                     timeNotification: false,
                     sensitivity: 0,
+                    colorTitle:"default",
                     notificationDays:[],
                     $key: "0"
                   }
