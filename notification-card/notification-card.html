@@ -159,6 +159,9 @@ So active notification will turn the words green if there on and red if there no
           '_checkDisabled(disabled, singleNote.disabledNotification)',
           '_getNotificationCardsColor(colors.*,singleNote.colorTitle)'
         ],
+        /**
+          get the specific color based on the singleNotes.colorTitle
+        */
         _getNotificationCardsColor:function(colors,noteColorTitle){
           if(typeof(this._notificationColor) == "undefined" ){
             this._notificationColor = {
