@@ -1,4 +1,5 @@
 <link rel="import" href="../../paper-input/paper-input.html">  
+<link rel="import" href="../../paper-time-input/paper-time-input.html">
 
 <!--
 i can't use paper-input with this validation tactic
@@ -12,23 +13,32 @@ but i might be able to add there styles
 
       min-width:125px;
       width: 15vw;
-      max-width:50%;
+      max-width:40%;
 
       /*i think is because i'm mixing flexbox and float
       float:left;
       */
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-left: 2.5%;
+      padding-right: 2.5%;
       padding-top: 5px;
     };
   </style>
   <template>
 
-        
-        <paper-input  id="paperInput" label="[[label]]" 
-                      required  type="time"  disabled="[[!enabled]]" bind-value="{{time}}"
-                      error-message="letters only!" invalid="{{invalid}}"> </paper-input>
-           
+        <div id="supportDate">
+          <paper-input  id="paperInput" label="[[label]]" 
+                        required  type="time"  disabled="[[!enabled]]" bind-value="{{time}}"
+                        error-message="numbers only!" invalid="{{invalid}}"> </paper-input>
+        </div>
+        <div id="dontSupportDate">
+          <paper-time-input id="paperTimeInput" label="[[label]]"  format=24
+                            disabled="[[!enabled]]" value="{{time}}"
+                            ></paper-time-input>
+          <p hidden$="[[!invalid]]">
+            invalid
+          </p>
+        </div>
+        <p>[[time]]</p>
   </template>
   <script>
     Polymer({
@@ -55,10 +65,29 @@ but i might be able to add there styles
           }
 
         },
+        ready: function(){
+          var input = document.createElement('input');
+          input.setAttribute('type','date');
+
+          var notADateValue = 'not-a-date';
+          input.setAttribute('value', notADateValue); 
+
+          supported = (input.value === notADateValue);
+          if (supported == true){
+            this.$.supportDate.innerHTML = ""
+          }
+          else{
+             this.$.dontSupportDate.innerHTML = ""
+          }
+        },
         check: function(){
             /*thou we binded the input with bind-value it doesn't set it the first time
             so you have to bind it when the element is attached to the dom*/
-           this.$.paperInput.value = this.time; 
+           this.$.paperInput.value = this.time;
+           /*
+           I can set all my stuff here for changing the time.
+           */ 
+           this.$.paperTimeInput.hour = 5
         }
 
         

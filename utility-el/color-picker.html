@@ -9,6 +9,7 @@
 <link rel="import" href="../../polymerfire/firebase-auth.html">
 <link rel="import" href="../../polymerfire/firebase-query.html">
 <link rel="import" href="../../polymerfire/firebase-document.html">
+<link rel="import" href="../../paper-swatch-picker/paper-swatch-picker.html">
 
 
 <dom-module id="color-picker">
@@ -44,19 +45,24 @@
       </paper-listbox>
     </paper-dropdown-menu>
     <div id="colorMenu" style="display:none">
+
+      <div id="supported_color_input">
+        <input id="colorInput" type="color" name="favcolor" 
+              value="{{color::input}}" style="display:none">
+      </div>
+      <div id="not_supported_color_input">
+        <paper-swatch-picker color="{{color}}" id="colorSwatches"></paper-swatch-picker>
+      </div>
       <paper-input  id="colorTitleInput" label="input title color"
-                      required   bind-value="{{colorTitle}}"> </paper-input>
+                        required   bind-value="{{colorTitle}}"> </paper-input>
 
-
-      <input id="colorInput" type="color" name="favcolor" 
-            value="{{color::input}}" style="display:none">
 
       <paper-button on-tap="changeColor" raised 
-                    style$="background:[[color]]"; width: 100%"></paper-button>
+                    style$="background:[[color]]; width: 100%"></paper-button>
 
 
       <paper-button id="addColorButton" raised on-tap="addColor">add</paper-button>
-      <p>{{colorTitle}}</p>
+
     </div>
   </template>
   <script>
@@ -90,11 +96,29 @@
 
         }
       },
+      ready: function(){
+          var input = document.createElement('input');
+          input.setAttribute('type','date');
+
+          var notADateValue = 'not-a-date';
+          input.setAttribute('value', notADateValue); 
+
+          supported = (input.value === notADateValue);
+          if (supported == true){
+            this.$.not_supported_color_input.style.display = "none"
+          }
+          else{
+            this.$.supported_color_input.style.display = "none"
+          }
+      },
       observers:[
         '_changedSelected(selectedIndex, myColors.*)'
       ],
       changeColor:function(){
-        this.$.colorInput.click();
+        if(this.$.supports_color_input.style.display != "none"){
+          this.$.colorInput.click();
+        }
+        
       },
       _changedSelected(selected,myColors){
         if(myColors.base.length <= selected){
