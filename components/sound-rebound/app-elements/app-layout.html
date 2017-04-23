@@ -1,0 +1,262 @@
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../app-layout/app-layout.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../app-route/app-route.html">
+<link rel="import" href="../../app-route/app-location.html">
+<link rel="import" href="../../paper-progress/paper-progress.html">
+<link rel="import" href="../../app-layout/app-scroll-effects/effects/waterfall.html">
+<link rel="import" href="../../polymerfire/firebase-auth.html">
+
+<link rel="import" href="./app-navigation-selected.html">
+<link rel="import" href="./app-login.html">
+<link rel="import" href="../utility-el/my-subscription.html">
+<link rel="import" href="../app-theme.html">
+<link rel="import" href="./app-neon-pages.html">
+<link rel="import" href="../utility-el/my-svgs-icons.html">
+
+<!--
+
+`<app-layout>` 
+## purpose
+`<app-layout>` is hold all the layout code.  So the logic for the sliding menu and the page transition
+all is held here.  It also hold the login in element.
+
+## resources
+
+app routing
+https://www.polymer-project.org/1.0/blog/routing
+
+vido on app routing
+https://www.youtube.com/watch?v=xRONodYEF2A
+
+Example code
+https://github.com/Polymer/polycasts/tree/master/ep46-carbon-route/blog
+
+-->
+
+<dom-module id="app-layout">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .anonymous{
+        color: black;
+      }
+      app-header {
+        color: #fff;
+        background-color: var(--accent-color);
+      }
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+      .drawer-list {
+        margin: 0 20px;
+      }
+
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        text-decoration: none;
+        color: var(--app-secondary-color);
+        line-height: 40px;
+      }
+
+      .drawer-list a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
+      paper-icon-button{
+        min-width:35px;
+      }
+      #anonymousButtonATag{
+        width:100%;
+      }
+      #anonymousButton{
+        width:80%;
+        text-align: center;
+        background-color:yellow;
+        margin: auto;
+        margin-top:10px;
+        display:block;
+      }
+
+      @media (max-width: 600px) {
+         .large{
+          display: none;
+        }
+        .small{
+          display:inherit;
+        }
+      }
+      @media (min-width: 600px) {
+        .small{
+          display:none;
+        }
+      }
+
+
+    </style>
+    
+    <app-location use-hash-as-path route="{{route}}" id="appLocation"></app-location>
+
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{data}}"> 
+      <!--active="{{pageActive}}"  the data is going to be the page access it by data.page -->
+    </app-route>
+    <firebase-auth
+      id="auth"
+      online="{{online}}"
+      signed-in="{{signedIn}}"> 
+    </firebase-auth>
+    
+
+    <app-login></app-login>
+    
+
+    <app-drawer-layout fullbleed force-narrow="[[forceNarrow]]">
+      <app-drawer id="drawer" swipe-open>
+        <app-toolbar >Menu</app-toolbar>
+        <div style="height: 100%; overflow: auto;">
+          <app-navigation-selected></app-navigation-selected> 
+        </div>
+      </app-drawer>
+
+      <app-header-layout  has-scrolling-region>
+        <app-header condenses reveals effects="waterfall" id="header" disabled="false">
+          <app-toolbar>
+            <paper-icon-button icon="menu" on-tap="drawerPanel"></paper-icon-button>
+            <div main-title>
+              <iron-icon icon="my-svgs-icons:soundRebound" ></iron-icon>
+              <span >sound-rebound</span>
+
+             
+
+
+
+              <div hidden$="[[online]]" style="display:inline">
+                <iron-icon icon="icons:cloud-off" >></iron-icon>              
+                <span class="large"> offline </span>
+              </div>
+
+              <a href="#/accountPage" style="color: inherit; text-decoration: none; padding-left:10%" id="anonymousButtonATag" hidden$="[[!anonymous]]">
+                <span class="large">
+                  Temporary Account
+                </span>
+                <span class="small">
+                  Tmp Account
+                </span>
+              </a>
+
+
+
+            </div>
+
+
+
+
+            
+            <my-subscription></my-subscription>
+            <!--<paper-progress value="10" indeterminate bottom-item></paper-progress>-->
+
+          </app-toolbar>
+        </app-header>
+
+        <!--
+        <a href="#/accountPage" style="color: inherit; text-decoration: none;" id="anonymousButtonATag">
+          <paper-button  raised id="anonymousButton">
+            ! Create Perminent Account
+          </paper-button>
+        </a>
+        -->
+
+        <app-neon-pages location="[[data.page]]"></app-neon-pages>
+
+        
+        
+      </app-header-layout>
+    </app-drawer-layout>
+  </template>
+  <script>
+    Polymer({
+      is: 'app-layout',
+      properties: {
+        forceNarrow: {
+          type: Boolean,
+          value: false
+        },
+        location:{
+          type: String,
+          value: '/notification'
+        },
+        anonymous:{
+          type: Boolean,
+          value: false
+        }
+      },
+      observers:[
+        'changeHeadersClasses(online, signedIn)'
+      ],
+      /*
+      drawerPanel - display the panel or hides it.
+      It also checks the forceNarrow variable.  Which
+      will allow you to remove the side panel if you don't
+      want it.
+      */
+      drawerPanel: function(){
+        this.forceNarrow =  !this.forceNarrow;
+        this.$.drawer.toggle()
+      },
+      attached: function() {
+        /*attached to app-location so it will update when there is no url*/
+        if (!this.route.path) {
+          this.set('route.path', '/notification');
+          window.location.hash = "/notification";
+        }
+        this.changeHeadersClasses();
+      },
+      changeHeadersClasses: function(online, signedIn){
+        console.log("changedHeaderClasses");
+        if(typeof online != "undefined" && signedIn != "undefined"){
+          /*if not online turn layout grey*/
+          if(online == false){
+            this.customStyle['--accent-color'] = "grey";
+            
+          }
+          else{
+            if(signedIn == true){
+
+              var user = this.$.auth.app.auth().currentUser;
+              console.log("user")
+              console.log(user.providerData.length);
+              /*if log in as anonymous then display layout as yellow*/
+              if(user.providerData.length == 0){
+                console.log("anonymous");
+                this.$.header.classList.add('anonymous');
+                this.customStyle['--accent-color'] = "yellow";
+                this.anonymous= true;
+              }
+              /*else if log in show default color*/
+              else{
+                this.anonymous = false;
+                console.log("not anonymous");
+                this.$.header.classList.remove('anonymous');
+                this.customStyle['--accent-color'] = '#ff4081';
+              }
+
+              
+            
+            }
+          }
+          
+          this.updateStyles();
+        }
+      }
+    });
+  </script>
+</dom-module>

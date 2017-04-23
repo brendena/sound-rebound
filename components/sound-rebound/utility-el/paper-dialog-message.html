@@ -1,0 +1,72 @@
+<link rel="import" href="../../neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+
+<!--
+
+
+# Purpose `<paper-dialog-message>`
+Its mostly just a wrapper for paper-dialog and all the animations for it.  
+I need paper-dialog to show error or to confirm actions.
+
+## resources
+https://elements.polymer-project.org/elements/paper-dialog
+
+## haven't finished 
+
+-->
+
+<dom-module id="paper-dialog-message">
+  <template>
+    <style>
+
+    </style>
+    
+  <paper-dialog entry-animation="scale-up-animation"
+                exit-animation="fade-out-animation"
+                id="message">
+    <h2>[[header]]</h2>
+    <p>
+      [[paragraphText]]
+    </p>
+    <paper-button on-tap="close">close</paper-button>
+  </paper-dialog>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'paper-dialog-message',
+      properties:{
+        /*header text*/
+        header:{
+          type:String,
+          value: ""
+        },
+        /*paragraph text*/
+        paragraphText:{
+          type: String,
+          value: ""
+        }
+      },
+      /*
+        just send the header text and 
+        paragraph text and open() 
+        and your done.
+
+      */
+      open: function(header, paragraphText){
+        this.header = header;
+        this.paragraphText = paragraphText;
+        this.$.message.open();
+      },
+      /*
+        closes the paper-dialog
+        pop up.
+      */
+      close: function(){
+        this.$.message.close();
+      }
+    });
+  </script>
+</dom-module>

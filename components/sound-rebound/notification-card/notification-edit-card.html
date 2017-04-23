@@ -1,0 +1,198 @@
+<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">  
+<link rel="import" href="../../paper-slider/paper-slider.html">  
+<link rel="import" href="../../paper-fab/paper-fab.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../utility-el/sensitivity-selector.html">
+<link rel="import" href="./notification-time-edit-prep.html">
+<link rel="import" href="../utility-el/color-picker.html">
+
+
+<!--
+# Purpose `<notification-edit-card>`
+This is a pop out menu to allow 
+you to edit a notification
+
+## resources
+
+
+## haven't finished 
+I would love a animation to when 
+you open up the time notification
+-->
+<dom-module id="notification-edit-card">
+  <style>
+      #closeButton{
+        position:absolute;
+        top: -50px;
+        left: -25px;
+      }
+      paper-card:{
+        overflow: auto;
+      }
+      #paddingDiv{
+        padding: 10px
+      }
+      paper-dialog{
+        /*transition: 1s;*/
+      }
+      paper-button{
+        min-width:50%;
+      }
+
+  </style>
+  <template>
+  <paper-dialog id="editNotificationModule" modal="false" >
+    
+      <paper-fab id="closeButton" icon="close" on-tap="close"></paper-fab>
+
+        <div class="card-content">
+           <h2>[[singleNote.name]]</h2>   
+        </div>
+        <paper-dialog-scrollable>
+          <div id="paddingDiv">
+            <div>
+                <paper-toggle-button checked="{{singleNote.repeatingNotification}}"> repeating notification</paper-toggle-button>
+            </div>
+            <div>
+                <paper-toggle-button checked="{{singleNote.timeNotification}}"> enable time specific notes</paper-toggle-button>
+            </div>
+            <div>
+              <color-picker color-title="{{singleNote.colorTitle}}"></color-picker>
+            </div>
+            <div>
+              
+            </div>
+            <div id="notificationTimeEditsContainer">
+              <notification-time-edit-prep id="notificationTPrep" days="{{singleNote.notificationDays}}"></notification-time-edit-prep>
+            </div>
+          
+            <div>
+              <sensitivity-selector sensitivity="{{singleNote.sensitivity}}"></sensitivity-selector>
+            </div>
+          </div>
+        </paper-dialog-scrollable>
+        <div style="display:flex; justify-content:space-around">
+          <paper-button on-tap="submit" raised> Submit </paper-button>
+          <paper-button on-tap="delete" raised>delete</paper-button>
+        </div>
+         
+    
+  </paper-dialog>  
+  </template>
+  <script>
+    Polymer({
+        is: 'notification-edit-card',
+        properties:{
+
+          singleNote:{
+                type : Object,
+                reflectToAttribute: true,
+                value: function(){
+                  return {
+                    name: "default",
+                    disabledNotification: false,
+                    repeatingNotification: false,
+                    timeNotification: false,
+                    sensitivity: 0,
+                    colorTitle:"default",
+                    notificationDays:[],
+                    $key: "0"
+                  }
+                }
+                
+            },
+        },
+        observers:[
+          '_closeOpenSpecificTimeSelector(singleNote.timeNotification)'
+        ],
+        /*
+          send a event with the notification
+          data to notification-section
+          where it will get pushed
+        */
+        submit: function(){
+          console.log("fired subitNotficationChange");
+          console.log(this.$.notificationTPrep.notificationDaysArray);
+          var nDayArray = this.$.notificationTPrep.notificationDaysArray;
+          console.log(nDayArray); 
+          var days = ["M","T","W","Th","F","S", "SU"];
+          var returnArray = {};
+          var addedStuff = false;
+          for(var i =0; i < days.length; i++){
+              if(nDayArray[i].start != "00:00" || nDayArray[i].end != "00:00"){
+                  var asdf = days[i];
+                  returnArray[days[i]] = nDayArray[i];
+                  addedStuff = true;
+              }
+          }
+          console.log("length  " +  returnArray == {});
+          if(addedStuff === false){
+            this.singleNote.timeNotification = false;
+          }         
+          console.log(days);
+          this.singleNote.notificationDays = returnArray;
+          console.log(this.singleNote)
+          this.fire('submitNotification', {"singleNote": this.singleNote});
+        },
+        /*
+          send delete notification
+          to notification-section
+        */
+        delete: function(){
+          this.fire('deleteNotification');
+        },
+        /*
+          opens dialog and appends it
+          to the to the body.
+        */
+        open: function(){
+          this.setDialog(true);
+          this.$.editNotificationModule.open();
+        },
+        /*
+          close paper-dialog
+        */
+        close: function(){
+          this.$.editNotificationModule.close();
+        },
+        /*
+          opens notification time selector 
+          and then notifys a resize event.
+        */
+        _closeOpenSpecificTimeSelector: function(switchValue){
+          if(typeof switchValue != "undefined"){
+            if(switchValue === true){
+              this.$.notificationTimeEditsContainer.hidden = false;
+            }
+            else if(switchValue === false){
+              this.$.notificationTimeEditsContainer.hidden = true;
+            }
+          }
+          this.$.editNotificationModule.notifyResize();        
+        },
+        /*
+
+        !!!!massive hack
+        https://github.com/PolymerElements/polymer-starter-kit/issues/154
+        basically this appends dialog to the top of the page.  You need to do this
+        because iron-overlay is on the top of the page and will overshadow everthing.
+
+        I don't know why this work becuase editnotificaitonModlue is removed from this element and moved to body
+        so all functions should stop working
+        */
+        setDialog: function (open) {
+            if (open) {
+                var node = this.$.editNotificationModule;
+                var textnode = document.querySelector("body");
+                textnode.appendChild(node);
+            } 
+        }
+
+        
+        
+    });
+  </script>
+</dom-module>

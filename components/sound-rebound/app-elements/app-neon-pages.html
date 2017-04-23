@@ -1,0 +1,58 @@
+<link rel="import" href="../../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../neon-animation/neon-animation.html">
+
+<link rel="import" href="../app-pages/page-account-setting.html">
+<link rel="import" href="../app-pages/page-about.html">
+<link rel="import" href="../notification-card/notification-section.html">
+<!--
+`<awesome-sauce>` injects a healthy dose of awesome into your page.
+
+In typical use, just slap some `<awesome-sauce>` at the top of your body:
+
+    <body>
+      <awesome-sauce></awesome-sauce>
+
+Wham! It's all awesome now!
+-->
+
+
+<dom-module id="app-neon-pages">
+  <template>
+    <style>
+
+    </style>
+
+      <neon-animated-pages selected='[[location]]'
+                         attr-for-selected='key'
+                         entry-animation='slide-from-left-animation'
+                         exit-animation='slide-right-animation'
+                          class="flex">
+
+        <neon-animatable key='notification'>
+          <notification-section></notification-section>
+        </neon-animatable>
+
+        <neon-animatable key='about'>
+          <page-about></page-about>
+        </neon-animatable>
+
+        <neon-animatable key='accountPage'>
+          <page-account-setting></page-account-setting>
+        </neon-animatable>
+
+
+
+      </neon-animated-pages>
+  </template>
+  <script>
+    Polymer({
+      is: 'app-neon-pages',
+      properties:{
+        location:{
+          type: String,
+          value: "String",
+        }
+      }
+    });
+  </script>
+</dom-module>

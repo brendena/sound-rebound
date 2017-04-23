@@ -1,0 +1,132 @@
+<link rel="import" href="../../iron-input/iron-input.html">
+<link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+
+<link rel="import" href="../utility-el/time-input.html">
+
+
+<dom-module id="notification-time-edit">
+  <style>
+      /*
+      https://codingwithgerwin.blogspot.com/2016/04/polymer-and-hidden-attribute.html
+      @apply(--layout-flex);
+      */
+      :host{
+        display:block;
+        padding:5px;
+        
+      };
+
+      p[[hidden]]{
+          display: none;
+      }  
+      #div2{
+        display: flex;
+        @apply(--layout-horizontal);
+      }
+    paper-checkbox{
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+
+    @media (max-width: 500px) {
+
+      
+      time-input{
+        @apply(--layout-vertical);
+      }
+
+
+    }
+
+  </style>
+  <template>
+    <!-- 
+    i want a checkbox
+    and two input tags
+    -->
+    <div id="div2" >
+        <paper-checkbox checked='{{enabled}}' style="float:left">
+            [[day]]
+        </paper-checkbox>
+        <div id="div3" style="display:flex; flex-wrap: wrap; justify-content: center">
+            <time-input id="start" enabled="{{enabled}}" time="{{start}}" invalid="{{startInvalid}}" label="Start time"></time-input>
+
+            <time-input id="end" enabled="{{enabled}}" time="{{end}}" invalid="{{endInvalid}}" label="End time"></time-input>
+        <div>
+    </div>
+    <!--
+    <p>[[start]] NTE</p>
+    <p>[[end]] NTE</p>
+    -->
+  </template>
+  <script>
+    Polymer({
+        is: 'notification-time-edit',
+        properties:{
+            day:{
+                type: String,
+                value: "default"
+            },
+            start:{
+                type: String, 
+                notify: true,
+                value: "00:00"
+            },
+            end:{
+                type: String,
+                notify: true,
+                value: "00:00"
+            },
+            startInvalid:{
+                type: Boolean,
+                value: false
+            },
+            endInvalid:{
+                type: Boolean,
+                value: false
+            },
+            error:{
+                type: Boolean,
+                value: true
+            },
+            enabled: {
+                type: Boolean,
+                notify: true,
+                value: false,
+            }
+        },
+        observers:[
+            '_checkInput(start, end)'
+        ],
+        attached: function(){
+            this._disableCheck();
+        },
+        _checkInput: function(start, end){
+            this._disableCheck();
+            console.log("checkInput got fired");
+            var regularExpress = /[:]/;
+            start = start.replace(regularExpress, "");
+            end = end.replace(regularExpress, "");
+            if(start > end){
+                this.startInvalid =  true;
+                this.endInvalid = true;
+            }
+            else{
+                this.startInvalid =  false;
+                this.endInvalid = false;
+            }
+        },
+        _disableCheck: function(){
+            if(this.start == "00:00" && this.end == "00:00"){
+                this.enabledInput = false;
+            }
+            else{
+                this.enabledInput = true;
+            }
+        }
+
+        
+        
+    });
+  </script>
+</dom-module>

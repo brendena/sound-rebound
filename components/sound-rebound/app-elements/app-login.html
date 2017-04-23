@@ -1,0 +1,225 @@
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/communication-icons.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../polymerfire/firebase-auth.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+
+<link rel="import" href="../utility-el/my-svgs-icons.html">
+<link rel="import" href="./app-email-login.html">
+
+
+
+<!--
+
+
+# Purpose `<app-login>`
+This element forces the user to log in.  Its will cover the entire page on any of the pages if you log out.
+This element holds all the information for login in with google auth or email.
+
+## resources
+
+
+firebase documents user managment
+https://firebase.google.com/docs/auth/web/manage-users
+
+
+## haven't finished 
+the anonymous log in currently doens't work
+
+-->
+<dom-module id="app-login">
+  <template>
+    <style>
+      :host {
+        position: absolute;
+        top: 0px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--paper-red-700);
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1;
+        color: var(--paper-purple-50);
+
+        /*@apply(--layout);
+        @apply(--layout-center-center);
+        */
+        display:flex;
+        align-content:center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      :host([signed-in]) {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      paper-button > * {
+        vertical-align: middle;
+        text-transform: none;
+      }
+      @media (max-width: 600px) {
+        :host{
+           @apply(--layout-vertical);
+        }
+        paper-button{
+          margin-top:30px;
+        }
+      }
+
+      #fontDiv{
+        width:100%; 
+        text-align: center;
+        font-size: calc(20px + 2vw);
+        padding-bottom: 2vh;
+
+      }
+
+      #soundReboundIcon{
+        width: calc(20px + 2vw);
+        height: calc(20px + 2vw);
+      }
+    </style>
+
+    <firebase-auth
+      id="auth"
+      provider="google"
+      signed-in="{{signedIn}}">
+    </firebase-auth>
+
+    <div id="fontDiv">
+      <iron-icon icon="my-svgs-icons:soundRebound" id="soundReboundIcon"></iron-icon>
+      <span>
+        Sound-Rebound
+      </span>
+    </div>
+
+    <paper-button on-tap="toggleEmailInput" disabled="[[disabled]]">
+      <iron-icon icon="communication:email"></iron-icon>
+      <span>Sign in with email</span>
+    </paper-button>
+    
+    <paper-button on-tap="googleLogIn" disabled="[[disabled]]" id="button">
+      <iron-icon icon="account-circle"></iron-icon>
+      <span>Sign in with Google</span>
+    </paper-button>
+
+      <paper-button on-tap="anonymousLogIn" disabled="[[disabled]]">
+        <iron-icon icon="icons:arrow-forward"></iron-icon>
+        <span>try site without account</span>
+      </paper-button>
+
+    <app-email-login id="emailLoginModule"></app-email-login>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: 'app-login',
+      
+      properties: {
+        /*if true this disables the paper-buttons*/
+        disabled: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
+        },
+        /*if true this will make the :host opacity: 0*/
+        signedIn: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
+        },
+      },
+      listeners: {
+          'resetPassword': 'resetEmailPassword',
+          'createAccount': 'createEmailAccount',
+          'logIn': 'emailLogIn',
+      },
+      /*
+      !not functional
+      this will hold the code to log in anonymously
+      */
+      anonymousLogIn: function() {
+        
+        this.$.auth.signInAnonymously().catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+        });
+      },
+      /*
+        toggle the element emailLog 
+        which will open a paper-dialog module
+      */
+      toggleEmailInput:function(){
+        this.$.emailLoginModule.open();
+      },
+      /*
+         This variables takes a email and a
+          password from the event variables
+         and create a email account.
+      */
+      createEmailAccount: function(e){
+        var that = this;
+        this.$.auth.createUserWithEmailAndPassword(e.detail.email,e.detail.password).then(function(){
+          that.$.emailLoginModule.nullError();
+        },function(error) {
+          that.firebaseErrorOutput(error);
+        });
+      },
+      /*
+        EmailLogIn takes your email and 
+        password and log you into the site.
+      */
+
+      emailLogIn: function(e){
+        var that = this;
+        this.$.auth.signInWithEmailAndPassword(e.detail.email,e.detail.password).then(function(){
+          that.$.emailLoginModule.nullError();
+        },function(error) {
+          that.firebaseErrorOutput(error);
+        });
+        
+      },
+
+      /*
+      
+         resetEmailPassword will take your 
+         email and sent you a reset code.
+      */
+      resetEmailPassword: function(e){
+        var that = this;
+        this.$.auth.auth.sendPasswordResetEmail(e.detail.email).then(function(){
+          that.$.emailLoginModule.nullError();
+        },function(error) {
+          that.firebaseErrorOutput(error);
+        });
+        
+      },
+      /*
+
+         If there was a error loggin in it will 
+         output to the console and send a message to the
+         user.
+      */
+      firebaseErrorOutput(error){
+        this.$.emailLoginModule.userError("jesus");
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log("error 2" + errorCode + errorMessage)
+        emailLoginModule.userError("make sure you inputed the right values");
+      },
+      /*
+        this will bring the google auth pop up.
+      */
+      googleLogIn: function(){
+        this.$.auth.signInWithPopup();
+      },
+    });
+  </script>
+</dom-module>

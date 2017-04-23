@@ -1,0 +1,18 @@
+{
+	"questions":[{
+		"questionTitle": "add notification",
+		"answer": "work in progress"
+	},{
+		"questionTitle": "manage account",
+		"answer": "work in progress"
+	},{
+		"questionTitle": "delete notification",
+		"answer": "work in progress"
+	},{
+		"questionTitle": "delete account",
+		"answer": "work in progress"
+	},{
+		"questionTitle": "reset passowrd",
+		"answer": "work in progress"
+	}]
+}

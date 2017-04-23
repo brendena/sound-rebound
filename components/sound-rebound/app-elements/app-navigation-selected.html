@@ -1,0 +1,93 @@
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-selector/iron-selector.html">
+<link rel="import" href="../app-theme.html">
+
+<!--
+
+
+# Purpose `<app-navigation-selected>`
+This app is the page selected for the slide out navigation bar.  It will change the selected when you 
+press one of the button, on back or foward on the browser or whenever the page url changes. 
+
+## resources
+
+## haven't finished 
+
+-->
+
+<dom-module id="app-navigation-selected">
+  <template>
+    <style>
+      paper-button{
+        width:100%;
+        margin:0;
+      }
+      .iron-selected paper-button {
+        background-color: var(--accent-color);
+
+      }
+      a{
+        color: inherit;
+        text-decoration: none;
+      }
+    </style>
+    
+      <firebase-auth
+        id="auth"> 
+      </firebase-auth>
+
+      </div>
+        
+        <iron-selector id="ironSelected" selected="notification" attr-for-selected="data-page">
+          <a  href="#/notification" data-page="notification"><paper-button >notification</paper-button></a>
+          <a  href="#/about" data-page="about"><paper-button >about page</paper-button></a>
+          <a  href="#/accountPage" data-page="accountPage"><paper-button >account page</paper-button></a>
+        </iron-selector>
+
+        <paper-button on-tap="signOut">sign out<iron-icon icon="icons:lock" ></iron-icon></paper-button>
+
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'app-navigation-selected',
+      /*
+        on being attached
+        change selected to proper
+        Url.  If hash URL changes
+        change the URl again.
+      */
+      attached:function(){
+        this._changeSelected();
+        window.onhashchange = function() {
+          console.log("!!!!!!!!!! changed");
+          this._changeSelected();
+        }.bind(this);
+      },
+      /*
+        change selected to match
+        the current Url.
+      */
+      _changeSelected(){
+        var location = window.location.href;
+        var rest = location.split("#/");
+        //don't change selected if you've navigated to app.html
+        if(rest[0] != location){
+          this.$.ironSelected.selected = rest[1];
+        }
+      },
+      signOut(){
+        this.$.auth.signOut().then(function() {
+            // Sign-out successful.
+              console.log("signed out");
+          }, function(error) {
+              console.log(error);
+              console.log("not signed out");
+            // An error happened.
+        });
+      }
+    });
+  </script>
+</dom-module>

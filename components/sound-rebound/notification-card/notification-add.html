@@ -1,0 +1,219 @@
+<link rel="import" href="../../polymerfire/firebase-auth.html">
+<link rel="import" href="../../polymerfire/firebase-query.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../paper-card/paper-card.html">  
+
+<link rel="import" href="./notification-card.html">
+
+<!--
+# Purpose `<notification-add>`
+A element that allows the user to add notification sounds.
+
+## resources
+
+
+## haven't finished 
+the paper-drowndown-menu can seem sometimes flaky
+-->
+<dom-module id="notification-add">
+  <template>
+    <style>
+      :host{
+        min-width:270px;/*270 is what the notification cards are */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      };
+      paper-card{
+        background: var(--light-primary-color);
+        padding:20px;
+      }
+      paper-card.disabled{
+        background: rgba(208, 208, 208, 0.79);
+      }
+      paper-button.add[disabled]{
+       background: rgba(150, 150, 150, 1); 
+      }
+    </style>
+
+    <firebase-auth
+        id="auth"
+        user="{{user}}">
+    </firebase-auth>
+
+    <firebase-query
+      id="query"
+      path="/list_sounds"
+      data="{{listSounds}}">
+    </firebase-query>
+
+    <firebase-query
+      id="usersAccount"
+      path="/users/[[user.uid]]">
+    </firebase-query>
+
+    <paper-card id="paperCard"  >
+      <div class="cafe-header">
+        <p id="headerInformation"></p>
+      </div>
+      <paper-dropdown-menu label="select sound to add" disabled="[[disabledNoMoreNotifications]]">
+        <paper-listbox id="paperList" class="dropdown-content" selected="{{selectedSound}}" >
+          <template is="dom-repeat" items="[[listSoundsNotificationNamesFiltered]]" as="sound"> <!-- filter=""-->
+             <paper-item value="[[sound.$val]]">[[sound.$val]]</paper-item>
+          </template>
+        </paper-listbox>
+      </paper-dropdown-menu>
+      <div>
+        <paper-button class="add" on-tap="addNotification" disabled="[[disabledNoMoreNotifications]]">add</paper-button>
+      </div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is: 'notification-add',
+      test: function(){
+        console.log(this.listSoundsNotificationNamesFiltered);
+      },
+      properties:{
+        /*
+          list of used 
+          notification Names
+        */
+        listOfNotificationNames:{
+          type: Array,
+          value: function(){
+            return [];
+          }
+        },
+        /*list notification names excluding 
+        the ones you have alread used*/
+        listSoundsNotificationNamesFiltered: {
+          type: Array,
+          value: function(){
+            return [];
+          }
+        },
+        /*list of all avaible notification sounds
+        taken from firebase*/
+        listSounds: {
+          type: Array,
+          value: function(){
+            return [];
+          }
+        },
+        /*disables notification add*/
+        disabledNoMoreNotifications: {
+          type: Boolean,
+          value: false
+        },
+        /*iron-selector value
+        set to -1 so it's not
+        preselected*/
+        selectedSound: {
+          type: Number,
+          value: -1
+        },
+        /*check if needed to disable
+        notification-add externaly*/
+        disabled: {
+          type:Boolean,
+          reflectToAttribute: true,
+          observer: 'checkNeedsDisabled',
+          value: true
+        }
+      },
+      observers: [
+        '_filterListOfNoticationsNames(listSounds.*)',
+        '_filterListOfNoticationsNames(listOfNotificationNames.*)'
+      ],
+      /*
+        fires a event that sends the object
+        to notification-second to push it to the
+        server
+      */
+      addNotification: function(){
+        this.fire('addNotification', {
+                  "newNotification": {
+                    name: this.listSoundsNotificationNamesFiltered[this.selectedSound].$val,
+                    sensitivity: 0,
+                    notificationDates: [],
+                    repeatingNotification: false,
+                    disabledNotification: false,
+                    timeNotification: false,
+                    notificationDays:[]
+                  }
+        });
+        this.$.paperList.selected = -1; 
+      },
+      /*
+        filters out all the the used
+        notifications
+      */
+      _filterListOfNoticationsNames: function(){
+        var tempArray = [];
+        /*
+          need to check for listofNotifation not being set yet and being set to a null array
+          some for query data
+        */
+        if(this.listOfNotificationNames !== null && this.listOfNotificationNames !== undefined && typeof this.listOfNotificationNames[0] !== 'undefined' &&
+           this.$.query.data[0] !== null && this.$.query.data[0] !== undefined ){
+
+          for(var i = 0; i < this.$.query.data.length; i++){
+            for(var j = 0; j < this.listOfNotificationNames.length; j++){
+              if(this.listOfNotificationNames[j] === this.$.query.data[i].$val){
+                break;
+              }
+              if(j == this.listOfNotificationNames.length -1){
+                tempArray.push(this.$.query.data[i]);
+              }
+            }
+          }
+
+          this.listSoundsNotificationNamesFiltered = tempArray.sort();
+        }
+        else{
+          /*
+            so if you haven't selected anythin
+            then the default is the query from firebase
+
+            the slice is to copy array not reference it
+          */
+          this.listSoundsNotificationNamesFiltered = this.$.query.data.sort().slice();
+        }
+
+        this.checkNeedsDisabled()
+      },
+      /*
+        checks to see if you need to 
+        disable the notification-add button
+        it checks to see if you've added all
+        possible notification.  It also check
+        to see if disabled been set to true
+        meening your currently offline.
+      */
+      checkNeedsDisabled :function(){
+        if(typeof this.listSoundsNotificationNamesFiltered[0] == 'undefined' || this.disabled == true){
+          this.$.paperCard.classList.add('disabled')
+          this.disabledNoMoreNotifications = true;
+
+          if(this.disabled == true){
+            this.$.headerInformation.innerHTML = "you are currently offline";
+          }
+          else{
+            this.$.headerInformation.innerHTML = "there's no more notification options"; 
+          }
+        }
+        else
+        {
+          this.$.paperCard.classList.remove('disabled')
+          this.disabledNoMoreNotifications = false;
+          this.$.headerInformation.innerHTML = "choose a notification to add";
+        }
+      }
+
+    });
+  </script>
+</dom-module>

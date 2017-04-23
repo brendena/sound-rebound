@@ -1,0 +1,92 @@
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../iron-list/iron-list.html">
+<!--
+`<awesome-sauce>` injects a healthy dose of awesome into your page.
+
+In typical use, just slap some `<awesome-sauce>` at the top of your body:
+
+    <body>
+      <awesome-sauce></awesome-sauce>
+
+Wham! It's all awesome now!
+-->
+<dom-module id="app-email-login">
+  <template>
+    <style>
+      #emailLogInModule{
+        z-index: 200;
+      }
+      p{
+        text-align: center;
+      }
+      button.no-style{
+        -webkit-appearance: none;
+        border: 0;
+        padding: 0;
+        background: transparent;
+      }
+    </style>
+
+    <paper-dialog id="emailLogInModule" entry-animation="scale-up-animation" exit-animation="fade-out-animation" > <!--with-backdrop caused problem -->
+      <form is="iron-form" id="form"d>
+        <paper-input label="email" bind-value="{{email}}" type="email" required>Email</paper-input>
+        <paper-input label="emailPassword" bind-value="{{password}}" type="password">password</paper-input>
+        <paper-button on-tap="_logIn" type="submit"> submit</paper-button>
+        <paper-button on-tap="_createAccount">Create Account</paper-button>
+        <paper-button on-tap="_resetPassword">password reset</paper-button>
+
+        <p id="errorText"></p>
+        
+      </form>
+    </paper-dialog>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'app-email-login',
+      properties:{
+        email:{
+          type: String,
+          value: "String",
+        },
+        password:{
+          type: String,
+          value: "String"
+        },
+      },
+      listeners: {
+        'iron-form-submit': '_test'
+      },
+      open: function(){
+        this.$.emailLogInModule.open();
+      },
+      close: function(){
+        this.$.emailLogInModule.close();
+      },
+      userError: function(text){
+        console.log("error");
+        this.$.errorText.innerHTML = text;
+      },
+      nullError: function(){
+        this.$.errorText.innerHTML = "";
+      },
+      _resetPassword: function(){
+        this.fire('resetPassword', {email: this.email});
+      },
+      _createAccount: function(){
+        this.fire('createAccount', {email: this.email, password: this.password});
+      },
+      _logIn: function(){
+        this.fire('logIn', {email: this.email, password: this.password});
+      }
+
+    });
+
+  </script>
+</dom-module>

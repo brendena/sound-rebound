@@ -1,0 +1,264 @@
+<link rel="import" href="../../app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+
+<link rel="import" href="../../polymerfire/firebase-auth.html">
+<link rel="import" href="../../polymerfire/firebase-query.html">
+<link rel="import" href="../../polymerfire/firebase-document.html">
+
+
+<link rel="import" href="./notification-add.html">
+<link rel="import" href="./notification-card.html">
+<link rel="import" href="./notification-edit-card.html">
+
+
+<!--
+# Purpose `<notification-section>`
+notification-sections holds both the
+`notifcation-card` and `notification-edit-card` and `notication-add`
+
+It main goal is to push the notification data to the all the above cards
+Its also main entry point for pushing data to firebase.  So there
+is many listeners that simply push data because `notification-section` 
+has all the query's and documents to do this.
+
+## resources
+
+
+## haven't finished 
+I would love a animation to when 
+you open up the time notification
+-->
+<dom-module id="notification-section">
+  <template>
+    <style>
+      /*  
+      notification-card notification-add{
+        display:flex;
+        float: left;
+      }
+      */
+      :host{
+        display:flex;
+        @apply(--layout-wrap);
+        @apply(--layout-horizontal);
+
+      };
+      notification-add, notification-card{
+        flex:1;
+        padding: 20px;
+      }
+
+      @media (max-width: 600px) {
+        notification-add, notification-card {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      
+    </style>
+
+    <firebase-auth
+        id="auth"
+        online="{{online}}"
+        user="{{user}}">
+    </firebase-auth>
+
+    <firebase-query
+      id="query"
+      path="/users/[[user.uid]]"
+      data="{{notifications}}">
+    </firebase-query>
+
+    <firebase-query
+      id="firebaseColorQuery"
+      path="/account_info/[[user.uid]]/colors"
+      data="{{myColors}}">
+    </firebase-query>
+
+    <firebase-document
+      id="firebaseDoc"
+      path="/users/[[user.uid]]/[[specificNotification]]"
+      data="{{editingNotification}}">
+    </firebase-document>
+    <!--
+    <app-indexeddb-mirror
+        session="[[user.uid]]"
+        key="notifications"
+        data="{{notifications}}"
+        persisted-data="{{persistedNotifications}}">
+    </app-indexeddb-mirror>
+   -->
+    <template is="dom-repeat" items="[[notifications]]" as="notification">
+      <notification-card single-note="[[notification]]" disabled="[[!online]]"
+                         colors="[[myColors]]"></notification-card>
+    </template>
+
+    <notification-add list-of-notification-names="[[listNotificationNames]]" disabled="[[!online]]"></notification-add>
+
+
+    <notification-edit-card id="editNotificationModule" single-note="[[editingNotification]]" ></notification-edit-card>
+
+
+
+  </template>
+  <script>
+    Polymer({
+      is: 'notification-section',
+      properties:{
+        /*list of just the notification name*/
+        listNotificationNames:{
+          type: Array,
+          value: function(){
+            return [];
+          }
+        },
+        /*firebase list of notifications*/
+        notifications:{
+          type: Array,
+          value: function(){
+            return [];
+          }
+        },
+        /*this is the specific note your editing.
+          Its connected to the firebase-document*/
+        specificNotification:{
+          type: String,
+          value: "default"
+        },
+        /*Signed in connected to firebase-auth
+        and disables all the notification elements*/
+        signedIn: {
+          type: Boolean,
+          value: false
+        }
+
+      },
+      
+      observers: [
+        '_updateListNotificationNames(notifications.*)'
+      ],
+      
+      listeners: {
+        "editNotification": "_editNotification",
+        'updateDisabledValue': '_updateDisabledValue',
+        'deleteNotification' : '_deleteNotification',
+        'addNotification' : "_addNotification",
+
+
+        "submitNotification": "_submitNotification",
+      },
+      /*
+        set the firebase-document
+        specific key which is bound to 
+        notification-edit-card as just a
+        one way binding.
+        Then opens the dialog pop up both.
+      */
+      _editNotification: function(e){
+        
+        this.specificNotification = e.detail.singleNote.$key;
+        this.editingNotification.notificationDays = [];
+        console.log(this.editingNotification)
+        this.$.editNotificationModule.open();
+      },
+      /*
+        This is a little section to just
+        manage the disabledNotification value.
+        We need this becuase notification-card
+        only has the ability to disable notification
+        and nothing else.
+      */
+      _updateDisabledValue: function(e){
+        console.log(e.detail.disabledNotification);
+        this.$.query.ref.child(e.detail.$key).update({"disabledNotification":e.detail.disabledNotification}); 
+      },
+      /*
+        just removes the 
+        notification card
+      */
+      _deleteNotification: function(e){
+        //this.$.query.ref.child(e.detail.$key).update("disabledNotification", e.detail.disabledNotification);
+        if(typeof e.detail.$key == "undefined"){
+          this.$.firebaseDoc.destroy();
+          this.$.editNotificationModule.close();
+        }
+        else {
+          this.$.query.ref.child(e.detail.$key).remove();
+        }
+
+      },
+      /*
+        pushes a notification.
+        This comes from the
+        notification-add element
+      */
+      _addNotification: function(e){
+        this.$.query.ref.push(e.detail.newNotification);
+      },
+
+      /*
+        updates the firebase notification
+        object and closes the notification
+
+        !!!!!!Hack
+        I set firebaseDoc.data = ""
+        and then set it.
+        This is because it doesn't notice
+        the change otherwise.
+        There ways to get around this.
+        I just don't know how to.
+
+      */
+      _submitNotification: function(e){
+        
+        var firebaseDoc = this.$.firebaseDoc;
+
+
+        firebaseDoc.data = "";
+        firebaseDoc.data = e.detail.singleNote;
+
+        console.log("submited notification");
+
+
+        this.$.editNotificationModule.close();
+        
+      },
+      /*
+      This create a list of notification
+      names that i've used.
+
+      basics behind the ovservers
+      http://stackoverflow.com/questions/38264330/firebase-query-data-observer-not-firing
+      */
+      _updateListNotificationNames: function(newData){
+        
+        /*if newData is not defined that meens that there 
+          no data to look at so stop. 
+          this is important because the first values is []*/
+        if(typeof newData.base !== "undefined"){
+          /*
+          check to see if we disabled a notification.  We need to do this
+          becuase notifications is going to change forces updateListNotificationNames to fire.
+          This is imortant because listNotificationNames hasen't changed.  Saving some processing cycles.
+          */
+          if(newData.base.length != this.listNotificationNames.length){
+
+
+            var tempNotificationList = [];
+            var data = this.$.query.data;
+            for(var i =0; i < data.length; i++){
+                if(data[i]['name'] != null && data[i]['name'] != undefined){
+                  console.log("jessussus");
+                   tempNotificationList.push(data[i]['name']);
+                }
+            }
+
+            console.log("going through");
+
+            this.listNotificationNames = tempNotificationList;
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>

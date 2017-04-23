@@ -1,0 +1,160 @@
+<link rel="import" href="../../neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../polymerfire/firebase-auth.html">
+<link rel="import" href="../../polymerfire/firebase-query.html">
+<link rel="import" href="../../polymerfire/firebase-document.html">
+<link rel="import" href="../../paper-swatch-picker/paper-swatch-picker.html">
+
+
+<dom-module id="color-picker">
+  <template>
+    <style>
+
+    </style>
+
+    <firebase-auth
+        id="auth"
+        online="{{online}}"
+        user="{{user}}">
+    </firebase-auth>
+
+    <firebase-query
+      id="firebaseQuery"
+      path="/account_info/[[user.uid]]/colors"
+      data="{{myColors}}">
+    </firebase-query>
+
+    <firebase-document
+      id="firebaseDoc"
+      path="/account_info/[[user.uid]]/colors"
+      data="{{myColorsDoc}}">
+    </firebase-document>
+    
+    <paper-dropdown-menu label="notification color">
+      <paper-listbox class="dropdown-content" selected="{{selectedIndex}}" >
+        <template is="dom-repeat" items="[[myColors]]" as="color">
+          <paper-item>{{color.$key}}</paper-item>
+        </template>
+        <paper-item >add card</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu>
+    <paper-button raised id="currentlySelectedColorElement"
+                    style$="background:[[currentlySelectedColor]];"></paper-button>
+
+    <div id="colorMenu" style="display:none">
+
+      <div id="supported_color_input">
+        <input id="colorInput" type="color" name="favcolor" 
+              value="{{color::input}}" style="display:none">
+      </div>
+      <div id="not_supported_color_input">
+        <paper-swatch-picker color="{{color}}" id="colorSwatches"></paper-swatch-picker>
+      </div>
+      <paper-input  id="colorTitleInput" label="input title color"
+                        required   bind-value="{{colorTitle}}"> </paper-input>
+
+
+      <paper-button on-tap="changeColor" raised 
+                    style$="background:[[color]]; width: 100%"></paper-button>
+
+
+      <paper-button id="addColorButton" raised on-tap="addColor">add</paper-button>
+<<<<<<< HEAD
+=======
+
+>>>>>>> dee8954b45943a36359789d4ce8e0afd1b3acdf9
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'color-picker',
+      properties:{
+        'color': {
+          type: String,
+          reflectToAttribute: true,
+          notify: true,
+          value:"#1CF5FE"
+        },
+        'colorTitle':{
+          type: String,
+          reflectToAttribute: true,
+          notify: true,
+          value: "blank"
+        },
+        'myColors':{
+          type: Array,
+          reflectToAttribute: true,
+          value: function(){
+            return [];
+          }
+        },
+        'selectedIndex':{
+          type: Number,
+          reflectToAttribute: true,
+          notify: true,
+          value: 0
+        },
+        'currentlySelectedColor':{
+          type: String,
+          notify:true,
+          value:"#000000",
+        }
+      },
+      ready: function(){
+          var input = document.createElement('input');
+          input.setAttribute('type','date');
+
+          var notADateValue = 'not-a-date';
+          input.setAttribute('value', notADateValue); 
+
+          supported = (input.value === notADateValue);
+          if (supported == true){
+            this.$.not_supported_color_input.style.display = "none"
+          }
+          else{
+            this.$.supported_color_input.style.display = "none"
+          }
+      },
+      observers:[
+        '_changedSelected(selectedIndex, myColors.*)'
+      ],
+
+      changeColor:function(){
+        if(this.$.supports_color_input.style.display != "none"){
+          this.$.colorInput.click();
+        }
+        
+      },
+      _changedSelected(selected,myColors){
+        //selected add color
+        if(myColors.base.length <= selected){
+          this.$.colorMenu.style.display = "inherit";
+          this.$.currentlySelectedColorElement.style.display ="none"
+        }
+        //selected pre existing color
+        else{
+          this.$.colorMenu.style.display = "none";
+          this.$.currentlySelectedColorElement.style.display ="inherit"
+          this.colorTitle = myColors.base[selected].$key;
+          if(myColors.base.length != 0){
+            this.currentlySelectedColor = myColors.base[selected].$val;
+          }
+        }
+        
+      },
+      addColor(){
+        this.$.colorMenu.style.display = "none";
+        this.$.currentlySelectedColorElement.style.display ="inherit"
+
+        this.$.firebaseDoc.path = "/account_info/" + this.user.uid +"/colors/" + this.colorTitle;
+        this.$.firebaseDoc.data = this.color; 
+      }
+    });
+  </script>
+</dom-module>
