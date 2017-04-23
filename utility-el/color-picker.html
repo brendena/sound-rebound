@@ -43,6 +43,9 @@
         <paper-item >add card</paper-item>
       </paper-listbox>
     </paper-dropdown-menu>
+    <paper-button raised id="currentlySelectedColorElement"
+                    style$="background:[[currentlySelectedColor]];"></paper-button>
+
     <div id="colorMenu" style="display:none">
       <paper-input  id="colorTitleInput" label="input title color"
                       required   bind-value="{{colorTitle}}"> </paper-input>
@@ -56,7 +59,6 @@
 
 
       <paper-button id="addColorButton" raised on-tap="addColor">add</paper-button>
-      <p>{{colorTitle}}</p>
     </div>
   </template>
   <script>
@@ -87,27 +89,40 @@
           reflectToAttribute: true,
           notify: true,
           value: 0
-
+        },
+        'currentlySelectedColor':{
+          type: String,
+          notify:true,
+          value:"#000000",
         }
       },
       observers:[
         '_changedSelected(selectedIndex, myColors.*)'
       ],
+
       changeColor:function(){
         this.$.colorInput.click();
       },
       _changedSelected(selected,myColors){
+        //selected add color
         if(myColors.base.length <= selected){
           this.$.colorMenu.style.display = "inherit";
+          this.$.currentlySelectedColorElement.style.display ="none"
         }
+        //selected pre existing color
         else{
           this.$.colorMenu.style.display = "none";
+          this.$.currentlySelectedColorElement.style.display ="inherit"
           this.colorTitle = myColors.base[selected].$key;
+          if(myColors.base.length != 0){
+            this.currentlySelectedColor = myColors.base[selected].$val;
+          }
         }
         
       },
       addColor(){
         this.$.colorMenu.style.display = "none";
+        this.$.currentlySelectedColorElement.style.display ="inherit"
 
         this.$.firebaseDoc.path = "/account_info/" + this.user.uid +"/colors/" + this.colorTitle;
         this.$.firebaseDoc.data = this.color; 

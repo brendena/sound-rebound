@@ -42,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <firebase-document 
     id="documentDisabledNotification"
     path="/notification_token/[[user.uid]]/disabled_global_notifications" 
-    data="{{checked}}">
+    data="{{!checked}}">
   </firebase-document>
 
   <paper-toggle-button
@@ -106,10 +106,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, (err) => {
             console.log('user subscribe failed :(', err);
             this.$.subscribe.checked = false;
-            this.$.errorDialog.open("error", "Check to make sure you haven't blocked notifications.");
+            this.$.errorDialog.open("Warning", "Check to make sure you haven't blocked notifications,else you won't get notification.");
           });
         } else {
           console.log('user rejected permission');
+          this.$.subscribe.checked = false;
         }
       },
       handleMessage: function(){
