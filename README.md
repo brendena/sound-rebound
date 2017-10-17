@@ -5,13 +5,13 @@
 
 [documentation page](https://brendena.github.io/sound-rebound/components/sound-rebound/)
 
+[sound-rebound.com](https://sound-rebound.com)
 
 [demo the site](https://brendena.github.io/sound-rebound/components/sound-rebound/app.html)
 
 
 [gh pages repo here](https://github.com/brendena/sound-rebound/tree/gh-pages)
 
-[sound-rebound.com](https://sound-rebound.com)
 
 bower -package
 ```shell
